@@ -1,0 +1,52 @@
+.site-header {
+  background-color: #333;
+  color: #fff;
+  padding: 1rem 0;
+}
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.site-header .logo {
+  font-size: 1.5rem;
+}
+
+.site-header .nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.site-header .nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.site-header .menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Мобільна адаптація */
+@media (max-width: 768px) {
+  .site-header .nav {
+    display: none;
+  }
+  .site-header .menu-btn {
+    display: block;
+  }
+}
+
