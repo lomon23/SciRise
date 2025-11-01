@@ -1,3 +1,6 @@
+
+import '/src/style/header.css'; // ✅ Vite підключить автоматично
+
 export function loadHeader() {
   const container = document.getElementById('header-container');
 
@@ -6,7 +9,6 @@ export function loadHeader() {
     .then(html => {
       container.innerHTML = html;
 
-      // Логіка мобільного меню
       const btn = container.querySelector('.menu-btn');
       const nav = container.querySelector('.nav');
 

@@ -1,7 +1,14 @@
+
 .site-header {
+  position: fixed;              /* робимо хедер "прилиплим" до верху */
+  top: 0;
+  left: 0;
+  width: 100%;
   background-color: #333;
   color: #fff;
   padding: 1rem 0;
+  z-index: 1000;                /* щоб був поверх усього */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .site-header .container {
@@ -29,6 +36,11 @@
   color: #fff;
   text-decoration: none;
   font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.site-header .nav a:hover {
+  color: #ffb84d; /* невеликий ефект при наведенні */
 }
 
 .site-header .menu-btn {
@@ -40,13 +52,30 @@
   cursor: pointer;
 }
 
-/* Мобільна адаптація */
+/* 📱 Мобільна адаптація */
 @media (max-width: 768px) {
   .site-header .nav {
     display: none;
+    position: absolute;
+    top: 100%; /* відразу під хедером */
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    gap: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
   }
+
   .site-header .menu-btn {
     display: block;
   }
+}
+
+/* 🧱 Щоб контент не залазив під хедер */
+body {
+  margin: 0;
+  padding-top: 70px; /* висота хедера */
 }
 
