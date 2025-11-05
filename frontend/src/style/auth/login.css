@@ -74,4 +74,23 @@ body {
     line-height: 50px;
     font-size: 24px;
 }
-
+.github-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #24292f; /* офіційний колір GitHub */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 15px;
+    font-family: sans-serif;
+    cursor: pointer;
+    }
+    .github-btn:hover {
+    background-color: #333a41;
+    }
+    .github-icon {
+    width: 20px;
+    height: 20px;
+}
