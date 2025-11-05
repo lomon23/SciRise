@@ -1,28 +1,42 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Логін</title>
-  <link rel="stylesheet" href="../../../src/style/auth/login.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../../src/style/auth/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Actor&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <div id = "header-container"></div>
-  <div class="login-container">
-    <h2>Вхід у акаунт</h2>
-    <form id="login-form">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Введіть email" required>
-
-      <label for="password">Пароль</label>
-      <input type="password" id="password" name="password" placeholder="Введіть пароль" required>
-
-      <button type="submit">Увійти</button>
-    </form>
-    <p class="login-msg"></p>
-  </div>
-
-    <script type="module" src="../../../src/scripts/main.js"></script>
+    <div class="wrapper">
+        <div class="photo">
+            
+        </div>
+        <div class="main-container">
+            <div class="login_form">
+                <div class="headline">
+                    <h1>Login</h1>
+                    <h4>Wellcome to login</h4>
+                </div>
+                <div class="input">
+                    <h2>User name</h2>
+                    <input type="text" placeholder="Username">
+                    <h2>Password</h2>
+                    <input type="password" placeholder="password">
+                </div>
+                <div class="remember_me">
+                    <label >
+                        <input type="checkbox" name="remember_me" value="yes">
+                        remember me
+                    </label>
+                    <a href="#">Forget Password</a>
+                </div>
+                <a class="login_button" href="#">login</a>
+            </div>
+        </div>
+    </div>
+     <script type="module" src="../../../src/scripts/main.js"></script>
 </body>
 </html>
-
