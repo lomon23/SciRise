@@ -1,28 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Логін</title>
-  <link rel="stylesheet" href="../../../src/style/auth/login.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Реєстрація</title>
+  <link rel="stylesheet" href="../../../src/style/auth/login.css" />
+  <style>
+    /* Легка стилізація, можна видалити якщо хочеш тільки зовнішній файл */
+    :root{
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --accent: #2b6ef6;
+      --text: #1f2937;
+      --muted: #6b7280;
+    }
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: Inter, Roboto, "Segoe UI", system-ui, sans-serif;
+      background:linear-gradient(180deg,var(--bg),#eef2ff);
+      color:var(--text);
+    }
+    main{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .card{
+      width:100%;
+      max-width:420px;
+      background:var(--card);
+      border-radius:12px;
+      box-shadow:0 6px 20px rgba(15,23,42,0.08);
+      padding:28px;
+    }
+    h1{
+      margin:0 0 18px 0;
+      font-size:20px;
+      font-weight:600;
+    }
+    form{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    label{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    input{
+      width:100%;
+      box-sizing:border-box;
+      padding:10px 12px;
+      border:1px solid #e6e9ef;
+      border-radius:8px;
+      font-size:14px;
+      outline:none;
+      transition:box-shadow .12s, border-color .12s;
+    }
+    input:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(43,110,246,0.08);
+    }
+    .actions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:6px;
+    }
+    button[type="submit"]{
+      background:var(--accent);
+      color:#fff;
+      border:none;
+      padding:10px 14px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .muted{
+      font-size:13px;
+      color:var(--muted);
+      text-decoration:none;
+    }
+    .footer{
+      margin-top:14px;
+      font-size:13px;
+      color:var(--muted);
+      text-align:center;
+    }
+    a { color:var(--accent); text-decoration:none; }
+    @media (max-width:480px){
+      .card{ padding:20px; border-radius:10px; }
+    }
+  </style>
 </head>
 <body>
-    <div id = "header-container"></div>
-  <div class="login-container">
-    <h2>Вхід у акаунт</h2>
-    <form id="login-form">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Введіть email" required>
+  <main>
+    <section class="card" aria-labelledby="reg-title">
+      <h1 id="reg-title">Реєстрація</h1>
 
-      <label for="password">Пароль</label>
-      <input type="password" id="password" name="password" placeholder="Введіть пароль" required>
+      <form id="registerForm" novalidate>
+        <div>
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" required />
+        </div>
 
-      <button type="submit">Увійти</button>
-    </form>
-    <p class="login-msg"></p>
-  </div>
+        <div>
+          <label for="first_name">Ім'я</label>
+          <input id="first_name" name="first_name" type="text" required />
+        </div>
 
-    <script type="module" src="../../../src/scripts/main.js"></script>
+        <div>
+          <label for="last_name">Прізвище</label>
+          <input id="last_name" name="last_name" type="text" required />
+        </div>
+
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required />
+        </div>
+
+        <div>
+          <label for="password">Пароль</label>
+          <input id="password" name="password" type="password" minlength="8" required />
+        </div>
+
+        <div class="actions">
+          <button type="submit">Зареєструватися</button>
+          <a class="muted" href="./login_page.html">Увійти</a>
+        </div>
+      </form>
+
+      <p class="footer">Маєш питання? <a href="mailto:support@example.com">Напиши нам</a></p>
+    </section>
+  </main>
+  <script src="../../scripts/API_endPoint/register.js"></script>
+  <script type="module" src="../../../src/scripts/main.js"></script>
 </body>
 </html>
-
