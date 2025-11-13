@@ -61,6 +61,74 @@ body {
     text-decoration: none;
     color: rgb(163, 163, 163);
 }
+.remember_me label {
+  position: relative; /* Потрібно для позиціонування */
+  padding-left: 30px; /* Робимо місце для нашого чекбоксу */
+  cursor: pointer;
+  user-select: none;
+  color: #555;
+}
+
+/* 2. Повністю ховаємо рідний чекбокс */
+.custom-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* 3. Малюємо нашу фіолетову коробку */
+.remember_me label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%); /* Центрування по вертикалі */
+  
+  width: 20px;
+  height: 20px;
+  
+  border: 2px solid #6c5ce7;
+  border-radius: 6px; /* ТВОЇ ЗАКРУГЛЕНІ КРАЇ */
+  background-color: #f0f0f0;
+  transition: background-color 0.2s;
+}
+
+/* 4. Малюємо "галочку" (вона прихована) */
+.remember_me label::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 6px;
+  height: 12px;
+  
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  
+  /* Хитрість для центрування + повороту */
+  transform: translateY(-60%) rotate(45deg);
+  
+  opacity: 0; /* Ховаємо галочку */
+  transition: opacity 0.2s;
+}
+
+/* 5. КЛЮЧОВИЙ МОМЕНТ: що робити, коли input відмічений */
+/* Коли input всередині label відмічений... */
+.remember_me label:has(.custom-checkbox:checked)::before {
+  background-color: #6c5ce7; /* ...робимо фон фіолетовим */
+  border-color: #6c5ce7;
+}
+
+/* ... і показуємо галочку */
+.remember_me label:has(.custom-checkbox:checked)::after {
+  opacity: 1;
+}
+
+/* 6. (Опціонально) Фокус для доступності */
+.custom-checkbox:focus-visible + label::before {
+   box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.5);
+}
 .login_button{
     background-color: #6646b3;
     color: #cac8ca;

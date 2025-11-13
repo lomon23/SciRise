@@ -4,104 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Реєстрація</title>
-  <link rel="stylesheet" href="../../../src/style/auth/login.css" />
-  <style>
-    /* Легка стилізація, можна видалити якщо хочеш тільки зовнішній файл */
-    :root{
-      --bg: #f6f7fb;
-      --card: #ffffff;
-      --accent: #2b6ef6;
-      --text: #1f2937;
-      --muted: #6b7280;
-    }
-    html,body{
-      height:100%;
-      margin:0;
-      font-family: Inter, Roboto, "Segoe UI", system-ui, sans-serif;
-      background:linear-gradient(180deg,var(--bg),#eef2ff);
-      color:var(--text);
-    }
-    main{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-    }
-    .card{
-      width:100%;
-      max-width:420px;
-      background:var(--card);
-      border-radius:12px;
-      box-shadow:0 6px 20px rgba(15,23,42,0.08);
-      padding:28px;
-    }
-    h1{
-      margin:0 0 18px 0;
-      font-size:20px;
-      font-weight:600;
-    }
-    form{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-    label{
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:6px;
-    }
-    input{
-      width:100%;
-      box-sizing:border-box;
-      padding:10px 12px;
-      border:1px solid #e6e9ef;
-      border-radius:8px;
-      font-size:14px;
-      outline:none;
-      transition:box-shadow .12s, border-color .12s;
-    }
-    input:focus{
-      border-color:var(--accent);
-      box-shadow:0 0 0 4px rgba(43,110,246,0.08);
-    }
-    .actions{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-top:6px;
-    }
-    button[type="submit"]{
-      background:var(--accent);
-      color:#fff;
-      border:none;
-      padding:10px 14px;
-      border-radius:8px;
-      cursor:pointer;
-      font-weight:600;
-    }
-    .muted{
-      font-size:13px;
-      color:var(--muted);
-      text-decoration:none;
-    }
-    .footer{
-      margin-top:14px;
-      font-size:13px;
-      color:var(--muted);
-      text-align:center;
-    }
-    a { color:var(--accent); text-decoration:none; }
-    @media (max-width:480px){
-      .card{ padding:20px; border-radius:10px; }
-    }
-  </style>
+  <link rel="stylesheet" href="../../../src/style/auth/register.css" />
+  
 </head>
 <body>
   <main>
     <section class="card" aria-labelledby="reg-title">
-      <h1 id="reg-title">Реєстрація</h1>
+      <h1 id="reg-title">Register</h1>
 
       <form id="registerForm" novalidate>
         <div>
@@ -110,12 +19,12 @@
         </div>
 
         <div>
-          <label for="first_name">Ім'я</label>
+          <label for="first_name">First name</label>
           <input id="first_name" name="first_name" type="text" required />
         </div>
 
         <div>
-          <label for="last_name">Прізвище</label>
+          <label for="last_name">Last name</label>
           <input id="last_name" name="last_name" type="text" required />
         </div>
 
@@ -125,17 +34,17 @@
         </div>
 
         <div>
-          <label for="password">Пароль</label>
+          <label for="password">Password</label>
           <input id="password" name="password" type="password" minlength="8" required />
         </div>
 
         <div class="actions">
-          <button type="submit">Зареєструватися</button>
-          <a class="muted" href="./login_page.html">Увійти</a>
+          <button type="submit">Register</button>
+          <a class="muted" href="./login_page.html">Log in</a>
         </div>
       </form>
 
-      <p class="footer">Маєш питання? <a href="mailto:support@example.com">Напиши нам</a></p>
+      <p class="footer">Got questions? <a href="mailto:support@example.com">Ask us</a></p>
     </section>
   </main>
   <script src="../../scripts/API_endPoint/register.js"></script>

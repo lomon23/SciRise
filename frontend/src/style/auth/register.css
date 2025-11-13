@@ -1,0 +1,148 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', 'Open Sans', sans-serif;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  width: 100%;
+  background: #f4f4f4;
+}
+
+body::after {
+  content: '';
+  flex: 1;
+  background-color: #f0f2f5;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 100px;
+  background: #ffffff;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+section.card {
+  width: 80%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+h1#reg-title {
+  font-size: 2.2rem;
+  font-weight: 400;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+form#registerForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+  row-gap: 15px;
+}
+
+form#registerForm div:has(input#username),
+form#registerForm div:has(input#email),
+form#registerForm div:has(input#password),
+form#registerForm .actions {
+  grid-column: 1 / -1;
+}
+
+form div label {
+  display: block;
+  padding-left: 5px;
+  font-weight: 100;
+  font-size: 14px;
+  color: rgb(163, 163, 163);
+  margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  height: 50px;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 3px 3px 5px rgba(1, 1, 1, 0.300);
+  border: 1px solid #ddd;
+  padding: 0 15px;
+  font-size: 1rem;
+  font-family: 'Roboto', 'Open Sans', sans-serif;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #6646b3;
+  box-shadow: 0 0 0 3px rgba(102, 70, 179, 0.3), 3px 3px 5px rgba(1, 1, 1, 0.300);
+}
+
+.actions {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.actions button[type="submit"] {
+  background-color: #6646b3;
+  color: #cac8ca;
+  text-decoration: none;
+  height: 55px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 3px 3px 5px rgba(1, 1, 1, 0.300);
+  text-align: center;
+  line-height: 55px;
+  font-size: 20px;
+  font-family: 'Roboto', 'Open Sans', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.actions button[type="submit"]:hover {
+  background-color: #5a409d;
+}
+
+.actions a.muted {
+  text-decoration: none;
+  color: rgb(163, 163, 163);
+  font-size: 15px;
+}
+
+.actions a.muted:hover {
+  text-decoration: underline;
+}
+
+p.footer {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 14px;
+  color: rgb(163, 163, 163);
+}
+
+p.footer a {
+  color: #6646b3;
+  text-decoration: none;
+}
+
+p.footer a:hover {
+  text-decoration: underline;
+}
