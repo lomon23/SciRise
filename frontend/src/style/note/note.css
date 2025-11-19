@@ -1,0 +1,311 @@
+:root {
+    --bg-color: #F0F2F5;
+    --card-bg-light: #FFFFFF;
+    --card-bg-dark: #1E1E1E;
+    --card-bg-ai: #FFFFFF; /* Можна змінити на світлий відтінок */
+    
+    --accent-purple: #7C3AED;
+    --accent-blue: #3B82F6;
+    --text-dark: #1F2937;
+    --text-light: #E5E7EB;
+    --border-color: #E5E7EB;
+    
+    --radius: 16px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    height: 100vh;
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+    overflow: hidden;
+    color: var(--text-dark);
+}
+
+/* --- ЗАГАЛЬНІ СТИЛІ ДЛЯ ПАНЕЛЕЙ --- */
+.pane {
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Щоб контент не вилазив за округлення */
+    transition: box-shadow 0.3s;
+}
+
+.pane:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.pane-header {
+    padding: 12px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+
+.pane-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+/* Скролбари (сучасні тонкі) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+/* --- ЛІВА ПАНЕЛЬ (PREVIEW) --- */
+.left-pane {
+    width: 50%;
+    background: var(--card-bg-light);
+    min-width: 200px;
+}
+.light-header {
+    background: #F8FAFC;
+    color: #64748B;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Стилізація Markdown контенту */
+.markdown-body h1 { font-size: 1.8em; margin-bottom: 0.5em; color: #111; }
+.markdown-body h2 { font-size: 1.4em; margin-top: 1em; margin-bottom: 0.5em; color: #333; }
+.markdown-body p { line-height: 1.6; margin-bottom: 1em; color: #4B5563; }
+.markdown-body ul { padding-left: 20px; color: #4B5563; }
+.markdown-body code { background: #F1F5F9; padding: 2px 5px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: #DB2777; }
+
+/* --- ПРАВА КОЛОНКА --- */
+.right-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Відступ між редактором і чатом */
+    min-width: 200px;
+}
+
+/* --- ВЕРХНЯ ПРАВА (EDITOR) --- */
+.top-pane {
+    height: 50%;
+    background: var(--card-bg-dark);
+    color: var(--text-light);
+    min-height: 150px;
+}
+.dark-header {
+    background: #2D2D2D;
+    color: #9CA3AF;
+}
+.editor-wrapper {
+    padding: 0; /* Прибираємо відступи для textarea */
+}
+textarea {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: #E2E8F0;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    outline: none;
+    resize: none;
+}
+
+/* --- НИЖНЯ ПРАВА (AI CHAT) --- */
+.bottom-pane {
+    flex: 1;
+    background: #fff;
+    /* Градієнт для красивого фону чату */
+    background: linear-gradient(135deg, #FDFBF7 0%, #F3F0FF 100%); 
+    position: relative;
+    min-height: 200px;
+}
+.ai-header {
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(5px);
+    color: var(--accent-purple);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+}
+
+.chat-messages {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    padding-bottom: 80px; /* Місце під інпут */
+}
+
+/* Empty State (По центру) */
+.empty-state {
+    text-align: center;
+    color: #6B7280;
+    max-width: 300px;
+}
+.ai-avatar {
+    width: 60px;
+    height: 60px;
+    background: var(--accent-purple);
+    color: white;
+    font-size: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px auto;
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+}
+.empty-state h3 { margin-bottom: 8px; color: #111; }
+
+/* Input Area */
+.chat-input-area {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: white;
+    padding: 5px;
+    border-radius: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    border: 1px solid #E5E7EB;
+}
+
+.chat-input {
+    flex: 1;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    outline: none;
+    font-size: 14px;
+}
+
+.send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--accent-purple);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+    transition: transform 0.2s, background 0.2s;
+}
+.send-btn:hover {
+    transform: scale(1.05);
+    background: #6D28D9;
+}
+.material-symbols-rounded { font-size: 20px; }
+
+/* --- RESIZERS --- */
+.resizer-vertical {
+    width: 10px;
+    background: transparent;
+    cursor: col-resize;
+    margin: 0 -5px; /* Щоб область кліку була ширша, але візуально не займала місце */
+    z-index: 10;
+}
+.resizer-horizontal {
+    height: 10px;
+    background: transparent;
+    cursor: row-resize;
+    margin: -5px 0;
+    z-index: 10;
+}
+/* Візуальна лінія при наведенні на resizer */
+.resizer-vertical::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 40px;
+    background: #CBD5E1;
+    border-radius: 2px;
+    margin: auto;
+    margin-top: 45vh;
+    transition: 0.2s;
+}
+.resizer-vertical:hover::after, .resizer-vertical.active::after { background: var(--accent-blue); height: 60px; }
+
+.resizer-horizontal::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: #4a4a4a; /* Темний для контрасту на темному фоні */
+    border-radius: 2px;
+    margin: auto;
+    opacity: 0.3;
+    transition: 0.2s;
+}
+.resizer-horizontal:hover::after, .resizer-horizontal.active::after { background: var(--accent-blue); opacity: 1; width: 60px; }
+:root {
+    --bg-color: #F0F2F5;
+    --accent-purple: #6B46C1;
+    --card-bg-dark: #1E1E1E;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg-color); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+/* Toolbar зверху */
+.toolbar {
+    background: white;
+    padding: 10px 20px;
+    border-bottom: 1px solid #E5E7EB;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+}
+.btn-icon { background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; }
+.btn-icon:hover { background: #F3F4F6; }
+.status { font-size: 0.9rem; color: #6B7280; opacity: 0; transition: opacity 0.3s; }
+.status.visible { opacity: 1; }
+.btn-primary { background: var(--accent-purple); color: white; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.btn-primary:hover { opacity: 0.9; }
+
+/* Основний контейнер */
+.container { flex: 1; display: flex; padding: 10px; gap: 10px; height: calc(100vh - 60px); }
+
+.pane { border-radius: 12px; background: white; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.left-pane { width: 50%; padding: 20px; overflow-y: auto; }
+.right-column { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+.top-pane { height: 60%; background: var(--card-bg-dark); color: #E2E8F0; }
+.bottom-pane { flex: 1; background: #F8FAFC; }
+
+textarea { width: 100%; height: 100%; background: transparent; border: none; color: inherit; padding: 20px; resize: none; outline: none; font-family: 'JetBrains Mono', monospace; line-height: 1.5; }
+
+/* Markdown стилізація */
+.markdown-body h1 { font-size: 1.8em; margin-bottom: 0.5em; }
+.markdown-body ul { padding-left: 20px; }
+
+/* Resizers */
+.resizer-vertical { width: 10px; cursor: col-resize; z-index: 10; }
+.resizer-horizontal { height: 10px; cursor: row-resize; z-index: 10; }
+
+/* Chat mini styles */
+.chat-container { height: 100%; display: flex; flex-direction: column; position: relative; }
+.chat-messages { flex: 1; display: flex; align-items: center; justify-content: center; color: #64748B; }
+.ai-avatar { font-size: 24px; margin-bottom: 5px; text-align: center; }
+.chat-input-area { padding: 15px; border-top: 1px solid #E2E8F0; }
+.chat-input { width: 100%; padding: 8px 15px; border-radius: 20px; border: 1px solid #CBD5E1; outline: none; }

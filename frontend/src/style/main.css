@@ -1,31 +1,116 @@
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: url('../assets/images/hero-bg.jpg') center/cover no-repeat;
-  color: #fff;
-  text-align: center;
-}
+    :root {
+      --bg-color: #0f172a;
+      --text-color: #f8fafc;
+      --accent-color: #6366f1;
+      --accent-hover: #4f46e5;
+      --secondary-bg: #1e293b;
+    }
 
-.hero h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
 
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
+    /* Контейнер хедера (залишив твій ID) */
+    #header-container {
+      width: 100%;
+      height: 60px;
+      /* Тимчасова рамка, щоб ти бачив, де буде хедер */
+      border-bottom: 1px solid #334155;
+    }
 
-.hero-btn {
-  padding: 0.8rem 2rem;
-  font-size: 1rem;
-  background-color: #ff6600;
-  border: none;
-  cursor: pointer;
-  color: #fff;
-  border-radius: 5px;
-}
+    /* Hero Section */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+    }
 
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -2px;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: #94a3b8;
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Кнопки та посилання */
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Стилізація твого посилання як кнопки */
+    a[href="./src/pages/workspace/note/note_list.html"] {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background-color: var(--accent-color);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4);
+    }
+
+    a[href="./src/pages/workspace/note/note_list.html"]:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.5);
+    }
+
+    .hero-btn {
+      padding: 0.75rem 1.5rem;
+      background-color: transparent;
+      border: 1px solid #475569;
+      color: #e2e8f0;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .hero-btn:hover {
+      border-color: #94a3b8;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Features Section */
+    .features {
+      padding: 4rem 2rem;
+      background-color: var(--secondary-bg);
+      text-align: center;
+    }
+
+    .features h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .features p {
+      color: #94a3b8;
+    }

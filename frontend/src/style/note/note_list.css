@@ -1,0 +1,151 @@
+:root {
+    --bg: #F8FAFC;
+    --sidebar-bg: #FFFFFF;
+    --primary: #6B46C1;
+    --text-main: #1E293B;
+    --text-sec: #64748B;
+    --border: #E2E8F0;
+    --hover-bg: #F1F5F9;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { 
+    font-family: 'Inter', sans-serif; 
+    background: var(--bg); 
+    color: var(--text-main);
+    height: 100vh; /* Важливо для фіксації сайдбару */
+    overflow: hidden; /* Прибираємо подвійний скрол */
+}
+
+/* --- LAYOUT --- */
+.app-container {
+    display: flex; /* Це ставить сайдбар і контент в ряд */
+    height: 100%;
+}
+
+/* --- SIDEBAR (Зліва) --- */
+.sidebar {
+    width: 260px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    flex-shrink: 0;
+}
+
+.logo-area {
+    font-weight: 800;
+    font-size: 1.4rem;
+    margin-bottom: 40px;
+    color: var(--text-main);
+}
+.logo-area span { color: var(--primary); }
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.menu-item {
+    text-decoration: none;
+    color: var(--text-sec);
+    padding: 12px 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.menu-item:hover { background-color: var(--hover-bg); color: var(--text-main); }
+.menu-item.active { background-color: #F3E8FF; color: var(--primary); }
+
+.sidebar-footer { border-top: 1px solid var(--border); padding-top: 20px; }
+.user-profile { display: flex; align-items: center; gap: 10px; }
+.avatar { width: 36px; height: 36px; background: #E2E8F0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+.user-info .name { font-size: 0.9rem; font-weight: 600; }
+.user-info .role { font-size: 0.75rem; color: var(--text-sec); }
+
+/* --- MAIN CONTENT (Справа) --- */
+.main-content {
+    flex: 1; /* Займає весь вільний простір */
+    overflow-y: auto; /* Скролиться тільки ця частина */
+    padding: 32px 40px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.page-title h1 { font-size: 1.8rem; margin-bottom: 5px; }
+.page-title p { color: var(--text-sec); }
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(107, 70, 193, 0.3); }
+
+/* --- КАРТКИ (GRID) --- */
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.note-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    height: 260px;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.note-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    border-color: #D8B4FE;
+}
+
+.note-date { font-size: 0.8rem; color: var(--text-sec); margin-bottom: 12px; background: #F1F5F9; align-self: flex-start; padding: 4px 8px; border-radius: 6px;}
+.note-preview { flex: 1; overflow: hidden; font-size: 0.9rem; mask-image: linear-gradient(180deg, black 60%, transparent 100%); }
+
+/* Стилі Markdown всередині карток */
+.note-preview h1 { font-size: 1.2em; margin-bottom: 0.5em; }
+.note-preview p { line-height: 1.5; color: #475569; }
+
+.delete-btn {
+    position: absolute; top: 15px; right: 15px;
+    background: white; color: #EF4444; border: 1px solid #FEE2E2;
+    border-radius: 8px; padding: 6px; cursor: pointer;
+    opacity: 0; transition: 0.2s;
+}
+.note-card:hover .delete-btn { opacity: 1; }
+
+.empty-state { margin-top: 80px; text-align: center; color: var(--text-sec); }
+.hidden { display: none; }
+.icon-large { font-size: 48px; color: #CBD5E1; margin-bottom: 10px; }
