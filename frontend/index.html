@@ -1,42 +1,165 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Головна сторінка</title>
-
-  <link rel="stylesheet" href="./src/style/main.css">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-
-  <style>
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkiRise - One workspace. Zero busywork.</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../../style/auth/main.css">
+    
+    <link rel="stylesheet" href="./src/style/main.css">
 </head>
 <body>
-  
-  <div id="header-container">
-    </div> 
 
-  <section class="hero">
-    <h1>*****</h1> 
-    <p>Це наш крутий Hero Section. Тут починається наш шлях.</p>
-    
-    <div class="button-group">
+    <header class="header">
+        <div class="container header-container">
+            <a href="main_page.html" class="logo-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
 
-      <a href="./src/pages/workspace/note/note_list.html">Почати навчання</a>
-      
-      <button class="hero-btn">Дізнатися більше</button>
-    </div>
-  </section>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#">Notion</a></li>
+                    <li><a href="#">Mail</a></li>
+                    <li><a href="#">Calendar</a></li>
+                    <li><a href="#">AI</a></li>
+                    <li><a href="#">Enterprise</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Explore</a></li>
+                    <li><a href="demo.html">Request a demo</a></li>
+                </ul>
+            </nav>
 
-  <section class="features">
-    <h2>Наші можливості</h2>
-    <p>Тут скоро з'являться картки, іконки та корисний функціонал.</p>
-  </section>
+            <div class="auth-buttons">
+                <a href="./src/pages/auth/login_page.html" class="btn btn-secondary">Log in</a>
+                <a href="./src/pages/workspace/note/note_list.html" class="btn btn-primary">Почати навчання</a>
+            </div>
+        </div>
+    </header>
 
-  <script type="module" src="../src/scripts/main.js"></script>
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-image">
+                    <img src="../../../public/main-page-logo.png" alt="SkiRise Illustration">
+                </div>
+
+                <h1 class="hero-title">
+                    One workspace.<br>
+                    Zero busywork.
+                </h1>
+                <p class="hero-subtitle">
+                    SkiRise is where your teams and AI agents capture knowledge, find answers, and automate projects. Now a team of 7 feels like 70.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="./src/pages/workspace/note/note_list.html" class="btn btn-primary btn-large">Почати навчання</a>
+                    
+                    <a href="demo.html" class="btn btn-secondary btn-large">Request a demo</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="pricing-section">
+            <div class="container">
+                <h2 class="section-title">Choose your right plan!</h2>
+
+                <div class="pricing-toggle">
+                    <button class="toggle-btn active">Monthly</button>
+                    <button class="toggle-btn">Quarterly</button>
+                </div>
+
+                <div class="pricing-grid">
+                    
+                    <a href="signup-pro.html" class="pricing-card-link">
+                        <div class="pricing-card">
+                            <span class="plan-badge">Pro</span>
+                            <div class="card-content">
+                                </div>
+                        </div>
+                    </a>
+
+                    <a href="signup-pro-plus.html" class="pricing-card-link">
+                        <div class="pricing-card featured">
+                            <span class="plan-badge">Pro Plus</span>
+                            <div class="card-content">
+                                </div>
+                        </div>
+                    </a>
+
+                    <a href="contact-sales.html" class="pricing-card-link">
+                        <div class="pricing-card">
+                            <span class="plan-badge">Custom</span>
+                            <div class="card-content">
+                                </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            
+            <div class="footer-col brand-col">
+                <h3>SkiRise</h3>
+                <div class="social-icons">
+                    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/87/87390.png" alt="Instagram"></a>
+                    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/20/20673.png" alt="Facebook"></a>
+                    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733641.png" alt="WhatsApp"></a>
+                    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384014.png" alt="LinkedIn"></a>
+                    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub"></a>
+                </div>
+                <button class="lang-btn">
+                    🌐 English (US)
+                </button>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Security</a></li>
+                    <li><a href="#">Status</a></li>
+                    <li><a href="#">Terms & privacy</a></li>
+                    <li><a href="#">Your privacy rights</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Download</h4>
+                <ul>
+                    <li><a href="#">Android</a></li>
+                    <li><a href="#">Windows</a></li>
+                    <li><a href="#">Calendar</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>SkiRise for</h4>
+                <ul>
+                    <li><a href="#">Admin</a></li>
+                    <li><a href="#">Teacher</a></li>
+                    <li><a href="#">Student</a></li>
+                </ul>
+                <br>
+                <a href="#" class="explore-more">Explore more ➝</a>
+            </div>
+
+        </div>
+    </footer>
+
+    <script type="module" src="../src/scripts/main.js"></script>
 </body>
 </html>
