@@ -1,0 +1,27 @@
+/* SplitStyles.css */
+
+.split {
+    display: flex;
+    box-sizing: border-box;
+}
+
+.gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.gutter:hover {
+    background-color: #6A5ACD; /* Підсвітка при наведенні */
+    transition: background-color 0.2s;
+}
+
+.gutter.gutter-horizontal {
+    cursor: col-resize;
+    width: 10px; /* Ширина вертикального розділювача */
+}
+
+.gutter.gutter-vertical {
+    cursor: row-resize;
+    height: 10px; /* Висота горизонтального розділювача */
+}

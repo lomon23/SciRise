@@ -1,0 +1,98 @@
+/* frontend/src/style/note/note_content.css */
+
+.main-content {
+    padding: 20px 30px;
+    flex-grow: 1;
+    background-color: #f7f7f7; /* Світлий фон сторінки */
+}
+
+/* --- Заголовки розділів --- */
+.content-section {
+    margin-bottom: 40px;
+}
+
+.content-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* --- Секція Favorite Notes (горизонтальний скрол) --- */
+
+.cards-container {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 15px;
+    overflow-x: auto; /* Дозволяє горизонтальну прокрутку */
+    scrollbar-width: none; /* Приховує смугу прокрутки (Firefox) */
+}
+
+.cards-container::-webkit-scrollbar {
+    display: none; /* Приховує смугу прокрутки (Chrome/Safari) */
+}
+
+/* Стиль для порожнього стану Favorite Notes */
+.empty-favorites-card {
+    min-width: 200px; /* Фіксована ширина картки */
+    height: 150px;
+    background-color: #e0e0e0; /* Світло-сірий */
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Секція Your Notes (сітка) --- */
+
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+/* Стиль для кнопки "Створити курс" (великий плюс) */
+.create-card {
+    min-height: 200px;
+    background-color: white;
+    border: 2px solid rgba(93, 63, 211, 0.5); /* Фіолетова облямівка */
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.create-card:hover {
+    box-shadow: 0 6px 15px rgba(93, 63, 211, 0.3);
+    transform: translateY(-2px);
+}
+
+.create-icon {
+    font-size: 60px;
+    font-weight: 300;
+    color: #5d3fd3; /* Фіолетовий колір вашого сайдбару */
+    line-height: 1;
+}
+
+.create-text {
+    margin-top: 10px;
+    color: #5d3fd3;
+    font-weight: 500;
+}
+
+
+/* --- Стиль для заглушок (порожніх карток) --- */
+.placeholder-card {
+    min-height: 200px;
+    background-color: #e0e0e0;
+    border-radius: 12px;
+}

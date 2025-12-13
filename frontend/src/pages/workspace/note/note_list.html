@@ -14,42 +14,14 @@
 </head>
 <body>
 
-    <div class="app-container">
-
-        <aside class="sidebar">
-            <div class="logo-area">
-                EduVerse <span>Notes</span>
-            </div>
-
-            <nav class="menu">
-                <a href="#" class="menu-item active">
-                    <span class="material-symbols-rounded">grid_view</span>
-                    Всі курси
-                </a>
-                <a href="#" class="menu-item">
-                    <span class="material-symbols-rounded">school</span>
-                    Навчання
-                </a>
-                <a href="#" class="menu-item">
-                    <span class="material-symbols-rounded">favorite</span>
-                    Улюблене
-                </a>
-            </nav>
-
-            <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="avatar">U</div>
-                    <div class="user-info">
-                        <div class="name">User</div>
-                        <div class="role">Admin</div>
-                    </div>
-                </div>
-            </div>
-        </aside>
+    <div id="app-container" class="app-container">
 
         <main class="main-content">
             
             <header class="content-header">
+                <button id="menuTriggerBtn" class="menu-trigger-btn">
+                    <span class="material-symbols-rounded">menu</span>
+                </button>
                 <div class="page-title">
                     <h1>Мої курси</h1>
                     <p>Керуй своїми знаннями</p>
@@ -61,7 +33,7 @@
             </header>
 
             <div id="notesGrid" class="notes-grid">
-                </div>
+            </div>
             
             <div id="emptyState" class="empty-state hidden">
                 <span class="material-symbols-rounded icon-large">library_books</span>
@@ -72,6 +44,8 @@
 
     </div>
 
+    <script type="module" src="../../../scripts/main.js"></script>
     <script src="../../../scripts/note/note_list.js"></script>
+
 </body>
 </html>

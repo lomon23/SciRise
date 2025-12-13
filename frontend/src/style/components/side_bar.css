@@ -1,0 +1,146 @@
+/* Базові стилі для всього сайдбару */
+.sidebar-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 280px; /* Ширина, як на скріншоті */
+    background-color: #5d3fd3; /* Фіолетовий колір */
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+
+    /* Початкова позиція: повністю приховано ліворуч */
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-out; /* Плавний перехід */
+
+    /* Використовуємо flex для розміщення елементів зверху до низу */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Розтягує контент і притискає кнопку виходу до низу */
+}
+
+/* Клас для відображення сайдбару */
+.sidebar-menu.active {
+    transform: translateX(0);
+}
+
+/* Оверлей, який з'являється поза сайдбаром */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none; /* За замовчуванням приховано */
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+
+/* --- Стилі для розділу користувача --- */
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.avatar-placeholder {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ccc; /* Сірий колір, як на скріншоті */
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.username-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.username-handle {
+    font-size: 0.9rem;
+    color: #bdbdbd; /* Світло-сірий для handle та Edit Profile */
+    margin: 0;
+}
+
+.edit-profile {
+    font-size: 0.8rem;
+    color: #bdbdbd;
+    text-decoration: none;
+    margin-top: 2px;
+}
+
+
+/* --- Стилі для навігації --- */
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin-bottom: 10px;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 10px 0;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.sidebar-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.icon {
+    fill: white;
+    width: 24px;
+    height: 24px;
+}
+
+/* --- Стилі для кнопки виходу --- */
+
+.logout-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 10px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Невеликий роздільник */
+}
+
+.logout-link .icon {
+    /* Змінюємо напрямок стрілки, щоб вона виглядала як "Вихід" */
+    transform: rotate(180deg);
+}
+
+/* --- Стиль для кнопки-тригера (якщо вона в сайдбарі) --- */
+.toggle-sidebar-btn {
+    /* Робимо кнопку невидимою, оскільки вона знаходиться в меню */
+    display: none;
+}
