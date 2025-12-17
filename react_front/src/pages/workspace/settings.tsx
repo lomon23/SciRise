@@ -1,185 +1,205 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getCurrentUser, updateUserProfile } from '../../scripts/API_endPoint/profile/user.service';
+//import type { User } from '../../scripts/API_endPoint/profile/user_types';
 
 const SettingsPage: React.FC = () => {
-  const containerStyle = {
-    display: 'flex',
-    gap: '30px',
-    maxWidth: '1200px',
-    margin: '0 auto'
+  const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  // Стейт форми
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [bio, setBio] = useState('');
+  
+  // Пароль
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  // Аватарка
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+  // 1. Завантаження
+  useEffect(() => {
+    getCurrentUser()
+      .then(user => {
+        setFirstName(user.first_name || '');
+        setLastName(user.last_name || '');
+        setEmail(user.email || '');
+        setBio(user.profile.bio || '');
+        
+        if (user.profile.avatar) {
+          setAvatarPreview(`http://localhost:8000${user.profile.avatar}`);
+        }
+        setLoading(false);
+      })
+      .catch(err => console.error(err));
+  }, []);
+
+  // 2. Вибір файлу
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setAvatarFile(file);
+      setAvatarPreview(URL.createObjectURL(file));
+    }
   };
 
-  const menuCardStyle = {
-    flex: 1,
-    backgroundColor: 'white',
-    borderRadius: '15px',
-    padding: '20px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-    height: 'fit-content'
+  // 3. Збереження
+  const handleSave = async () => {
+    if (newPassword && newPassword !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    setSaving(true);
+    const formData = new FormData();
+    
+    formData.append('first_name', firstName);
+    formData.append('last_name', lastName);
+    formData.append('email', email);
+    formData.append('bio', bio);
+    
+    if (newPassword) {
+      formData.append('password', newPassword);
+    }
+
+    if (avatarFile) {
+      formData.append('avatar', avatarFile);
+    }
+
+    try {
+      await updateUserProfile(formData);
+      setNewPassword(''); // Очищаємо поле паролю
+      setConfirmPassword('');
+      alert('Profile updated successfully!');
+    } catch (error) {
+      alert('Failed to save changes');
+      console.error(error);
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const contentCardStyle = {
-    flex: 3,
-    backgroundColor: 'white',
-    borderRadius: '15px',
-    padding: '40px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+  // 4. Видалення акаунту
+  const handleDeleteAccount = async () => {
+    if (confirm("Are you sure? This action cannot be undone. All your notes will be lost.")) {
+      try {
+        await fetch('http://localhost:8000/api/user/me/', { 
+            method: 'DELETE',
+            credentials: 'include' 
+        });
+        alert("Account deleted.");
+        navigate('/login'); // Викидаємо на логін
+      } catch (error) {
+        console.error("Failed to delete", error);
+      }
+    }
   };
 
-  const sectionTitleStyle = {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    marginBottom: '20px',
-    borderBottom: '1px solid #eee',
-    paddingBottom: '10px'
-  };
+  if (loading) return <div className="p-10">Loading settings...</div>;
 
-  const inputGroupStyle = {
-    marginBottom: '20px'
-  };
-
-  const labelStyle = {
-    display: 'block',
-    marginBottom: '8px',
-    fontWeight: 500,
-    fontSize: '14px',
-    color: '#555'
-  };
-
-  const inputStyle = {
-    width: '100%',
-    padding: '10px 15px',
-    borderRadius: '8px',
-    border: '1px solid #ddd',
-    outline: 'none',
-    fontSize: '14px',
-    backgroundColor: '#F9F9F9'
-  };
-
-  const menuItemStyle = (isActive: boolean) => ({
-    padding: '12px 15px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    marginBottom: '5px',
-    backgroundColor: isActive ? '#F0EEFA' : 'transparent',
-    color: isActive ? '#6A5ACD' : '#333',
-    fontWeight: isActive ? 'bold' : 'normal' as 'normal'
-  });
+  const labelStyle = "block text-sm font-semibold text-gray-700 mb-2";
+  const inputStyle = "w-full p-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#6A5ACD] transition-colors bg-white";
 
   return (
-    <div style={{ paddingBottom: '50px' }}>
-      <div style={{ marginBottom: '30px' }}>
-        <h1 style={{ margin: 0 }}>Settings</h1>
-        <p style={{ color: '#888', marginTop: '5px' }}>Manage your account settings and preferences.</p>
-      </div>
+    <div className="flex min-h-screen bg-[#F8F9FC] font-sans justify-center">
+      
+      <div className="w-full max-w-4xl p-6 md:p-8">
+        <h1 className="text-2xl font-bold text-gray-800 mb-8">Settings</h1>
 
-      <div style={containerStyle}>
-        
-        <div style={menuCardStyle}>
-          <div style={menuItemStyle(true)}>General</div>
-          <div style={menuItemStyle(false)}>Account</div>
-          <div style={menuItemStyle(false)}>Notifications</div>
-          <div style={menuItemStyle(false)}>Appearance</div>
-          <div style={menuItemStyle(false)}>Privacy & Security</div>
-          <div style={menuItemStyle(false)}>Billing</div>
-        </div>
-
-        <div style={contentCardStyle}>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-10">
           
-          <div style={{ marginBottom: '40px' }}>
-            <div style={sectionTitleStyle}>Public Profile</div>
+          {/* --- PROFILE SECTION --- */}
+          <div>
+            <h2 className="text-lg font-bold text-gray-800 mb-6">Profile Details</h2>
             
-            <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '20px' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#E0E0E0' }}></div>
+            <div className="flex items-center gap-6 mb-8">
+              <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden flex-shrink-0 border-2 border-white shadow-sm">
+                {avatarPreview ? (
+                  <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 text-xl font-bold">
+                    {firstName[0]}
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex gap-3">
+                <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
+                <button onClick={() => fileInputRef.current?.click()} className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                  Change Picture
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <button style={{ backgroundColor: 'white', border: '1px solid #ddd', padding: '8px 15px', borderRadius: '5px', cursor: 'pointer', marginRight: '10px' }}>Change Picture</button>
-                <button style={{ backgroundColor: 'white', border: 'none', color: '#d9534f', cursor: 'pointer' }}>Delete</button>
+                <label className={labelStyle}>First Name</label>
+                <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className={inputStyle} />
+              </div>
+              <div>
+                <label className={labelStyle}>Last Name</label>
+                <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} className={inputStyle} />
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '20px' }}>
-              <div style={{ ...inputGroupStyle, flex: 1 }}>
-                <label style={labelStyle}>First Name</label>
-                <input type="text" style={inputStyle} defaultValue="User" />
-              </div>
-              <div style={{ ...inputGroupStyle, flex: 1 }}>
-                <label style={labelStyle}>Last Name</label>
-                <input type="text" style={inputStyle} defaultValue="Name" />
-              </div>
+            <div className="mb-6">
+               <label className={labelStyle}>Email Address</label>
+               <input type="email" value={email} onChange={e => setEmail(e.target.value)} className={inputStyle} />
             </div>
 
-            <div style={inputGroupStyle}>
-              <label style={labelStyle}>Bio</label>
-              <textarea style={{ ...inputStyle, height: '80px', resize: 'none' }} defaultValue="Student at University. Learning React and TypeScript." />
+            <div>
+              <label className={labelStyle}>Bio</label>
+              <textarea rows={3} value={bio} onChange={e => setBio(e.target.value)} className={inputStyle} placeholder="Tell us about yourself..." />
             </div>
           </div>
 
-          <div style={{ marginBottom: '40px' }}>
-            <div style={sectionTitleStyle}>Contact Info</div>
-            
-            <div style={inputGroupStyle}>
-              <label style={labelStyle}>Email Address</label>
-              <input type="email" style={inputStyle} defaultValue="username@example.com" />
-            </div>
+          <hr className="border-gray-100" />
 
-            <div style={inputGroupStyle}>
-              <label style={labelStyle}>Phone Number</label>
-              <input type="tel" style={inputStyle} defaultValue="+380 99 123 45 67" />
-            </div>
-          </div>
-
-          <div style={{ marginBottom: '40px' }}>
-            <div style={sectionTitleStyle}>Preferences</div>
-            
-            <div style={inputGroupStyle}>
-              <label style={labelStyle}>Language</label>
-              <select style={inputStyle}>
-                <option>English (United States)</option>
-                <option>Ukrainian</option>
-                <option>German</option>
-              </select>
-            </div>
-
-            <div style={inputGroupStyle}>
-              <label style={labelStyle}>Timezone</label>
-              <select style={inputStyle}>
-                <option>(GMT+02:00) Eastern European Time (Kyiv)</option>
-                <option>(GMT+00:00) London</option>
-                <option>(GMT-05:00) Eastern Time (US & Canada)</option>
-              </select>
+          {/* --- PASSWORD SECTION --- */}
+          <div>
+            <h2 className="text-lg font-bold text-gray-800 mb-6">Change Password</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div>
+                  <label className={labelStyle}>New Password</label>
+                  <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className={inputStyle} placeholder="Min 6 characters" />
+               </div>
+               <div>
+                  <label className={labelStyle}>Confirm Password</label>
+                  <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className={inputStyle} placeholder="Repeat password" />
+               </div>
             </div>
           </div>
 
-          <div style={{ marginBottom: '20px' }}>
-            <div style={sectionTitleStyle}>Notifications</div>
-            
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #f5f5f5' }}>
-              <div>
-                <div style={{ fontWeight: 500 }}>Email Notifications</div>
-                <div style={{ fontSize: '12px', color: '#888' }}>Receive emails about your account activity.</div>
-              </div>
-              <input type="checkbox" checked readOnly style={{ transform: 'scale(1.2)' }} />
-            </div>
+          <hr className="border-gray-100" />
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #f5f5f5' }}>
-              <div>
-                <div style={{ fontWeight: 500 }}>Push Notifications</div>
-                <div style={{ fontSize: '12px', color: '#888' }}>Receive push notifications on your device.</div>
-              </div>
-              <input type="checkbox" readOnly style={{ transform: 'scale(1.2)' }} />
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0' }}>
-              <div>
-                <div style={{ fontWeight: 500 }}>Weekly Digest</div>
-                <div style={{ fontSize: '12px', color: '#888' }}>Get a weekly summary of your learning progress.</div>
-              </div>
-              <input type="checkbox" checked readOnly style={{ transform: 'scale(1.2)' }} />
-            </div>
+          {/* --- DANGER ZONE --- */}
+          <div>
+            <h2 className="text-lg font-bold text-red-600 mb-2">Danger Zone</h2>
+            <p className="text-sm text-gray-500 mb-4">Once you delete your account, there is no going back. Please be certain.</p>
+            <button 
+              onClick={handleDeleteAccount}
+              className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-lg text-sm font-medium hover:bg-red-100 transition"
+            >
+              Delete Account
+            </button>
           </div>
 
-          <div style={{ marginTop: '30px', textAlign: 'right' }}>
-            <button style={{ backgroundColor: 'transparent', border: '1px solid #ccc', padding: '10px 20px', borderRadius: '5px', marginRight: '10px', cursor: 'pointer' }}>Cancel</button>
-            <button style={{ backgroundColor: '#6A5ACD', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '5px', cursor: 'pointer' }}>Save Changes</button>
+          {/* --- SAVE BUTTONS --- */}
+          <div className="flex justify-end pt-6 border-t border-gray-100">
+            <button 
+              onClick={handleSave}
+              disabled={saving}
+              className="px-8 py-3 bg-[#6A5ACD] text-white rounded-xl text-sm font-bold hover:bg-[#5842b5] transition shadow-lg shadow-indigo-200 disabled:opacity-70"
+            >
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
           </div>
 
         </div>

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,8 +41,9 @@ INSTALLED_APPS = [
     'main',
     'rest_framework',
     'corsheaders',
+    'channels',
 ]
-
+ASGI_APPLICATION = 'myproject.asgi.application'
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.security.SecurityMiddleware',
@@ -129,3 +131,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+MEDIA_URL = '/'  # URL для доступу до медіафайлів
+
+# Фізичний шлях до папки з файлами на комп'ютері
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
+# settings.py
+GEMINI_API_KEY = "AIzaSyA87YljId5FhaP7Gz1qF7y14fIbHqzJQlw"

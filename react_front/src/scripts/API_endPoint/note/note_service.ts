@@ -66,3 +66,22 @@ export const deleteNote = async (id: number): Promise<void> => {
     throw new Error('Failed to delete note');
   }
 };
+
+// Додай цю функцію до існуючих
+export const aiEditNote = async (text: string, instruction: string) => {
+    // Отримуємо токен (якщо ти використовуєш cookies, цей крок може бути іншим,
+    // але зазвичай fetch з credentials: 'include' працює сам)
+    const response = await fetch('http://localhost:8000/api/ai/edit/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Важливо для сесії/кук
+        body: JSON.stringify({ text, instruction }),
+    });
+
+    if (!response.ok) {
+        throw new Error('AI Edit failed');
+    }
+    return response.json();
+};

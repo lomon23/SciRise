@@ -1,0 +1,102 @@
+/* src/style/workspace/calendar_custom.css */
+
+.react-calendar {
+  width: 100%;
+  background: white;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.125em;
+  padding: 10px;
+}
+
+/* Навігація (Місяць, рік, стрілочки) */
+.react-calendar__navigation {
+  display: flex;
+  height: 44px;
+  margin-bottom: 20px;
+}
+
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.react-calendar__navigation button:hover {
+  background-color: #F3F0FF; /* Світло-фіолетовий */
+  color: #6A5ACD;
+}
+
+/* Дні тижня */
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.75em;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+  text-decoration: none; /* Прибираємо підкреслення */
+}
+.react-calendar__month-view__weekdays__weekday abbr {
+    text-decoration: none;
+    cursor: default;
+}
+
+/* Кнопки днів */
+.react-calendar__tile {
+  max-width: 100%;
+  padding: 10px 6.6667px;
+  background: none;
+  text-align: center;
+  line-height: 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 12px; /* Заокруглення */
+  cursor: pointer;
+  transition: 0.2s;
+  color: #444;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-calendar__tile:hover {
+  background-color: #F3F0FF;
+  color: #6A5ACD;
+}
+
+/* Сьогоднішній день */
+.react-calendar__tile--now {
+  background: #fff;
+  border: 1px solid #6A5ACD;
+  color: #6A5ACD;
+  font-weight: bold;
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: #F3F0FF;
+}
+
+/* Вибраний день (Активний) */
+.react-calendar__tile--active {
+  background: #6A5ACD !important;
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(106, 90, 205, 0.3);
+}
+
+/* Сусідні місяці (бліді) */
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #e0e0e0;
+}
