@@ -1,28 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Split from 'react-split';
 import ReactMarkdown from 'react-markdown';
-import '../../style/workspace/editor_page.css'; // Не забудь імпортувати стилі!
+import { getNote, updateNote } from '../../scripts/API_endPoint/note/note_service';
+import '../../style/workspace/editor_page.css';
+
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => { setDebouncedValue(value); }, delay);
+    return () => { clearTimeout(handler); };
+  }, [value, delay]);
+  return debouncedValue;
+}
+
+// --- ХЕЛПЕР ДЛЯ ВИТЯГУВАННЯ ЗАГОЛОВКА ---
+const extractTitle = (markdown: string): string => {
+  // 1. Беремо перший рядок (до ентера)
+  const firstLine = markdown.split('\n')[0] || "";
+  
+  // 2. Прибираємо "решітки" (#) і пробіли, якщо вони є на початку
+  // Наприклад: "#  Hello " -> "Hello"
+  // Наприклад: "Just text" -> "Just text"
+  let title = firstLine.replace(/^#+\s*/, '').trim();
+
+  // 3. Обрізаємо, якщо занадто довгий (опціонально, щоб не ламати верстку карток)
+  if (title.length > 50) {
+    title = title.substring(0, 50) + "...";
+  }
+
+  // 4. Якщо пусто, повертаємо дефолт
+  return title || "Untitled Note";
+};
 
 const EditorPage: React.FC = () => {
-  // Стейт для тексту (Markdown)
-  const [markdownText, setMarkdownText] = useState<string>('# Hello, SkiRise!\n\nStart typing in the editor on the right...');
-  
-  // Стейт для чату (поки що просто поле вводу)
-  const [aiInput, setAiInput] = useState<string>('');
+  const { id } = useParams<{ id: string }>();
+  const noteId = Number(id);
 
-  const cardStyle = {
-    backgroundColor: 'white',
-    height: '100%',
-    overflow: 'auto',
-    padding: '20px',
-    boxSizing: 'border-box' as 'border-box',
-    position: 'relative' as 'relative'
+  const [markdownText, setMarkdownText] = useState<string>('');
+  const [aiInput, setAiInput] = useState<string>('');
+  
+  const [isDataLoaded, setIsDataLoaded] = useState(false); 
+  const [saveStatus, setSaveStatus] = useState<'Saved' | 'Saving...' | 'Unsaved' | 'Loading...'>('Loading...');
+
+  // 1. ЗАВАНТАЖЕННЯ ДАНИХ
+  useEffect(() => {
+    if (!noteId) return;
+    
+    setIsDataLoaded(false); 
+    setSaveStatus('Loading...');
+
+    getNote(noteId)
+      .then(note => {
+        setMarkdownText(note.content || ""); 
+        setIsDataLoaded(true); 
+        setSaveStatus('Saved');
+      })
+      .catch(err => {
+        console.error("Error loading note:", err);
+        setSaveStatus('Unsaved');
+      });
+  }, [noteId]);
+
+  // 2. АВТОЗБЕРЕЖЕННЯ (Тепер з оновленням заголовка!)
+  const debouncedContent = useDebounce(markdownText, 1000);
+
+  useEffect(() => {
+    if (!noteId || !isDataLoaded) return; 
+
+    const save = async () => {
+      setSaveStatus('Saving...');
+      
+      // --- МАГІЯ ТУТ ---
+      // Визначаємо заголовок на льоту
+      const newTitle = extractTitle(debouncedContent);
+
+      try {
+        // Відправляємо і контент, і новий заголовок
+        await updateNote(noteId, { 
+            content: debouncedContent,
+            title: newTitle 
+        });
+        
+        setSaveStatus('Saved');
+        // Тут можна додати оновлення контексту, якщо хочеш щоб в Sidebar назва мінялась миттєво
+      } catch (e) {
+        setSaveStatus('Unsaved');
+        console.error(e);
+      }
+    };
+    
+    save();
+  }, [debouncedContent, noteId, isDataLoaded]);
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMarkdownText(e.target.value);
+    setSaveStatus('Unsaved');
   };
 
+  const containerStyle = { height: 'calc(100vh - 20px)', padding: '10px' };
+
   return (
-    <div style={{ height: 'calc(100vh - 40px)', padding: '10px' }}> {/* Відступ від країв */}
-      
-      {/* Горизонтальний спліт: Ліва (Markdown) vs Права (Editor + AI) */}
+    <div style={containerStyle}>
+      <div style={{ position: 'absolute', top: '15px', right: '30px', zIndex: 10, fontSize: '12px', fontWeight: 'bold', color: saveStatus === 'Saved' ? 'green' : saveStatus === 'Unsaved' ? 'red' : 'orange' }}>
+        {saveStatus}
+      </div>
+
       <Split 
         className="split" 
         sizes={[50, 50]} 
@@ -30,111 +113,50 @@ const EditorPage: React.FC = () => {
         expandToMin={false} 
         gutterSize={10} 
         gutterAlign="center" 
-        snapOffset={30} 
-        dragInterval={1}
         direction="horizontal"
         cursor="col-resize"
         style={{ height: '100%' }}
       >
-        
-        {/* === ЛІВА ПАНЕЛЬ: Результат (Markdown Render) === */}
-        <div style={{ ...cardStyle, borderRadius: '10px 0 0 10px' }}>
-             {/* Заголовок або меню (три крапки) можна додати тут */}
-             <div style={{ position: 'absolute', top: '10px', right: '10px', color: '#ccc', cursor: 'pointer' }}>⋮</div>
-             
-             {/* Власне рендер Markdown */}
-             <div className="markdown-body" style={{ color: '#333', lineHeight: '1.6' }}>
-                <ReactMarkdown>{markdownText}</ReactMarkdown>
+        <div style={{ backgroundColor: 'white', overflow: 'auto', padding: '20px', borderRadius: '10px 0 0 10px', border: '1px solid #eee' }}>
+             <div className="markdown-body">
+                {!isDataLoaded ? <p style={{color: '#ccc'}}>Loading...</p> : <ReactMarkdown>{markdownText}</ReactMarkdown>}
              </div>
         </div>
 
-        {/* === ПРАВА ПАНЕЛЬ: Містить вертикальний спліт === */}
         <div style={{ height: '100%' }}>
-            
             <Split
-                className="split"
-                sizes={[50, 50]}
+                className="split-vertical"
+                sizes={[70, 30]}
                 minSize={100}
-                expandToMin={false}
-                gutterSize={10}
-                gutterAlign="center"
-                snapOffset={30}
-                dragInterval={1}
                 direction="vertical"
                 cursor="row-resize"
-                style={{ height: '100%', flexDirection: 'column' }}
+                style={{ height: '100%' }}
             >
-                
-                {/* --- ВЕРХ: Редактор тексту --- */}
-                <div style={{ ...cardStyle, borderRadius: '0 10px 0 0', padding: 0 }}>
-                    <div style={{ position: 'absolute', top: '10px', right: '10px', color: '#ccc', cursor: 'pointer', zIndex: 2 }}>⋮</div>
+                <div style={{ backgroundColor: 'white', padding: 0, borderRadius: '0 10px 0 0', border: '1px solid #eee' }}>
                     <textarea 
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            border: 'none',
-                            outline: 'none',
-                            resize: 'none',
-                            padding: '20px',
-                            fontSize: '16px',
-                            fontFamily: 'monospace',
-                            color: '#555'
-                        }}
-                        placeholder="Start writing..."
+                        style={{ width: '100%', height: '100%', border: 'none', outline: 'none', resize: 'none', padding: '20px', fontSize: '16px', fontFamily: 'monospace', color: '#333' }}
+                        placeholder="# Start with a title..."
                         value={markdownText}
-                        onChange={(e) => setMarkdownText(e.target.value)}
+                        onChange={handleTextChange}
+                        disabled={!isDataLoaded}
                     />
                 </div>
-
-                {/* --- НИЗ: AI Чат (Хардкод) --- */}
-                <div style={{ ...cardStyle, borderRadius: '0 0 10px 0', display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ position: 'absolute', top: '10px', right: '10px', color: '#ccc', cursor: 'pointer' }}>⋮</div>
-                    
-                    {/* Область повідомлень (Центральний текст "Чим можу допомогти?") */}
-                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#aaa', fontSize: '18px' }}>
-                        Чим можу допомогти?
+                <div style={{ backgroundColor: 'white', borderRadius: '0 0 10px 0', padding: '20px', display: 'flex', flexDirection: 'column', border: '1px solid #eee' }}>
+                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#aaa' }}>
+                        AI Copilot ready...
                     </div>
-
-                    {/* Поле вводу AI */}
-                    <div style={{ position: 'relative', marginTop: 'auto' }}>
+                    <div style={{ position: 'relative' }}>
                         <input 
                             type="text" 
-                            placeholder="Start writing..." 
+                            placeholder="Ask AI..." 
                             value={aiInput}
                             onChange={(e) => setAiInput(e.target.value)}
-                            style={{
-                                width: '100%',
-                                padding: '12px 40px 12px 15px',
-                                borderRadius: '20px',
-                                border: '1px solid #6A5ACD', // Фіолетовий бордюр
-                                outline: 'none'
-                            }}
+                            style={{ width: '100%', padding: '10px', borderRadius: '20px', border: '1px solid #6A5ACD', outline: 'none' }}
                         />
-                        {/* Кнопка відправки (стрілочка) */}
-                        <button style={{
-                            position: 'absolute',
-                            right: '5px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            background: '#6A5ACD',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '50%',
-                            width: '30px',
-                            height: '30px',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-                            ↑
-                        </button>
                     </div>
                 </div>
-
             </Split>
         </div>
-
       </Split>
     </div>
   );

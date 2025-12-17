@@ -60,10 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
           <span>🏠</span> Home
         </Link>
 
-        {/* --- НОВЕ ПОСИЛАННЯ НА EDITOR (Work Space) --- */}
-        <Link to="/workspace/editor" style={{ color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '18px' }}>
-          <span>📝</span> Editor
-        </Link>
+        {/* Editor прибрано звідси */}
 
         <Link to="/workspace/settings" style={{ color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '18px' }}>
           <span>⚙️</span> Settings
