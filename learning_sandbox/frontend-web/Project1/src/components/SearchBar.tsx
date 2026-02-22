@@ -24,6 +24,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)} 
         style={{ 
+          width: '700px',
           padding: '12px', 
           borderRadius: 'var(--border-radius)', 
           border: 'none',

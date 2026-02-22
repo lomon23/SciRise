@@ -37,7 +37,7 @@ export const HourlyForecast = ({ data }: HourlyForecastProps) => {
               {hour.time}
             </div>
             <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
-              {hour.temp}°C
+              {hour.temp.toFixed(1)}°C
             </div>
           </div>
         ))}
