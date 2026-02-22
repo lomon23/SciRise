@@ -11,7 +11,7 @@ function App() {
   const [loading, setLoading] = useState(false);             
   const [error, setError] = useState<string | null>(null);   
 
-  /*const fetchWeather = async (city: string) => {
+  const fetchWeather = async (city: string) => {
     setLoading(true);    
     setError(null);      
     setWeatherData(null); 
@@ -24,23 +24,9 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };*/
+  };
 
-  const fetchWeather = async (city: string) => {
-  setLoading(true);
-  setError(null);
-  
-  // Імітуємо затримку мережі
-  setTimeout(() => {
-    setWeatherData({
-      city: city,
-      current: { temp: 22, humidity: 45, precipitation_chance: 10, condition: 'Сонячно', advice: 'Гарна погода для прогулянки!' },
-      hourly: Array(24).fill(null).map((_, i) => ({ time: `${i}:00`, temp: 20 + Math.random() * 5 })),
-      daily: Array(7).fill(null).map((_, i) => ({ date: `2026-02-${23+i}`, temp_max: 25, temp_min: 18, condition: 'Ясно' }))
-    });
-    setLoading(false);
-  }, 500);
-};
+
 
   useEffect(() => {
     fetchWeather('Львів'); 
