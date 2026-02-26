@@ -84,9 +84,28 @@ void WeatherUI::updateView(const QJsonObject& root) {
     double temp = current["temp"].toDouble();
     QString advice = current["advice"].toString();
 
+    QWidget *container = this->findChild<QWidget*>("CardContainer");
+    if (!container) return;
+
+    QHBoxLayout *layout = qobject_cast<QHBoxLayout*>(container->layout());
+    if (!layout) return;
+
+    QLayoutItem *child;
+    while((child = layout->takeAt(0)) != nullptr){
+        delete child->widget();
+        delete child;
+    }
+
     QJsonArray forecast = root["forecast"].toArray();
     for (const QJsonValue& val : forecast) {
         QJsonObject dayObj = val.toObject();
+        auto *card = new WeatherCard(
+            dayObj["day"].toString(),
+            dayObj["temp"].toDouble(),
+            container
+        );
+
+        layout->addWidget(card);
     }
 }
 
