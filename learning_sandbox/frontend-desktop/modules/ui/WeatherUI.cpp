@@ -8,107 +8,109 @@
 #include <QMessageBox>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QLabel>
+#include <QDebug>
+#include <QJsonDocument>
 
 WeatherUI::WeatherUI(QWidget *parent) : QWidget(parent) {
-    // 1. Базові налаштування вікна
     setWindowTitle("SciRise Weather");
-    resize(800, 600);
+    resize(900, 700);
 
-    // 2. Головний вертикальний лейаут (розташовує елементи зверху вниз)
     auto *mainLayout = new QVBoxLayout(this);
-
-    // 3. Верхня панель (Поле вводу + Кнопка)
-    auto *searchLayout = new QHBoxLayout(); // Горизонтальний лейаут
+    
+    auto *searchLayout = new QHBoxLayout();
     auto *cityInput = new QLineEdit(this);
     cityInput->setPlaceholderText("Введіть назву міста...");
-    
     auto *searchButton = new QPushButton("Пошук", this);
     searchButton->setCursor(Qt::PointingHandCursor);
-
     searchLayout->addWidget(cityInput);
     searchLayout->addWidget(searchButton);
 
-    // 4. Зона для карток прогнозу (Скрол)
-    auto *scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    
-    // Контейнер, який буде знаходитись всередині скролу
-    auto *cardContainer = new QWidget();
-    cardContainer->setObjectName("CardContainer"); // Спеціально для твого applyStyles()
-    
-    // Горизонтальний лейаут для карток (зліва направо)
-    auto *cardsLayout = new QHBoxLayout(cardContainer);
-    cardsLayout->setAlignment(Qt::AlignLeft);
-    
-    scrollArea->setWidget(cardContainer);
+    auto *currentWeatherWidget = new QWidget(this);
+    currentWeatherWidget->setObjectName("CurrentWeather");
+    auto *currentLayout = new QVBoxLayout(currentWeatherWidget);
+    auto *lblMainInfo = new QLabel("Оберіть місто", currentWeatherWidget);
+    lblMainInfo->setObjectName("MainTempLabel");
+    lblMainInfo->setAlignment(Qt::AlignCenter);
+    currentLayout->addWidget(lblMainInfo);
 
-    // 5. Збираємо все до купи у головний лейаут
+    auto *hourlyScroll = new QScrollArea(this);
+    hourlyScroll->setWidgetResizable(true);
+    hourlyScroll->setFixedHeight(120);
+    auto *hourlyContainer = new QWidget();
+    hourlyContainer->setObjectName("HourlyContainer");
+    auto *hourlyLayout = new QHBoxLayout(hourlyContainer);
+    hourlyLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    hourlyScroll->setWidget(hourlyContainer);
+
+    auto *dailyScroll = new QScrollArea(this);
+    dailyScroll->setWidgetResizable(true);
+    auto *dailyContainer = new QWidget();
+    dailyContainer->setObjectName("DailyContainer");
+    auto *dailyLayout = new QHBoxLayout(dailyContainer);
+    dailyLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    dailyScroll->setWidget(dailyContainer);
+
     mainLayout->addLayout(searchLayout);
-    mainLayout->addWidget(scrollArea);
+    mainLayout->addWidget(currentWeatherWidget);
+    mainLayout->addWidget(new QLabel("Погодинний прогноз (24г):"));
+    mainLayout->addWidget(hourlyScroll);
+    mainLayout->addWidget(new QLabel("Прогноз на тиждень:"));
+    mainLayout->addWidget(dailyScroll);
 
-    // 6. МАГІЯ СИГНАЛІВ: коли тиснемо кнопку, відправляємо сигнал searchRequested
     connect(searchButton, &QPushButton::clicked, this, [this, cityInput]() {
-        if (!cityInput->text().trimmed().isEmpty()) {
-            // Випромінюємо сигнал, який у main.cpp підключений до WeatherNetwork
-            emit searchRequested(cityInput->text().trimmed()); 
-        }
+        QString text = cityInput->text().trimmed();
+        if (!text.isEmpty()) emit searchRequested(text);
     });
-    
-    // Щоб пошук працював і по натисканню Enter у полі вводу
     connect(cityInput, &QLineEdit::returnPressed, searchButton, &QPushButton::click);
 
-    // 7. Застосовуємо твої стилі з методу applyStyles()
     applyStyles();
+}
+
+void WeatherUI::updateView(const QJsonObject& root) {
+    auto *lblMain = findChild<QLabel*>("MainTempLabel");
+    QJsonObject current = root["current"].toObject();
+    if (lblMain) {
+        lblMain->setText(QString("%1: %2°C\n%3")
+            .arg(root["city"].toString())
+            .arg(current["temp"].toDouble())
+            .arg(current["advice"].toString()));
+    }
+
+    auto updateContainer = [this](const QString& objectName, const QJsonArray& data, bool isHourly) {
+        QWidget *container = findChild<QWidget*>(objectName);
+        if (!container) return;
+        QLayout *layout = container->layout();
+        
+        QLayoutItem *item;
+        while ((item = layout->takeAt(0))) {
+            if (QWidget *w = item->widget()) w->deleteLater();
+            delete item;
+        }
+
+        for (const QJsonValue& val : data) {
+            QJsonObject obj = val.toObject();
+            QString label = isHourly ? obj["time"].toString() : obj["date"].toString();
+            double t = isHourly ? obj["temp"].toDouble() : obj["temp_max"].toDouble();
+            layout->addWidget(new WeatherCard(label, t, container));
+        }
+    };
+
+    updateContainer("HourlyContainer", root["hourly"].toArray(), true);
+    updateContainer("DailyContainer", root["daily"].toArray(), false);
 }
 
 void WeatherUI::applyStyles() {
     this->setStyleSheet(R"(
-        QWidget { 
-            background-color: #1f1f1f; 
-            color: white; 
-            font-family: 'Segoe UI', sans-serif;
-        }
-        QLineEdit { 
-            background-color: #306c8c; 
-            border-radius: 8px; 
-            padding: 8px; 
-            border: none;
-        }
+        QWidget { background-color: #1a1a1a; color: white; font-family: 'Segoe UI'; }
+        QLineEdit { background-color: #2d2d2d; border-radius: 5px; padding: 5px; border: 1px solid #3d3d3d; }
+        QPushButton { background-color: #306c8c; border-radius: 5px; padding: 5px 15px; }
+        #MainTempLabel { font-size: 24px; font-weight: bold; margin: 20px; color: #4a90e2; }
         QScrollArea { border: none; background: transparent; }
-        #CardContainer { background: transparent; }
+        #HourlyContainer, #DailyContainer { background: transparent; }
     )");
 }
 
-void WeatherUI::updateView(const QJsonObject& root) {
-    QJsonObject current = root["current"].toObject();
-    double temp = current["temp"].toDouble();
-    QString advice = current["advice"].toString();
-
-    QWidget *container = this->findChild<QWidget*>("CardContainer");
-    if (!container) return;
-
-    QHBoxLayout *layout = qobject_cast<QHBoxLayout*>(container->layout());
-    if (!layout) return;
-
-    QLayoutItem *child;
-    while((child = layout->takeAt(0)) != nullptr){
-        delete child->widget();
-        delete child;
-    }
-
-    QJsonArray forecast = root["forecast"].toArray();
-    for (const QJsonValue& val : forecast) {
-        QJsonObject dayObj = val.toObject();
-        auto *card = new WeatherCard(
-            dayObj["day"].toString(),
-            dayObj["temp"].toDouble(),
-            container
-        );
-
-        layout->addWidget(card);
-    }
-}
-
 void WeatherUI::showError(const QString &message) {
-    QMessageBox::critical(this, "Помилка", message);
+    QMessageBox::critical(this, "SciRise Error", message);
 }
