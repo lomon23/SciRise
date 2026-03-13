@@ -1,17 +1,13 @@
 #include <QApplication>
-#include "modules/network/WeatherNetwork.h"
-#include "modules/ui/WeatherUI.h"
+#include <QWidget>
 
-int main(int argc, char* argv[]) {
-    QApplication a(argc, argv);
+int main(int argc, char *argv[]){
+    QApplication app(argc, argv);
 
-    WeatherUI ui;
-    WeatherNetwork network;
+    QWidget window;
+    window.resize(400, 300);
+    window.setWindowTitle("Desktop application");
+    window.show();
 
-    QObject::connect(&ui, &WeatherUI::searchRequested, &network, &WeatherNetwork::fetchWeather);
-    QObject::connect(&network, &WeatherNetwork::dataReady, &ui, &WeatherUI::updateView);
-    QObject::connect(&network, &WeatherNetwork::errorOccurred, &ui, &WeatherUI::showError);
-
-    ui.show();
-    return a.exec();
+    return app.exec();
 }
