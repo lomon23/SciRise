@@ -3,6 +3,7 @@ import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 
 function App() {
+  const [access_token, set_access_token] = useState<string | null>(null);
 
   const [is_login_view, set_is_login_view] = useState<boolean>(true);
 
@@ -46,7 +47,10 @@ function App() {
       </div>
 
       
-      {is_login_view ? <LoginForm /> : <RegisterForm />}
+      {is_login_view ? 
+  <LoginForm onLoginSuccess={(token: string) => set_access_token(token)} /> : 
+  <RegisterForm />
+}
       
     </div>
   );

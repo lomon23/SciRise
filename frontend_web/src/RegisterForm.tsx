@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import api from './api';
 
 const styles = {
     CardContainer: {
@@ -62,15 +63,25 @@ const RegisterForm = () => {
     const [user_username, set_user_username] = useState<string>('');
     const [user_password, set_user_password] = useState<string>('');
 
-    const handleRegisterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log('Дані для реєстрації (ref #4):', { 
-            email: user_email, 
-            username: user_username, 
-            password: user_password 
-        });
-    };
+   const handleRegisterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  
+  try {
+    const response = await api.post('/register/', {
+      email: user_email,
+      username: user_username,
+      password: user_password
+    });
 
+    if (response.status === 201) {
+      console.log('Користувача створено! (ref #5)');
+      alert('Реєстрація успішна! Тепер ви можете увійти.');
+    }
+  } catch (error: any) {
+    console.error('Помилка реєстрації:', error.response?.data || error.message);
+    alert('Не вдалося зареєструватися. Можливо, такий імейл вже є?');
+  }
+};
     return (
         <div style={styles.CardContainer}>
             <h2 style={styles.Header}>Реєстрація</h2>

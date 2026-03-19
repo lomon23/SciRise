@@ -1,73 +1,25 @@
 import React, { useState } from 'react';
-
 import api from './api';
 
-const styles = {
-    
-    CardContainer: {
-        backgroundColor: '#FFFFFF',
-        padding: '40px',
-        borderRadius: '12px', 
-        boxShadow: '0 10px 25px rgba(0,0,0,0.5)', 
-        maxWidth: '350px',
-        width: '100%',
-        margin: '50px auto',
-        fontFamily: 'sans-serif'
-    },
-    Header: {
-        textAlign: 'center' as const,
-        marginBottom: '30px',
-        color: '#1a1a1a', 
-        textTransform: 'uppercase' as const, 
-        letterSpacing: '1px'
-    },
-    Form: {
-        display: 'flex',
-        flexDirection: 'column' as const,
-        gap: '20px'
-    },
-    Label: {
-        display: 'block',
-        marginBottom: '8px',
-        color: '#555',
-        fontSize: '14px',
-        fontWeight: 'bold'
-    },
-    Input: {
-        width: '100%',
-        padding: '12px',
-        boxSizing: 'border-box' as const,
-        backgroundColor: '#F5F5F5', 
-        color: '#1a1a1a',
-        border: '1px solid #ddd',
-        borderRadius: '6px'
-    },
-    
-    SubmitButton: {
-        padding: '12px',
-        marginTop: '15px',
-        cursor: 'pointer',
-        backgroundColor: '#00BAC7', 
-        color: 'white',
-        border: 'none',
-        borderRadius: '6px',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        textTransform: 'uppercase' as const,
-        letterSpacing: '1px',
-        transition: 'background-color 0.2s'
-    }
+interface LoginFormProps {
+    onLoginSuccess: (token: string) => void;
+}
+
+const styles: { [key: string]: React.CSSProperties } = {
+    CardContainer: { backgroundColor: '#FFFFFF', padding: '40px', borderRadius: '12px', maxWidth: '350px', width: '100%', margin: '50px auto', fontFamily: 'sans-serif' },
+    Header: { textAlign: 'center', color: '#1a1a1a' },
+    Form: { display: 'flex', flexDirection: 'column' },
+    Label: { display: 'block', marginBottom: '6px', color: '#555', fontSize: '14px', fontWeight: 'bold' },
+    Input: { width: '100%', padding: '10px', boxSizing: 'border-box', backgroundColor: '#F5F5F5', color: '#1a1a1a', border: '1px solid #ddd', borderRadius: '6px', marginBottom: '15px' },
+    SubmitButton: { padding: '12px', cursor: 'pointer', backgroundColor: '#00D1B2', color: 'white', border: 'none', borderRadius: '6px', fontWeight: 'bold', width: '100%' }
 };
 
-const LoginForm = () => {
-    
+const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
     const [user_email, set_user_email] = useState<string>('');
     const [user_password, set_user_password] = useState<string>('');
 
-    
     const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
         try {
             const response = await api.post('/login/', {
                 email: user_email,
@@ -75,15 +27,16 @@ const LoginForm = () => {
             });
 
             if (response.status === 200) {
-                console.log('Успішний вхід! Отримано access токен (ref #5)');
-                alert('Ви успішно увійшли в SciRise!');
                 
+                onLoginSuccess(response.data.access);
+                alert('Ви успішно увійшли!');
             }
         } catch (error: any) {
-            console.error('Помилка авторизації:', error.response?.data || error.message);
-            alert('Помилка: перевірте дані або стан сервера');
+            console.error('Помилка:', error.response?.data || error.message);
+            alert('Помилка авторизації');
         }
     };
+    
 
     return (
         <div style={styles.CardContainer}>
@@ -95,7 +48,7 @@ const LoginForm = () => {
                     <input
                         type="email"
                         value={user_email}
-                        onChange={(e) => set_user_email(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => set_user_email(e.target.value)}
                         required
                         style={styles.Input}
                         placeholder="email@gmail.com"
@@ -107,7 +60,7 @@ const LoginForm = () => {
                     <input
                         type="password"
                         value={user_password}
-                        onChange={(e) => set_user_password(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => set_user_password(e.target.value)}
                         required
                         style={styles.Input}
                         placeholder="••••••••"
