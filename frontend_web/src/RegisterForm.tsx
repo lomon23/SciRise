@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 
 
 const styles = {
-    
     CardContainer: {
         backgroundColor: '#FFFFFF',
         padding: '40px',
-        borderRadius: '12px', 
-        boxShadow: '0 10px 25px rgba(0,0,0,0.5)', 
+        borderRadius: '12px',
+        boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
         maxWidth: '350px',
         width: '100%',
         margin: '50px auto',
@@ -16,27 +15,27 @@ const styles = {
     Header: {
         textAlign: 'center' as const,
         marginBottom: '30px',
-        color: '#1a1a1a', 
-        textTransform: 'uppercase' as const, 
+        color: '#1a1a1a',
+        textTransform: 'uppercase' as const,
         letterSpacing: '1px'
     },
     Form: {
         display: 'flex',
         flexDirection: 'column' as const,
-        gap: '20px'
+        gap: '15px' 
     },
     Label: {
         display: 'block',
-        marginBottom: '8px',
+        marginBottom: '6px',
         color: '#555',
         fontSize: '14px',
         fontWeight: 'bold'
     },
     Input: {
         width: '100%',
-        padding: '12px',
+        padding: '10px',
         boxSizing: 'border-box' as const,
-        backgroundColor: '#F5F5F5', 
+        backgroundColor: '#F5F5F5',
         color: '#1a1a1a',
         border: '1px solid #ddd',
         borderRadius: '6px'
@@ -46,7 +45,7 @@ const styles = {
         padding: '12px',
         marginTop: '15px',
         cursor: 'pointer',
-        backgroundColor: '#00BAC7', 
+        backgroundColor: '#00D1B2',
         color: 'white',
         border: 'none',
         borderRadius: '6px',
@@ -54,27 +53,29 @@ const styles = {
         fontWeight: 'bold',
         textTransform: 'uppercase' as const,
         letterSpacing: '1px',
-        transition: 'background-color 0.2s'
     }
 };
 
-const LoginForm = () => {
-    
+const RegisterForm = () => {
+
     const [user_email, set_user_email] = useState<string>('');
+    const [user_username, set_user_username] = useState<string>('');
     const [user_password, set_user_password] = useState<string>('');
 
-    
-    const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleRegisterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Дані для входу (ref #4):', { email: user_email, password: user_password });
-        // Тут пізніше буде API
+        console.log('Дані для реєстрації (ref #4):', { 
+            email: user_email, 
+            username: user_username, 
+            password: user_password 
+        });
     };
 
     return (
         <div style={styles.CardContainer}>
-            <h2 style={styles.Header}>Авторизація</h2>
+            <h2 style={styles.Header}>Реєстрація</h2>
             
-            <form onSubmit={handleLoginSubmit} style={styles.Form}>
+            <form onSubmit={handleRegisterSubmit} style={styles.Form}>
                 <div>
                     <label style={styles.Label}>Email Address</label>
                     <input
@@ -84,6 +85,18 @@ const LoginForm = () => {
                         required
                         style={styles.Input}
                         placeholder="email@gmail.com"
+                    />
+                </div>
+
+                <div>
+                    <label style={styles.Label}>Username</label>
+                    <input
+                        type="text"
+                        value={user_username}
+                        onChange={(e) => set_user_username(e.target.value)}
+                        required
+                        style={styles.Input}
+                        placeholder="Username"
                     />
                 </div>
 
@@ -100,11 +113,11 @@ const LoginForm = () => {
                 </div>
 
                 <button type="submit" style={styles.SubmitButton}>
-                    Увійти
+                    Створити аккаунт
                 </button>
             </form>
         </div>
     );
 };
 
-export default LoginForm;
+export default RegisterForm;
