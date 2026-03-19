@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import api from './api';
 
 const styles = {
     
@@ -64,10 +65,24 @@ const LoginForm = () => {
     const [user_password, set_user_password] = useState<string>('');
 
     
-    const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Дані для входу (ref #4):', { email: user_email, password: user_password });
-        // Тут пізніше буде API
+        
+        try {
+            const response = await api.post('/login/', {
+                email: user_email,
+                password: user_password
+            });
+
+            if (response.status === 200) {
+                console.log('Успішний вхід! Отримано access токен (ref #5)');
+                alert('Ви успішно увійшли в SciRise!');
+                
+            }
+        } catch (error: any) {
+            console.error('Помилка авторизації:', error.response?.data || error.message);
+            alert('Помилка: перевірте дані або стан сервера');
+        }
     };
 
     return (
