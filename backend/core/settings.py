@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'users',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -120,4 +121,9 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,     
+    'BLACKLIST_AFTER_ROTATION': True,  
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+CORS_ALLOW_CREDENTIALS = True
