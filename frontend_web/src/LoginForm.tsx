@@ -18,6 +18,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
     const [user_email, set_user_email] = useState<string>('');
     const [user_password, set_user_password] = useState<string>('');
 
+    const [error_message, set_error_message] = useState<string>('');
     const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -29,12 +30,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
             if (response.status === 200) {
                 
                 onLoginSuccess(response.data.access);
-                alert('Ви успішно увійшли!');
+            
             }
         } catch (error: any) {
             console.error('Помилка:', error.response?.data || error.message);
-            alert('Помилка авторизації');
+            set_error_message('Помилка авторизації. Перевірте пошту або пароль.');
         }
+   
     };
     
 
@@ -66,7 +68,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
                         placeholder="••••••••"
                     />
                 </div>
-
+                 
+                {error_message && <p style={{ color: 'red' }}>{error_message}</p>}
+                
                 <button type="submit" style={styles.SubmitButton}>
                     Увійти
                 </button>
