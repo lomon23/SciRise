@@ -1,6 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
+import axios, { AxiosError } from 'axios';
 
-import api from './api';
+import api from '../../api';
+
 
 const styles = {
     CardContainer: {
@@ -58,29 +61,38 @@ const styles = {
 };
 
 const RegisterForm = () => {
-
+    const [validation_errors, set_validation_errors] = useState<Record<string, string[]>>({});
     const [user_email, set_user_email] = useState<string>('');
     const [user_username, set_user_username] = useState<string>('');
     const [user_password, set_user_password] = useState<string>('');
+    const navigate = useNavigate();
 
    const handleRegisterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   
   try {
-    const response = await api.post('/register/', {
+    const response = await api.post('register/', {
       email: user_email,
       username: user_username,
       password: user_password
     });
 
     if (response.status === 201) {
-      console.log('Користувача створено! (ref #5)');
-      alert('Реєстрація успішна! Тепер ви можете увійти.');
+      console.log('Користувача створено!');
+      navigate('/login');
     }
-  } catch (error: any) {
-    console.error('Помилка реєстрації:', error.response?.data || error.message);
-    alert('Не вдалося зареєструватися. Можливо, такий імейл вже є?');
-  }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+        const axios_error = error as AxiosError<Record<string, string[]>>;
+        if (axios_error.response && axios_error.response.status === 400) {
+            set_validation_errors(axios_error.response.data);
+        } else {
+            console.error('Системна помилка API:', axios_error.message);
+        }
+    } else {
+        console.error('Невідома помилка:', error);
+    }
+ }
 };
     return (
         <div style={styles.CardContainer}>
@@ -95,8 +107,13 @@ const RegisterForm = () => {
                         onChange={(e) => set_user_email(e.target.value)}
                         required
                         style={styles.Input}
-                        placeholder="email@gmail.com"
+                        placeholder="user@scirise.com"
                     />
+                    {validation_errors.email && (
+                     <span style={{ color: 'red', fontSize: '12px' }}>
+                     {validation_errors.email?.[0]}
+                     </span>
+                    )}
                 </div>
 
                 <div>
@@ -109,6 +126,11 @@ const RegisterForm = () => {
                         style={styles.Input}
                         placeholder="Username"
                     />
+                    {validation_errors.username && (
+                     <span style={{ color: 'red', fontSize: '12px' }}>
+                     {validation_errors.username?.[0]}
+                     </span>
+                    )}
                 </div>
 
                 <div>
@@ -121,6 +143,11 @@ const RegisterForm = () => {
                         style={styles.Input}
                         placeholder="••••••••"
                     />
+                    {validation_errors.password && (
+                     <span style={{ color: 'red', fontSize: '12px' }}>
+                     {validation_errors.password?.[0]}
+                     </span>
+                    )}
                 </div>
 
                 <button type="submit" style={styles.SubmitButton}>

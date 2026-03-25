@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import api from './api';
+import api from '../../api';
+import { use_auth_store } from '../../store/authStore';
+import axios, { AxiosError } from 'axios';
 
-interface LoginFormProps {
-    onLoginSuccess: (token: string) => void;
-}
+
 
 const styles: { [key: string]: React.CSSProperties } = {
     CardContainer: { backgroundColor: '#FFFFFF', padding: '40px', borderRadius: '12px', maxWidth: '350px', width: '100%', margin: '50px auto', fontFamily: 'sans-serif' },
@@ -14,7 +14,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     SubmitButton: { padding: '12px', cursor: 'pointer', backgroundColor: '#00D1B2', color: 'white', border: 'none', borderRadius: '6px', fontWeight: 'bold', width: '100%' }
 };
 
-const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
+    const LoginForm: React.FC = () => {
+    const set_access_token = use_auth_store((state) => state.set_access_token);
     const [user_email, set_user_email] = useState<string>('');
     const [user_password, set_user_password] = useState<string>('');
 
@@ -22,22 +23,34 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
     const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await api.post('/login/', {
+            const response = await api.post('login/', {
                 email: user_email,
                 password: user_password
             });
 
             if (response.status === 200) {
                 
-                onLoginSuccess(response.data.access);
+                set_access_token(response.data.access);
             
             }
-        } catch (error: any) {
-            console.error('Помилка:', error.response?.data || error.message);
-            set_error_message('Помилка авторизації. Перевірте пошту або пароль.');
+        }  catch (error) {
+    if (axios.isAxiosError(error)) { 
+        const axios_error = error as AxiosError<{ detail?: string }> 
+        
+        if (axios_error.response) {
+            if (axios_error.response.status === 401) {
+                set_error_message(axios_error.response.data?.detail || 'Неправильний логін або пароль');
+            } else {
+                set_error_message(`Помилка сервера: ${axios_error.response.status}`);
+            }
+        } else {
+            set_error_message('Немає зв\'язку з сервером. Перевірте підключення.');
         }
-   
-    };
+    } else {
+        set_error_message('Сталася непередбачувана помилка');
+        console.error(error);
+    }
+}   };
     
 
     return (
@@ -53,7 +66,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => set_user_email(e.target.value)}
                         required
                         style={styles.Input}
-                        placeholder="email@gmail.com"
+                        placeholder="user@scirise.com"
                     />
                 </div>
 
