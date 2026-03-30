@@ -48,7 +48,7 @@ class AuthManager: public QObject{
         QNetworkAccessManager *m_networkManager;
         
         QString m_accessToken;
-        const QString m_baseUrl = "API_BASE_URL";
+        QString m_baseUrl;
 
         struct PendingRequest {
             QUrl url;
