@@ -161,7 +161,7 @@ void AuthManager::clearTokens()
 {
     m_accessToken.clear();
     QSettings settings("Scirise", "MyApp");
-    settings.remove("auth/refresh");
+    settings.remove("api/auth/refresh");
 }
 
 void AuthManager::logout()
