@@ -1,4 +1,8 @@
 #include <QApplication>
+#include <QFile>
+#include <QTextStream>
+#include <QDir>
+#include <QDebug>
 #include <QWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -6,8 +10,39 @@
 
 #include "AuthManager/AuthManager.h" 
 
+void loadEnv(const QString &filePath) {
+    QFile file(filePath);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        qWarning() << "Cannot open .env file at:" << file.fileName();
+        return;
+    }
+
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+ 
+        if (line.isEmpty() || line.startsWith("#")) {
+            continue;
+        }
+
+        int eqIndex = line.indexOf('=');
+        if (eqIndex > 0) {
+            QString key = line.left(eqIndex).trimmed();
+            QString value = line.mid(eqIndex + 1).trimmed();
+            
+            if (value.startsWith('"') && value.endsWith('"')) {
+                value = value.mid(1, value.length() - 2);
+            }
+
+            qputenv(key.toUtf8(), value.toUtf8());
+        }
+    }
+}
+
 int main(int argc, char *argv[]){
     QApplication app(argc, argv);
+
+    loadEnv(".env");
 
     QWidget window;
     window.resize(400, 300);

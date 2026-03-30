@@ -48,7 +48,7 @@ class AuthManager: public QObject{
         QNetworkAccessManager *m_networkManager;
         
         QString m_accessToken;
-        const QString m_baseUrl = "http://127.0.0.1:8000/api/auth";
+        const QString m_baseUrl = "API_BASE_URL";
 
         struct PendingRequest {
             QUrl url;

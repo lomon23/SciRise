@@ -1,7 +1,9 @@
 #include "AuthManager.h"
+#include <QProcessEnvironment>
 
 AuthManager::AuthManager(QObject *parent) : QObject(parent){
     m_networkManager = new QNetworkAccessManager(this);
+    m_baseUrl = qEnvironmentVariable("API_BASE_URL", "http://127.0.0.1:8000/api/auth");
 }
 
 void AuthManager::registerUser(const QString &email, const QString &username, const QString &password)
@@ -147,14 +149,13 @@ void AuthManager::retryPendingRequests()
 void AuthManager::saveRefreshToken(const QString &token)
 {
     QSettings settings("Scirise", "MyApp");
-    settings.setValue("auth/refresh", token.toUtf8().toBase64()); 
+    settings.setValue("api/auth/refresh", token); 
 }
 
 QString AuthManager::loadRefreshToken()
 {
     QSettings settings("Scirise", "MyApp");
-    QByteArray base64Token = settings.value("auth/refresh").toByteArray();
-    return QString::fromUtf8(QByteArray::fromBase64(base64Token));
+    return settings.value("api/auth/refresh").toString();
 }
 
 void AuthManager::clearTokens()
