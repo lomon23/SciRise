@@ -148,20 +148,20 @@ void AuthManager::retryPendingRequests()
 
 void AuthManager::saveRefreshToken(const QString &token)
 {
-    QSettings settings("Scirise", "MyApp");
+    QSettings settings("SciRise", "MyApp");
     settings.setValue("api/auth/refresh", token); 
 }
 
 QString AuthManager::loadRefreshToken()
 {
-    QSettings settings("Scirise", "MyApp");
+    QSettings settings("SciRise", "MyApp");
     return settings.value("api/auth/refresh").toString();
 }
 
 void AuthManager::clearTokens()
 {
     m_accessToken.clear();
-    QSettings settings("Scirise", "MyApp");
+    QSettings settings("SciRise", "MyApp");
     settings.remove("api/auth/refresh");
 }
 

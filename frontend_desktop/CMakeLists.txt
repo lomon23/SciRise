@@ -8,8 +8,16 @@ set(CMAKE_AUTORCC ON)
 find_package(Qt6 REQUIRED COMPONENTS Widgets Network)
 
 add_executable(QtBaseProject
-    main.cpp
-    AuthManager/AuthManager.h
-    AuthManager/AuthManager.cpp
+    src/main.cpp
+    src/core/AuthManager/AuthManager.h
+    src/core/AuthManager/AuthManager.cpp
+    src/ui/LoginForm/LoginForm.h
+    src/ui/LoginForm/LoginForm.cpp
 )
+
+target_include_directories(QtBaseProject PRIVATE
+    src/core/AuthManager
+    src/ui/LoginForm
+)
+
 target_link_libraries(QtBaseProject Qt6::Widgets Qt6::Network)
