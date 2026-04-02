@@ -5,7 +5,10 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QVBoxLayout>
-#include "AuthManager.h"
+
+#include "AuthServise.h"
+#include "TokenManager.h"
+#include "ApiClient.h"
 
 class LoginForm: public QWidget{
     Q_OBJECT
@@ -22,7 +25,9 @@ class LoginForm: public QWidget{
         QPushButton *loginButton;
         QVBoxLayout *layout;
 
-        AuthManager *authManager;
+        TokenManager *tokenManager;
+        ApiClient *apiClient;
+        AuthServise *authServise;
 };
 
 #endif
