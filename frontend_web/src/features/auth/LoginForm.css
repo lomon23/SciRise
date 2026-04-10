@@ -1,0 +1,43 @@
+
+.auth-form-container {
+    width: 100%;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.custom-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.custom-input:focus {
+    outline: none;
+    border-color: #6347D1; 
+    box-shadow: 0 0 0 3px rgba(99, 71, 209, 0.1);
+}
+
+.input-row {
+    display: flex;
+    gap: 15px; 
+    margin-bottom: 20px;
+}
+
+.input-row .input-group {
+    margin-bottom: 0;
+    flex: 1; 
+}

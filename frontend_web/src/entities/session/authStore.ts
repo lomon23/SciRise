@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware'; // Додай цей імпорт
+import { persist } from 'zustand/middleware'; 
 
 interface AuthState {
     access_token: string | null;
@@ -15,7 +15,7 @@ export const use_auth_store = create<AuthState>()(
             clear_access_token: () => set({ access_token: null }),
         }),
         {
-            name: 'scirise-auth-storage', // Ключ у localStorage
+            name: 'scirise-auth-storage',
         }
     )
 );
