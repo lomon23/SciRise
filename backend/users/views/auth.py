@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import RegisterSerializer
+from ..serializers import RegisterSerializer
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
