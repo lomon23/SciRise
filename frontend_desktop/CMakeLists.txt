@@ -1,31 +1,29 @@
-cmake_minimum_required(VERSION 3.10)
-project(QtBaseProject)
+cmake_minimum_required(VERSION 3.16)
+project(SciRise VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Network)
+find_package(Qt6 COMPONENTS Core Gui Widgets Network WebSockets REQUIRED)
 
-add_executable(QtBaseProject
-    src/main.cpp
-    
-    src/core/network/ApiClient.cpp
-    src/core/network/ApiClient.h
-    
-    src/core/auth/AuthServise.cpp
-    src/core/auth/AuthServise.h
-    src/core/auth/TokenManager.cpp
-    src/core/auth/TokenManager.h
-    
-    src/ui/auth/LoginForm.h
-    src/ui/auth/LoginForm.cpp
+include_directories(src)
+
+file(GLOB_RECURSE SOURCES 
+    "src/*.cpp" 
+    "src/*.h" 
+    "src/*.ui"
 )
 
-target_include_directories(QtBaseProject PRIVATE
-    src/core/network
-    src/core/auth
-    src/ui/auth
-)
+add_executable(SciRise ${SOURCES})
 
-target_link_libraries(QtBaseProject Qt6::Widgets Qt6::Network)
+target_link_libraries(SciRise PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+    Qt6::Network
+    Qt6::WebSockets
+)
