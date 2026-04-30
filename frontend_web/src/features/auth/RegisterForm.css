@@ -1,0 +1,55 @@
+/* Базові стилі для форми (такі ж, як у логіні) */
+.auth-form-container {
+    width: 100%;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.custom-input {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    background-color: #F5F5F5;
+    color: #1a1a1a;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.custom-input:focus {
+    outline: none;
+    border-color: #6347D1;
+}
+
+.error-text {
+    color: #ff4d4f;
+    font-size: 13px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* НОВІ СТИЛІ: Щоб поля First Name та Last Name стояли в один рядок */
+.input-row {
+    display: flex;
+    gap: 15px; /* Відстань між полями */
+    margin-bottom: 20px;
+}
+
+.input-row .input-group {
+    margin-bottom: 0;
+    width: calc(50% - 7.5px); /* Рівно половина ширини мінус відступ */
+    display: flex;
+    flex-direction: column;
+}
