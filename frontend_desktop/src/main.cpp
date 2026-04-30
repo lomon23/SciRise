@@ -1,5 +1,5 @@
 #include <QApplication>
-#include "LoginForm.h"
+#include "ui/auth/LoginForm.h"
 #include "utils/EnvLoader.h"
 
 int main(int argc, char *argv[]) {

@@ -15,7 +15,7 @@ BaseSocketClient::~BaseSocketClient(){
     m_webSocket.close();
 }
 
-void BaseSocketClient::connectToServer(const QString &endpoint, QString &token){
+void BaseSocketClient::connectToServer(const QString &endpoint, const QString &token){
     QUrl url(endpoint);
     if(!token.isEmpty()){
         url.setQuery("token = " + token);
@@ -53,7 +53,7 @@ void BaseSocketClient::onDisconnected() {
 }
 
 void BaseSocketClient::onTextMessageReceived(const QString &message) {
-    handleTextMessage(message);
+    handleChatMessage(message);
 }
 
 void BaseSocketClient::onError(QAbstractSocket::SocketError error) {

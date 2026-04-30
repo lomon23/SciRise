@@ -25,14 +25,14 @@ class BaseSocketClient: public QObject{
 
     protected:
         void sendJson(const QJsonObject &json);
-        virtual void handleTextMessage(const QString &message) = 0;
+        virtual void handleChatMessage(const QString &message) = 0;
 
     private slots:
         void onConnected();
         void onDisconnected();
         void onTextMessageReceived(const QString &message);
         void onError(QAbstractSocket::SocketError error);
-        void onSslErrors(const QList<QSslerror> &errors);
+        void onSslErrors(const QList<QSslError> &errors);
 
     private:
         QWebSocket m_webSocket;

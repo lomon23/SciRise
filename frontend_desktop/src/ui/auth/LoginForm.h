@@ -6,9 +6,9 @@
 #include <QLineEdit>
 #include <QVBoxLayout>
 
-#include "AuthServise.h"
-#include "TokenManager.h"
-#include "ApiClient.h"
+#include "core/auth/AuthServise.h"
+#include "network/TokenManager.h"
+#include "network/ApiClient.h"
 
 class LoginForm: public QWidget{
     Q_OBJECT

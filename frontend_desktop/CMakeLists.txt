@@ -8,7 +8,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 COMPONENTS Core Gui Widgets Network WebSockets REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Widgets Network WebSockets WebEngineWidgets WebChannel REQUIRED)
 
 include_directories(src)
 
@@ -26,4 +26,6 @@ target_link_libraries(SciRise PRIVATE
     Qt6::Widgets
     Qt6::Network
     Qt6::WebSockets
+    Qt6::WebEngineWidgets
+    Qt6::WebChannel
 )

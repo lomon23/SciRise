@@ -23,7 +23,7 @@ void ChatSocketClient::handleChatMessage(const QString &message){
         return;
     }
 
-    if(obj.contains("message") && obj.contains["username"]){
-        emit chatMessageRecieved(obj["username"].toString(), obj["message"].toString());
+    if(obj.contains("message") && obj.contains("username")){
+        emit chatMessageReceived(obj["username"].toString(), obj["message"].toString());
     }
 }

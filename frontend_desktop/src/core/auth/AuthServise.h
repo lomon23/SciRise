@@ -2,8 +2,8 @@
 #define AUTHSERVISE_H
 
 #include <QObject>
-#include "ApiClient.h"
-#include "TokenManager.h"
+#include "network/ApiClient.h"
+#include "network/TokenManager.h"
 
 class AuthServise : public QObject {
     Q_OBJECT

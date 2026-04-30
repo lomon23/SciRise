@@ -6,8 +6,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include "ChatManager.h"
-#include "TokenManager.h"
+#include "core/chat/ChatManager.h"
+#include "network/TokenManager.h"
 
 class ChatWindow : public QWidget {
     Q_OBJECT

@@ -19,7 +19,7 @@ ChatManager::ChatManager(TokenManager *tokenManager, QObject *parent)
 
 void ChatManager::connectToChat(const QString &wsUrl){
     if(!m_tokenManager){
-        emit errorOcurred("No Token Manager provided");
+        emit errorOccurred("No Token Manager provided");
         return;
     }
 
@@ -42,11 +42,11 @@ void ChatManager::sendMessage(const QString &text){
     m_socketClient->sendChatMessage(text);
 }
 
-bool ChatManager::isConnected(){
+bool ChatManager::isConnected() const {
     return m_socketClient->isConnected();
 }
 
-void ChatManager::onRawMessageReceived(QString &username, QString &text){
+void ChatManager::onRawMessageReceived(const QString &username, const QString &text){
     ChatMessage msg;
 
     msg.username = username;

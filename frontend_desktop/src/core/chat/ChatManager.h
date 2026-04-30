@@ -2,27 +2,27 @@
 #define CHATMANAGER_H
 
 #include <QObject>
-#include "ChatSocketClient.h"
-#include "ChatMessage.h"
-#include "TokenManager.h"
+#include "network/sockets/ChatSocketClient.h"
+#include "models/ChatMessage.h"
+#include "network/TokenManager.h"
 
-class ChatManager{
+class ChatManager : public QObject{
     Q_OBJECT
     public:
-        explicit ChatManager(TokenManager *tokenManager, QObject *parent = nulltr);
+        explicit ChatManager(TokenManager *tokenManager, QObject *parent = nullptr);
 
         void connectToChat(const QString &wsUrl);
         void disconnectFromChat();
 
         void sendMessage(const QString &text);
 
-        void isConnected() const;
+        bool isConnected() const;
 
     signals:
         void connected();
         void disconnected();
         void messageReceived(const ChatMessage &message);
-        void errorOcurred(const QString &error);
+        void errorOccurred(const QString &error);
         void authFailed();
 
     private slots:
