@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import './LoginForm.css'; // Підключаємо нашу готову красу
+import { useNavigate, Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import axios from 'axios';
 import api from '../../api';
@@ -10,6 +11,7 @@ const RegisterForm = () => {
     const [user_password, set_user_password] = useState('');
     const navigate = useNavigate();
 
+    // Логіка відправки даних залишається повністю без змін
     const handleRegisterSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -27,17 +29,67 @@ const RegisterForm = () => {
     };
 
     return (
-        <form onSubmit={handleRegisterSubmit}>
-            <h2>Реєстрація</h2>
-            <input type="email" value={user_email} onChange={e => set_user_email(e.target.value)} placeholder="Email" required />
-            {validation_errors.email && <span style={{color: 'red'}}>{validation_errors.email[0]}</span>}
+        <div className="auth-page-container">
             
-            <input type="text" value={user_username} onChange={e => set_user_username(e.target.value)} placeholder="Username" required />
+            {/* 1. Форма тепер ЗЛІВА */}
+            <div className="auth-form-area">
+                <div className="auth-form-wrapper">
+                    
+                    <h2 style={{ fontSize: '32px', marginBottom: '8px', fontWeight: '600' }}>Register</h2>
+                    <p style={{ color: '#6c757d', fontSize: '14px', marginBottom: '35px' }}>
+                        Welcome! Please create your account.
+                    </p>
+
+                    <form onSubmit={handleRegisterSubmit}>
+                        
+                        <p style={{ fontSize: '12px', marginBottom: '8px', color: '#6c757d' }}>Email Address</p>
+                        <input 
+                            type="email" 
+                            value={user_email} 
+                            onChange={e => set_user_email(e.target.value)} 
+                            className="custom-input" 
+                            required 
+                        />
+                        {/* Якщо є помилка пошти, показуємо її тут */}
+                        {validation_errors.email && (
+                            <p style={{ color: 'red', fontSize: '13px', marginTop: '-15px', marginBottom: '15px' }}>
+                                {validation_errors.email[0]}
+                            </p>
+                        )}
+
+                        <p style={{ fontSize: '12px', marginBottom: '8px', color: '#6c757d' }}>User Name</p>
+                        <input 
+                            type="text" 
+                            value={user_username} 
+                            onChange={e => set_user_username(e.target.value)} 
+                            className="custom-input" 
+                            required 
+                        />
+                        
+                        <p style={{ fontSize: '12px', marginBottom: '8px', color: '#6c757d' }}>Password</p>
+                        <input 
+                            type="password" 
+                            value={user_password} 
+                            onChange={e => set_user_password(e.target.value)} 
+                            className="custom-input" 
+                            required 
+                        />
+                        
+                        <button type="submit" className="custom-button">Register</button>
+                    </form>
+
+                    {/* Посилання на логін */}
+                    <div style={{ marginTop: '25px', fontSize: '12px', color: '#6c757d' }}>
+                        Already Have An Account? <Link to="/login" className="auth-link" style={{color: '#6b4eb0', fontWeight: 'bold', textDecoration: 'none'}}>Log In</Link>
+                    </div>
+
+                </div>
+            </div>
+
+            {/* 2. Сірий квадрат тепер СПРАВА */}
+            <div className="auth-image-placeholder"></div>
             
-            <input type="password" value={user_password} onChange={e => set_user_password(e.target.value)} placeholder="Password" required />
-            
-            <button type="submit">Створити аккаунт</button>
-        </form>
+        </div>
     );
 };
 

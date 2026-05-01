@@ -1,7 +1,7 @@
+import './LoginForm.css';
 import React, { useState } from 'react';
 import api from '../../api';
 import { use_auth_store } from '../../store/authStore';
-import axios from 'axios';
 
 const LoginForm = () => {
     const set_access_token = use_auth_store((state) => state.set_access_token);
@@ -22,13 +22,61 @@ const LoginForm = () => {
     };
 
     return (
-        <form onSubmit={handleLoginSubmit}>
-            <h2>Авторизація</h2>
-            <input type="email" value={user_email} onChange={e => set_user_email(e.target.value)} placeholder="Email" required />
-            <input type="password" value={user_password} onChange={e => set_user_password(e.target.value)} placeholder="Password" required />
-            {error_message && <p style={{color: 'red'}}>{error_message}</p>}
-            <button type="submit">Увійти</button>
-        </form>
+        <div className="auth-page-container">
+            <div className="auth-image-placeholder"></div>
+
+            <div className="auth-form-area">
+                {/* Нова обгортка для обмеження ширини */}
+                <div className="auth-form-wrapper">
+                    
+                    <h2 style={{ fontSize: '32px', marginBottom: '8px', fontWeight: '600' }}>Login</h2>
+                    <p style={{ color: '#6c757d', fontSize: '14px', marginBottom: '35px' }}>
+                        Welcome Back! Please Login To Your Account
+                    </p>
+
+                    <form onSubmit={handleLoginSubmit}>
+                        
+                        <p style={{ fontSize: '12px', marginBottom: '8px', color: '#6c757d' }}>User Name</p>
+                        <input 
+                            type="email" 
+                            value={user_email} 
+                            onChange={e => set_user_email(e.target.value)} 
+                            className="custom-input" 
+                            required 
+                        />
+                        
+                        <p style={{ fontSize: '12px', marginBottom: '8px', color: '#6c757d' }}>Password</p>
+                        <input 
+                            type="password" 
+                            value={user_password} 
+                            onChange={e => set_user_password(e.target.value)} 
+                            className="custom-input" 
+                            required 
+                        />
+
+                        <div className="auth-options">
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                <input 
+                                    type="checkbox" 
+                                    style={{ width: '16px', height: '16px', accentColor: '#6b4eb0', cursor: 'pointer' }} 
+                                />
+                                Remember me
+                            </label>
+                            <span className="auth-link">Forget Password?</span>
+                        </div>
+                        
+                        {error_message && <p style={{color: 'red', fontSize: '14px'}}>{error_message}</p>}
+                        
+                        <button type="submit" className="custom-button">Login</button>
+                    </form>
+
+                    <div style={{ marginTop: '25px', fontSize: '12px', color: '#6c757d' }}>
+                        Don't Have An Account? <span className="auth-link" style={{color: '#6b4eb0', fontWeight: 'bold'}}>Sign Up</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     );
 };
 
