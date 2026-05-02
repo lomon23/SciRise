@@ -40,3 +40,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "message": event["message"],
             "username": event["username"],
         }))
+        #rtrgg
