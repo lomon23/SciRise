@@ -1,3 +1,19 @@
+:root {
+  --primary-purple: #6b4eb0; 
+  --primary-hover: #5a4296;
+  --bg-light: #f8f9fa;
+  --text-dark: #333333;
+  --border-color: #dce0e4;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  margin: 0;
+  padding: 0;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;

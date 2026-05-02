@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import api from '../../api';
+import { AuthService } from '../../apis/authService';
 import { use_auth_store } from '../../store/authStore';
-import axios from 'axios';
 
 const LoginForm = () => {
     const set_access_token = use_auth_store((state) => state.set_access_token);
@@ -11,8 +10,9 @@ const LoginForm = () => {
 
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        set_error_message('');
         try {
-            const response = await api.post('login/', { email: user_email, password: user_password });
+            const response = await AuthService.login({ email: user_email, password: user_password });
             if (response.status === 200) {
                 set_access_token(response.data.access);
             }
