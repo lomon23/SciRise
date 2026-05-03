@@ -1,6 +1,6 @@
-import './Navbar.css';
 import { Link } from 'react-router-dom';
 import { use_auth_store } from '../../store/authStore';
+import './Navbar.css';
 
 const Navbar = () => {
   const { access_token, clear_access_token } = use_auth_store();
@@ -22,8 +22,7 @@ const Navbar = () => {
             <Link to="/video" className="navbar-link">Відео</Link>
             <button 
               onClick={clear_access_token} 
-              className="navbar-link" 
-              style={{ background: 'none', border: 'none', padding: 0, fontFamily: 'inherit', cursor: 'pointer' }}
+              className="navbar-link-logout"
             >
               Вийти
             </button>

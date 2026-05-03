@@ -1,18 +1,10 @@
-.login-container {
+.register-container {
   display: flex;
-  height: calc(100vh - 85px);
+  height: calc(100vh - 85px); /* Мінус висота Navbar */
   font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
-/* Картинка тепер зліва, тому вона йде першою в коді або ми просто ставимо flex-direction */
-.login-image {
-  flex: 1;
-  background-color: #b0b0b0;
-  border-radius: 20px;
-  margin: 20px;
-}
-
-.login-content {
+.register-content {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -22,19 +14,19 @@
   background-color: #ffffff;
 }
 
-.login-form-box {
+.register-form-box {
   width: 100%;
   max-width: 450px;
 }
 
-.login-title {
+.register-title {
   font-size: 36px;
   font-weight: 700;
   margin-bottom: 10px;
   color: #000;
 }
 
-.login-subtitle {
+.register-subtitle {
   color: #6c757d;
   margin-bottom: 30px;
   font-size: 15px;
@@ -44,6 +36,18 @@
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+}
+
+/* Для полів Ім'я та Прізвище в один ряд */
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.form-row .form-group {
+  margin-bottom: 0;
+  flex: 1;
 }
 
 .form-label {
@@ -67,37 +71,10 @@
   border-color: #6b4eb0;
 }
 
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 13px;
-  color: #6c757d;
-}
-
-.form-options label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.forgot-link {
-  color: #6c757d;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.forgot-link:hover {
-  color: #6b4eb0;
-}
-
 .error-text {
   color: #ff3860;
   font-size: 12px;
   margin-top: 5px;
-  text-align: center;
 }
 
 .btn-submit {
@@ -111,6 +88,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-top: 10px;
 }
 
 .btn-submit:hover:not(:disabled) {
@@ -122,17 +100,24 @@
   cursor: not-allowed;
 }
 
-.register-link {
+.login-link {
   text-align: left;
   margin-top: 20px;
   font-size: 14px;
   color: #6c757d;
 }
 
-.register-link a {
+.login-link a {
   color: #6b4eb0;
   text-decoration: none;
   font-weight: 600;
+}
+
+.register-image {
+  flex: 1;
+  background-color: #b0b0b0; /* Сіра заглушка */
+  border-radius: 20px;
+  margin: 20px;
 }
 
 .login-container, .register-container {

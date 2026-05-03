@@ -1,41 +1,30 @@
-import './MainPage.css';
 import { Link } from 'react-router-dom';
 import { use_auth_store } from '../store/authStore';
+import HeroSection from '../components/landing/HeroSection';
+import AboutSection from '../components/landing/AboutSection';
+import Footer from '../components/landing/Footer';
+import './MainPage.css';
 
 const MainPage = () => {
   const token = use_auth_store((state) => state.access_token);
 
+  // СТАН 1: Залогінений (строго по ТЗ: пустий екран, голі кнопки без стилів)
+  if (token) {
+    return (
+      <div>
+        <Link to="/chat"><button>Просто чат</button></Link>
+        <Link to="/video"><button>Відео чат</button></Link>
+        <Link to="/profile"><button>Профіль</button></Link>
+      </div>
+    );
+  }
+
+  // СТАН 2: Не залогінений (збираємо лендінг з компонентів)
   return (
-    <div className="hero-container">
-      
-      {/* Блок з ілюстрацією */}
-      <div className="hero-illustration">
-        <div className="hero-circle"></div>
-      </div>
-
-      {/* Тексти з твого макету */}
-      <h1 className="hero-title">
-        One workspace.<br/>Zero busywork.
-      </h1>
-      
-      <p className="hero-subtitle">
-        SciRise is where your teams and AI agents capture knowledge, find answers, and automate projects. 
-        Now a team of 7 feels like 70.
-      </p>
-
-      <div className="hero-buttons">
-        {token ? (
-          // Якщо юзер вже зайшов
-          <Link to="/chat" className="btn-primary">Go to Workspace</Link>
-        ) : (
-          // Якщо юзер ще гість — показуємо кнопки як на дизайні
-          <>
-            <Link to="/register" className="btn-primary">Get SciRise free</Link>
-            <Link to="/login" className="btn-secondary">Request a demo</Link>
-          </>
-        )}
-      </div>
-
+    <div className="landing-page">
+      <HeroSection />
+      <AboutSection />
+      <Footer />
     </div>
   );
 };

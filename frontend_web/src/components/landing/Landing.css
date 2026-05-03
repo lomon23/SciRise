@@ -1,0 +1,189 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* Захищає від появи горизонтального скролу */
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+.landing-page-container {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.landing-page-container h1, 
+.landing-page-container h2, 
+.landing-page-container h3, 
+.landing-page-container h4, 
+.landing-page-container p {
+  font-family: inherit;
+}
+
+/* --- ABOUT SECTION --- */
+.about-section {
+  padding: 80px 20px;
+  background-color: #f8f9fa;
+  text-align: center;
+  font-family: 'Inter', 'Segoe UI', sans-serif; /* Примусово ставимо шрифт на всю секцію */
+}
+
+.about-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 50px;
+  color: #111;
+  font-family: 'Inter', 'Segoe UI', sans-serif; /* Примусово для головного заголовка */
+}
+
+.features-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  flex: 1;
+  min-width: 250px;
+  max-width: 330px;
+  text-align: left;
+  border: 1px solid #f0f0f0;
+  transition: transform 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  background-color: #f0ebff;
+  color: #6b4eb0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.feature-card h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #222;
+  font-family: 'Inter', 'Segoe UI', sans-serif; /* Примусово для заголовків карток */
+}
+
+.feature-card p {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.6;
+  font-family: 'Inter', 'Segoe UI', sans-serif; /* Примусово для тексту карток */
+}
+
+.landing-page, .hero-container {
+  padding-top: 50px; /* Рівно висота навбара */
+}
+
+/* --- FOOTER SECTION --- */
+.footer-section {
+  background-color: #6b4eb0;
+  color: #fff;
+  padding: 35px 20px 20px; /* Ще трохи зменшили верхній відступ */
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 30px;
+}
+
+.footer-brand {
+  flex: 2;
+  min-width: 250px;
+}
+
+.footer-brand h2 {
+  color: #ffffff;
+  font-size: 32px; /* Збільшили (було 24) */
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.footer-brand p {
+  color: #e2d8f5;
+  font-size: 15px; /* Збільшили */
+  line-height: 1.6;
+  max-width: 300px;
+  margin-top: 0;
+}
+
+.footer-links {
+  flex: 1;
+  min-width: 150px;
+}
+
+.footer-links h4 {
+  font-size: 18px; /* Збільшили (було 15) */
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #ffffff;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #c4b5fd;
+  text-decoration: none;
+  font-size: 15px; /* Збільшили */
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 35px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  color: #c4b5fd;
+  font-size: 14px;
+}
+
+/* ОЦЕЙ РЯДОК ПРИБИРАЄ БІЛУ СМУГУ ЗНИЗУ */
+.footer-bottom p {
+  margin: 0; 
+}
