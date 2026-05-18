@@ -24,3 +24,5 @@ htmlcov/
 *.coveragerc
 *.pyo
 *.pyd
+package-lock.json
+.node_modules/
