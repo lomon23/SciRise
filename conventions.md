@@ -24,3 +24,5 @@ DB: PostgreSQL
 Auth: JWT
 
 Frontend: react, vite, scss
+
+

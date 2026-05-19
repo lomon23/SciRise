@@ -1,0 +1,72 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 6px; // Легке закруглення
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease; // Плавна анімація всіх станів
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // === ВАРІАНТИ (Variants) ===
+  
+  &--primary {
+    background-color: #7c3aed; // Наш соковитий фіолетовий
+    color: #ffffff;
+    
+    &:hover:not(:disabled) {
+      background-color: #6d28d9;
+    }
+    
+    &:active:not(:disabled) {
+      transform: scale(0.98); // Ефект реального натискання
+    }
+  }
+
+  &--secondary {
+    background-color: #27282f;
+    color: #e2e8f0;
+    
+    &:hover:not(:disabled) {
+      background-color: #3f3f46;
+    }
+  }
+
+  &--ghost {
+    background-color: transparent;
+    color: #94a3b8;
+    
+    &:hover:not(:disabled) {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #e2e8f0;
+    }
+  }
+
+  // === РОЗМІРИ (Sizes) ===
+  
+  &--sm {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  &--md {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  &--lg {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+
+  // === ПОВНА ШИРИНА ===
+  &--full {
+    width: 100%;
+  }
+}

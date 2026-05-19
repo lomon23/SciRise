@@ -1,3 +1,6 @@
+import '@fontsource/inter/400.css'; // Звичайний текст (Regular)
+import '@fontsource/inter/500.css'; // Для кнопок та інпутів (Medium)
+import '@fontsource/inter/600.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';

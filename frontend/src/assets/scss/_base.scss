@@ -1,3 +1,13 @@
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  background-color: #0c0c0e; // якщо ще не переніс кольори, то закинь одразу
+  color: #e2e8f0;
+  height: 100%;
+}
 * {
   margin: 0;
   padding: 0;

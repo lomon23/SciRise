@@ -1,27 +1,24 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, ReactNode } from 'react';
 import { AuthContext } from './contexts/AuthContext';
 
-// Імпортуємо сторінки (поки вони пусті, але роутер вже буде готовий)
-import LandingPage from './pages/landing/LendingPage';
-import WorkspacePage from './pages/workspace/WorkspacePage';
+import LandingPage from './pages/landing/LendingPage'; 
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 
-// Компонент-захисник для приватних роутів
-const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+import WorkspaceLayout from './pages/workspace/WorkspaceLayout'; 
+import WorkspacePage from './pages/workspace/WorkspacePage';
+
+const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const auth = useContext(AuthContext);
-  // Якщо юзера немає — кидаємо на логін
   if (!auth?.user) {
     return <Navigate to="/auth/login" replace />;
   }
   return children;
 };
 
-// Захисник для публічних роутів (щоб залогінений не міг зайти на /login)
-const PublicRoute = ({ children }: { children: JSX.Element }) => {
+const PublicRoute = ({ children }: { children: ReactNode }) => {
   const auth = useContext(AuthContext);
-  // Якщо юзер вже залогінений — кидаємо відразу у воркспейс
   if (auth?.user) {
     return <Navigate to="/workspace" replace />;
   }
@@ -46,14 +43,29 @@ function App() {
         </PublicRoute>
       } />
 
-      {/* Приватна зона (тільки для залогінених) */}
-      <Route path="/workspace/*" element={
-        <PrivateRoute>
-          <WorkspacePage />
-        </PrivateRoute>
-      } />
+      {/* ПРИВАТНА ЗОНА */}
+      <Route 
+        path="/workspace" 
+        element={
+          <PrivateRoute>
+            <WorkspaceLayout />
+          </PrivateRoute>
+        }
+      >
+        {/* /workspace (нічого не обрано) */}
+        <Route index element={<WorkspacePage />} />
+        
+        {/* /workspace/profile */}
+        <Route path="profile" element={<div style={{ padding: '24px' }}><h2>Тут буде Профіль</h2></div>} />
+        
+        {/* /workspace/groups/* (зірочка потрібна, бо там будуть підроути груп і чатів) */}
+        <Route path="groups/*" element={<div style={{ padding: '24px' }}><h2>Робоча зона груп: Чат / Дошка</h2></div>} />
+        
+        {/* /workspace/settings/* */}
+        <Route path="settings/*" element={<div style={{ padding: '24px' }}><h2>Сторінка налаштувань</h2></div>} />
+      </Route>
 
-      {/* Якщо ввели якусь діч у URL — кидаємо на головну */}
+      {/* Глобальний фолбек */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

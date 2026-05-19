@@ -2,6 +2,7 @@ import { useState, useContext, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import { axiosInstance } from '../../api/axios';
+import { Button, Input } from '../../components/ui';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -38,7 +39,7 @@ const LoginPage = () => {
       {error && <div style={{ color: 'red' }}>{error}</div>}
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <input 
+        <Input 
           type="email" 
           placeholder="Email" 
           value={email} 
@@ -46,7 +47,7 @@ const LoginPage = () => {
           required 
           style={{ padding: '10px' }}
         />
-        <input 
+        <Input 
           type="password" 
           placeholder="Пароль" 
           value={password} 
@@ -54,7 +55,7 @@ const LoginPage = () => {
           required 
           style={{ padding: '10px' }}
         />
-        <button type="submit" style={{ padding: '10px', cursor: 'pointer' }}>Увійти</button>
+        <Button type="submit" style={{ padding: '10px', cursor: 'pointer' }}>Увійти</Button>
       </form>
 
       <p>Немає акаунту? <Link to="/auth/register">Зареєструватися</Link></p>
