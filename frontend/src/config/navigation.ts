@@ -2,6 +2,7 @@
 export const globalModules = [
   { id: 'profile', label: 'Профіль', icon: '👤', path: '/workspace/profile' },
   { id: 'groups', label: 'Групи', icon: '📁', path: '/workspace/groups' },
+  { id: 'courses', label: 'Курси', icon: '📚', path: '/workspace/courses' },
   { id: 'settings', label: 'Налаштування', icon: '⚙️', path: '/workspace/settings' },
 ];
 
