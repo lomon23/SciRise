@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef, type FormEvent } from 'react';
 import { useParams } from 'react-router-dom';
+import { io } from 'socket.io-client';
 import { axiosInstance } from '../../../api/axios';
 import { Input, Button } from '../../../components/ui';
+
+// Підключаємося до нашого Node.js сервера (сокетів)
+const socket = io('http://localhost:3001');
 
 interface Message {
   id: number;
@@ -17,14 +21,14 @@ export const ChannelChat = () => {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Фетчимо історію при зміні каналу
+  // 1. Фетчинг історії та підписка на сокети
   useEffect(() => {
+    if (!channelId) return;
+
     const fetchMessages = async () => {
-      if (!channelId) return;
       setLoading(true);
       try {
         const response = await axiosInstance.get(`/channels/${channelId}/messages/`);
-        // Бекенд віддає від новіших до старіших, тому реверсимо для UI
         setMessages(response.data.reverse());
       } catch (error) {
         console.error('Помилка завантаження чату:', error);
@@ -34,24 +38,61 @@ export const ChannelChat = () => {
     };
 
     fetchMessages();
+
+    // Заходимо в кімнату (перетворюємо ID на строку для надійності)
+    const roomId = String(channelId);
+    console.log("🔌 Пробуємо зайти в канал:", roomId);
+    socket.emit('join_channel', roomId);
+
+    // Слухач вхідних повідомлень
+    const receiveMessageHandler = (message: Message) => {
+      console.log("📥 Прилетіло по сокетах:", message);
+      setMessages((prev) => {
+        // Запобіжник: якщо це наше ж повідомлення (вже є в стейті), ігноруємо
+        if (prev.some(m => m.id === message.id)) return prev;
+        return [...prev, message];
+      });
+    };
+
+    socket.on('receive_message', receiveMessageHandler);
+
+    // Відписка при зміні каналу або закритті компонента
+    return () => {
+      socket.off('receive_message', receiveMessageHandler);
+    };
   }, [channelId]);
 
-  // Автоскрол донизу при нових повідомленнях
+  // 2. Автоскрол до останнього повідомлення
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // 3. Відправка повідомлення
   const handleSendMessage = async (e: FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !channelId) return;
 
+    const roomId = String(channelId);
+
     try {
+      // Відправляємо в базу
       const response = await axiosInstance.post(`/channels/${channelId}/messages/`, {
         text: newMessage
       });
-      // Одразу додаємо нове повідомлення в локальний стейт, щоб не чекати рефетчу
-      setMessages(prev => [...prev, response.data]);
+      const savedMessage = response.data;
+
+      console.log("📤 Відправляємо в сокети:", savedMessage);
+      
+      // Відправляємо в реалтайм
+      socket.emit('send_message', { 
+        channelId: roomId, 
+        message: savedMessage 
+      });
+
+      // Малюємо в себе миттєво
+      setMessages(prev => [...prev, savedMessage]);
       setNewMessage('');
+      
     } catch (error) {
       console.error('Помилка відправки:', error);
     }
@@ -59,7 +100,7 @@ export const ChannelChat = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', background: '#0f172a' }}>
-      {/* Хедер чату */}
+      {/* Хедер */}
       <div style={{ padding: '16px 24px', borderBottom: '1px solid #1e293b', background: '#1e293b', color: '#f8fafc', fontWeight: 600 }}>
         # Канал {channelId}
       </div>
@@ -90,7 +131,7 @@ export const ChannelChat = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Інпут відправки */}
+      {/* Інпут */}
       <div style={{ padding: '24px', background: '#1e293b' }}>
         <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '12px' }}>
           <Input 

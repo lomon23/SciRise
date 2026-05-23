@@ -78,13 +78,35 @@ export const ContextSidebar = () => {
         <>
           <div className="context-sidebar__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3>Мої Групи</h3>
-            <button 
-              onClick={() => setIsModalOpen(true)} // <-- Відкриваємо модалку по кліку
-              style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '20px' }} 
-              title="Створити групу"
-            >
-              +
-            </button>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {/* НОВА КНОПКА ПРИЄДНАННЯ */}
+              <button 
+                onClick={async () => {
+                  const groupId = window.prompt('Введіть ID групи, щоб приєднатися:');
+                  if (!groupId) return;
+                  
+                  try {
+                    await axiosInstance.post(`/groups/${groupId}/join/`);
+                    fetchGroups(); // Оновлюємо сайдбар - нова група з'явиться миттєво
+                  } catch (error: any) {
+                    alert(error.response?.data?.error || 'Помилка приєднання. Перевірте ID.');
+                  }
+                }}
+                style={{ background: '#3b82f6', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '12px', padding: '4px 8px', borderRadius: '4px' }} 
+                title="Приєднатися за ID"
+              >
+                Ввійти
+              </button>
+              
+              {/* СТАРА КНОПКА СТВОРЕННЯ */}
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '20px' }} 
+                title="Створити групу"
+              >
+                +
+              </button>
+            </div>
           </div>
           
           <div className="context-sidebar__channels">
