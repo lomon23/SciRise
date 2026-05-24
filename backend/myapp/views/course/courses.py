@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets, permissions
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.db.models import Q
 from myapp.models import Course
@@ -37,3 +37,9 @@ class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Course.objects.filter(
             Q(is_public=True) | Q(owner=user) | Q(groups__members__user=user)
         ).distinct()
+    
+class CourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all().prefetch_related('modules__lessons')
+    serializer_class = CourseSerializer
+    # Можеш додати перевірку: тільки власник може редагувати, інші — бачити
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]

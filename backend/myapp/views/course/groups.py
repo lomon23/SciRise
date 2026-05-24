@@ -16,14 +16,15 @@ class GroupListCreateView(generics.ListCreateAPIView):
         return Group.objects.filter(members__user=self.request.user).distinct()
 
     def perform_create(self, serializer):
-        # 1. Створюємо групу. Сигнал (який ми писали раніше) автоматом створить 2 дефолтні канали
+        # Створюємо групу
         group = serializer.save(owner=self.request.user)
         
-        # 2. Автоматом робимо творця адміном у GroupMember, інакше він сам не побачить свою групу
+        # Робимо творця адміном (фікс тут 👇)
+        from myapp.models import GroupMember
         GroupMember.objects.create(
-            user=self.request.user, 
-            group=group, 
-            role=GroupMember.Role.ADMIN
+            user=self.request.user,
+            group=group,
+            role='ADMIN' 
         )
 
 class GroupDetailView(generics.RetrieveDestroyAPIView):
@@ -65,3 +66,23 @@ class AttachCourseView(APIView):
             {"message": f"Course '{course.title}' successfully attached to '{group.name}'"}, 
             status=status.HTTP_200_OK
         )
+    
+class JoinGroupView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, group_id):
+        # Шукаємо групу
+        group = get_object_or_404(Group, id=group_id)
+        
+        # Перевіряємо, чи юзер вже не є в цій групі
+        if GroupMember.objects.filter(group=group, user=request.user).exists():
+            return Response({"error": "Ви вже є учасником цієї групи"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Додаємо юзера як звичайного учасника (передаємо роль рядком, як і 'ADMIN')
+        GroupMember.objects.create(
+            user=request.user, 
+            group=group, 
+            role='MEMBER' 
+        )
+        
+        return Response({"message": f"Успішно приєднано до {group.name}"}, status=status.HTTP_200_OK)

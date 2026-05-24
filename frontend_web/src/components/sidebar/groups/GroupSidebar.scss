@@ -1,0 +1,25 @@
+.group-sidebar {
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .btn-action {
+      padding: 4px 8px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__status {
+    padding: 16px;
+    font-size: 14px;
+    text-align: center;
+  }
+}

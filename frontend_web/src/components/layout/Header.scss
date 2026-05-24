@@ -1,0 +1,61 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  width: 100%;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+  }
+
+  &__logo {
+    font-size: 24px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  &__nav {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  &__nav-link {
+    text-decoration: none;
+    font-size: 16px;
+  }
+
+  &__auth {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  &__auth-link {
+    text-decoration: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &--primary {
+      border-radius: 4px;
+    }
+  }
+
+  // Структура для нової кнопки виходу
+  &__auth-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    background: none;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

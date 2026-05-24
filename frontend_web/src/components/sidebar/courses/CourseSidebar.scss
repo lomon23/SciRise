@@ -1,0 +1,31 @@
+.course-sidebar {
+  &__actions {
+    display: flex;
+    align-items: center;
+
+    .btn-action {
+      padding: 4px 8px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      color: #777777;
+      font-size: 18px;
+
+      &:hover {
+        color: #aaaaaa;
+      }
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__status {
+    padding: 16px;
+    font-size: 13px;
+    color: #555555;
+    text-align: center;
+  }
+}

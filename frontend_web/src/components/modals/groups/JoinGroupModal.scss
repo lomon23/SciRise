@@ -1,0 +1,56 @@
+.join-group-modal {
+  &__overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 360px;
+    padding: 24px;
+    gap: 16px;
+    background-color: #1e293b;
+  }
+
+  &__error {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    input {
+      padding: 10px;
+      font-family: inherit;
+      width: 100%;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+
+    button {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+  }
+}

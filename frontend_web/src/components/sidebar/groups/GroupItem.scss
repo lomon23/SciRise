@@ -1,0 +1,103 @@
+.group-item {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  gap: 8px;
+  border-bottom: 1px solid #2a2a2a;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    padding-bottom: 4px;
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #cccccc;
+  }
+
+  &__channels {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__channel-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 6px 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    border-radius: 4px;
+    color: #999999;
+
+    &:hover {
+      background-color: #222222;
+      color: #bbbbbb;
+    }
+  }
+
+  // СТИЛІ ДЛЯ ПРИКРІПЛЕНИХ КУРСІВ
+  &__courses {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid #222222;
+  }
+
+  &__courses-title {
+    font-size: 11px;
+    color: #666666;
+    padding: 0 8px 4px 8px;
+    text-transform: uppercase;
+  }
+
+  &__course-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 6px 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 13px;
+    border-radius: 4px;
+    color: #888888;
+
+    &:hover {
+      background-color: #222222;
+      color: #aaaaaa;
+    }
+  }
+
+  &__add-course-btn {
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    border: 1px dashed #444444;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4px;
+    color: #777777;
+
+    &:hover {
+      background-color: #1a1a1a;
+      color: #999999;
+      border-color: #555555;
+    }
+  }
+}

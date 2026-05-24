@@ -1,0 +1,107 @@
+.create-course-modal {
+  &__overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    background-color: rgba(15, 15, 15, 0.85); // Дуже темний оверлей
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    gap: 16px;
+    background-color: #1e1e1e; // Темно-сірий фон
+    border: 1px solid #333333;
+    color: #999999; // Приглушений текст
+  }
+
+  h3 {
+    color: #aaaaaa;
+    font-size: 16px;
+  }
+
+  &__error {
+    padding: 8px;
+    font-size: 13px;
+    border: 1px solid #442222; // Ледь червонуватий для помилки, але темний
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-size: 12px;
+      color: #777777;
+    }
+
+    input, textarea {
+      padding: 10px;
+      font-family: inherit;
+      width: 100%;
+      background-color: #111111;
+      border: 1px solid #2a2a2a;
+      color: #999999;
+      outline: none;
+
+      &:focus {
+        border-color: #555555;
+      }
+    }
+
+    textarea {
+      resize: vertical;
+    }
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #777777;
+    cursor: pointer;
+
+    input {
+      accent-color: #444444; // Перебиваємо дефолтний синій чекбокс
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+
+    button {
+      padding: 8px 16px;
+      cursor: pointer;
+      background-color: #222222;
+      border: 1px solid #333333;
+      color: #888888;
+
+      &:hover:not(:disabled) {
+        background-color: #333333;
+        color: #aaaaaa;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

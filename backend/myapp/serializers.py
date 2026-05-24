@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import (
     CustomUser, Profile, 
-    Course, CourseModule, Lesson, 
+    Course, Module, Lesson, 
     Group, GroupMember, Channel, Message
 )
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -27,15 +27,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             'role': validated_data.pop('role', 'student'),
         }
         password = validated_data.pop('password')
-
-        user = CustomUser.objects.create_user(
-            email=validated_data['email'],
-            password=password
-        )
-
+        user = CustomUser.objects.create_user(email=validated_data['email'], password=password)
         Profile.objects.create(user=user, **profile_data)
         return user
-
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -44,81 +38,65 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             'email': self.user.email,
             'role': self.user.profile.role,
             'first_name': self.user.profile.first_name,
-            'last_name': self.user.profile.last_name,
         }
         return data
 
-
-class ProfileSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(source='user.email', read_only=True)
-
-    class Meta:
-        model = Profile
-        fields = ['id', 'email', 'first_name', 'last_name', 'role', 'bio']
-
-
 # ==========================================
-# COURSES (Лекції та контент)
+# COURSES (Markdown based)
 # ==========================================
 
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ['id', 'title', 'content', 'video_url', 'order']
+        fields = ['id', 'title', 'content', 'lesson_type', 'order']
 
-
-class CourseModuleSerializer(serializers.ModelSerializer):
+class ModuleSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(many=True, read_only=True)
 
     class Meta:
-        model = CourseModule
+        model = Module
         fields = ['id', 'title', 'order', 'lessons']
 
-
 class CourseSerializer(serializers.ModelSerializer):
-    # Тягнемо модулі і лекції одразу
-    modules = CourseModuleSerializer(many=True, read_only=True)
+    modules = ModuleSerializer(many=True, read_only=True)
     owner_name = serializers.CharField(source='owner.profile.first_name', read_only=True)
+    owner_email = serializers.EmailField(source='owner.email', read_only=True)
 
     class Meta:
         model = Course
-        fields = ['id', 'title', 'description', 'owner', 'owner_name', 'is_public', 'is_paid', 'price', 'created_at', 'modules']
-        read_only_fields = ['owner']
-
+        # Додали owner_email сюди:
+        fields = ['id', 'title', 'description', 'owner_name', 'owner_email', 'modules', 'created_at']
 
 # ==========================================
-# WORKSPACE (Групи, Канали, Чати)
+# WORKSPACE
 # ==========================================
 
 class ChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Channel
-        fields = ['id', 'name', 'channel_type', 'group', 'created_at']
-        read_only_fields = ['group']
+        fields = ['id', 'name', 'channel_type']
 
+# Міні-версія курсу чисто для кнопок у сайдбарі
+class CourseMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ['id', 'title']
 
 class GroupSerializer(serializers.ModelSerializer):
-    # МАГІЯ ТУТ: Група одразу віддає свої канали і прикріплені курси
     channels = ChannelSerializer(many=True, read_only=True)
-    courses = CourseSerializer(many=True, read_only=True)
-
+    courses = CourseMiniSerializer(many=True, read_only=True) # Додаємо курси
+    
     class Meta:
         model = Group
-        fields = ['id', 'name', 'owner', 'channels', 'courses', 'created_at']
-        read_only_fields = ['owner']
-
+        # Не забуваємо додати 'courses' у fields
+        fields = ['id', 'name', 'channels', 'courses', 'created_at'] 
 
 class MessageSerializer(serializers.ModelSerializer):
-    # Щоб на фронті було що писати над повідомленням
     author_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Message
-        fields = ['id', 'channel', 'author', 'author_name', 'text', 'created_at']
-        read_only_fields = ['author', 'channel']
+        fields = ['id', 'author_name', 'text', 'created_at']
 
     def get_author_name(self, obj):
-        profile = getattr(obj.author, 'profile', None)
-        if profile and profile.first_name:
-            return f"{profile.first_name} {profile.last_name}".strip()
-        return obj.author.email
+        return f"{obj.author.profile.first_name}".strip() or obj.author.email
