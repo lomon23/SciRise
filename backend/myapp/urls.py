@@ -8,7 +8,8 @@ from .views.auth.login import LoginView
 from .views.course.groups import GroupListCreateView, GroupDetailView, ChannelCreateView, AttachCourseView, JoinGroupView
 from .views.course.courses import CourseFeedView, CourseListCreateView, CourseDetailView
 from .views.course.chat import MessageListCreateView
-from .views.course.courses import CourseViewSet
+from .views.course.courses import CourseViewSet, LessonCreateView, LessonUpdateView
+from .views.course.board import BoardWidgetListCreateView, BoardWidgetDetailView
 
 router = DefaultRouter()
 router.register(r'courses', CourseViewSet, basename='course')
@@ -31,4 +32,8 @@ urlpatterns = [
 
 # ЧАТ (Історія та відправка HTTP)
     path('channels/<int:channel_id>/messages/', MessageListCreateView.as_view(), name='channel-messages'),
+    path('modules/<int:module_id>/lessons/', LessonCreateView.as_view(), name='lesson-create'),
+    path('lessons/<int:pk>/', LessonUpdateView.as_view(), name='lesson-detail'),
+    path('groups/<int:group_id>/widgets/', BoardWidgetListCreateView.as_view(), name='board-widgets-list'),
+    path('widgets/<int:pk>/', BoardWidgetDetailView.as_view(), name='board-widget-detail'),
 ] + router.urls

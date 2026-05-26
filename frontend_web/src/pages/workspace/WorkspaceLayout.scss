@@ -5,8 +5,9 @@
   overflow: hidden;
 
   &__content-area {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
+    flex: 1; /* ОСЬ ЦЕ КРИТИЧНО. Воно змушує блок зайняти весь вільний простір справа */
+    height: 100%;
+    position: relative;
+    background-color: #0d0d0d;
   }
 }

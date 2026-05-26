@@ -1,24 +1,23 @@
 import { useNavigate } from 'react-router-dom';
 import './GroupItem.scss';
+import { useVoice } from '../../../pages/voice/VoiceContext'; 
 
-// Додаємо інтерфейс для курсу
 interface AttachedCourse {
   id: number;
   title: string;
 }
 
-// Додаємо інтерфейс каналу
 interface AttachedChannel {
   id: number;
   name: string;
-  channel_type: string; // 'text' або 'voice', залежить від твоєї моделі
+  channel_type: string; 
 }
 
 interface GroupData {
   id: number;
   name: string;
   courses?: AttachedCourse[]; 
-  channels?: AttachedChannel[]; // Додаємо масив каналів
+  channels?: AttachedChannel[]; 
 }
 
 interface Props {
@@ -28,8 +27,8 @@ interface Props {
 
 export const GroupItem = ({ group, onAddCourseClick }: Props) => {
   const navigate = useNavigate();
+  const { joinVoice, currentRoom } = useVoice();
 
-  // Перевірка ролі, щоб приховати кнопку "+ Додати курс" для студентів
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : null;
   const isTutor = user?.role === 'tutor';
@@ -42,23 +41,43 @@ export const GroupItem = ({ group, onAddCourseClick }: Props) => {
       
       <div className="group-item__channels">
         {group.channels && group.channels.length > 0 ? (
-          group.channels.map((channel) => (
-            <button
-              key={channel.id}
-              className="group-item__channel-btn"
-              onClick={() => navigate(`/workspace/groups/${group.id}/channels/${channel.id}`)}
-            >
-              {channel.channel_type === 'voice' ? '🔊' : '💬'} {channel.name}
-            </button>
-          ))
+          group.channels.map((channel) => {
+            const isVoice = channel.channel_type === 'voice';
+            const isActiveVoice = isVoice && currentRoom === channel.id.toString();
+
+            return (
+              <button
+                key={channel.id}
+                className={`group-item__channel-btn ${isActiveVoice ? 'active-voice' : ''}`}
+                onClick={() => {
+                  if (isVoice) {
+                    // 1. ПІДКЛЮЧАЄМОСЯ ДО ВЕБРАТЦ
+                    joinVoice(channel.id.toString());
+                    // 2. ПЕРЕХОДИМО НА СТОРІНКУ
+                    navigate(`/workspace/groups/${group.id}/voice/${channel.id}`);
+                  } else {
+                    navigate(`/workspace/groups/${group.id}/channels/${channel.id}`);
+                  }
+                }}
+              >
+                {isVoice ? '🔊' : '💬'} {channel.name}
+              </button>
+            );
+          })
         ) : (
           <div style={{ fontSize: '12px', color: '#555', padding: '4px 8px' }}>
             Каналів немає
           </div>
         )}
+
+        <button
+          className="group-item__channel-btn"
+          onClick={() => navigate(`/workspace/groups/${group.id}/board`)}
+        >
+          🖍 Інтерактивна дошка
+        </button>
       </div>
 
-      {/* Рендеримо прикріплені курси, якщо вони є */}
       {group.courses && group.courses.length > 0 && (
         <div className="group-item__courses">
           <div className="group-item__courses-title">Курси:</div>
@@ -66,7 +85,7 @@ export const GroupItem = ({ group, onAddCourseClick }: Props) => {
             <button
               key={course.id}
               className="group-item__course-btn"
-              onClick={() => navigate(`/workspace/courses/${course.id}`)}
+              onClick={() => navigate(`/workspace/groups/${group.id}/courses/${course.id}`)}
             >
               📚 {course.title}
             </button>
@@ -74,7 +93,6 @@ export const GroupItem = ({ group, onAddCourseClick }: Props) => {
         </div>
       )}
 
-      {/* Кнопка додавання курсу доступна тільки викладачу */}
       {isTutor && (
         <button
           className="group-item__add-course-btn"

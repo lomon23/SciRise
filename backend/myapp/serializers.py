@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import (
     CustomUser, Profile, 
     Course, Module, Lesson, 
-    Group, GroupMember, Channel, Message
+    Group, GroupMember, Channel, Message, BoardWidget
 )
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -78,9 +78,10 @@ class ChannelSerializer(serializers.ModelSerializer):
 
 # Міні-версія курсу чисто для кнопок у сайдбарі
 class CourseMiniSerializer(serializers.ModelSerializer):
+    owner_email = serializers.EmailField(source='owner.email', read_only=True) # ДОДАЄМО owner_email
     class Meta:
         model = Course
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'owner_email']
 
 class GroupSerializer(serializers.ModelSerializer):
     channels = ChannelSerializer(many=True, read_only=True)
@@ -100,3 +101,9 @@ class MessageSerializer(serializers.ModelSerializer):
 
     def get_author_name(self, obj):
         return f"{obj.author.profile.first_name}".strip() or obj.author.email
+    
+class BoardWidgetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BoardWidget
+        fields = '__all__'
+        read_only_fields = ['group']

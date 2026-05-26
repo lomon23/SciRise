@@ -1,0 +1,197 @@
+.profile-page {
+  width: 100%;
+  height: 100%;
+  padding: 48px;
+  background-color: #0d0d0d;
+  color: #ccc;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.profile-container {
+  width: 100%;
+  max-width: 1100px; /* Збільшив ширину, щоб влізло більше карток */
+  margin: 0 auto; /* Центрує весь блок по середині екрана */
+  display: flex;
+  gap: 60px; /* Збільшив відступ між лівою колонкою і картками */
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+// === ЛІВИЙ ДІВ ===
+.profile-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+
+  .profile-avatar {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #333;
+    margin-bottom: 20px;
+    background: #111;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .profile-name {
+    margin: 0 0 20px 0;
+    display: flex;
+    flex-direction: column;
+    
+    .fullname {
+      font-size: 24px;
+      font-weight: 600;
+      color: #fff;
+    }
+    
+    .username {
+      font-size: 18px;
+      color: #777;
+    }
+  }
+
+  .edit-profile-btn {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #eee;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 24px;
+    transition: 0.2s;
+
+    &:hover {
+      background: #222;
+      border-color: #555;
+    }
+  }
+
+  .profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 14px;
+    border-top: 1px solid #222;
+    padding-top: 20px;
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      
+      .icon { color: #888; }
+      .value { color: #ddd; font-weight: 500; }
+    }
+  }
+}
+
+// === ЦЕНТРАЛЬНИЙ ДІВ ===
+.profile-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-tabs {
+  display: flex;
+  gap: 16px;
+  border-bottom: 1px solid #222;
+  margin-bottom: 24px;
+
+  button {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #888;
+    padding: 12px 4px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+
+    &:hover { color: #ccc; }
+
+    &.active {
+      color: #fff;
+      font-weight: 500;
+      border-bottom-color: #deff9a; // Неоновий акцент
+    }
+
+    .badge {
+      background: #222;
+      color: #aaa;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+  }
+}
+
+// СІТКА КАРТОК (ГРУПИ/КУРСИ)
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.data-card {
+  padding: 20px;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.1s, border-color 0.2s;
+
+  &:hover {
+    border-color: #444;
+    transform: translateY(-2px);
+  }
+
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: #fff;
+  }
+
+  p {
+    margin: 0 0 16px 0;
+    font-size: 13px;
+    color: #777;
+    flex: 1;
+    display: -webkit-box;
+    //-webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-type {
+    align-self: flex-start;
+    font-size: 11px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid #333;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+}
+
+.empty-state, .loading-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  border: 1px dashed #222;
+  border-radius: 8px;
+}

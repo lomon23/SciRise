@@ -1,0 +1,85 @@
+.floating-voice-widget {
+  position: fixed;
+  width: 260px; // Компактний розмір
+  background-color: #161616;
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 9999;
+  
+  // Додаємо легку анімацію появи
+  animation: popIn 0.2s ease-out forwards;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.voice-header {
+  background-color: #222;
+  padding: 8px 12px;
+  font-size: 11px;
+  color: #aaa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: grab;
+  user-select: none;
+  border-bottom: 1px solid #333;
+
+  &:active { cursor: grabbing; }
+
+  button {
+    background: transparent;
+    border: 1px solid #444;
+    color: #ccc;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    
+    &:hover {
+      background: #333;
+      color: #fff;
+    }
+  }
+}
+
+.voice-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px;
+  background-color: #1a1a1a;
+
+  button {
+    background: #333;
+    border: none;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: 0.2s ease;
+
+    &:hover { background: #444; }
+    
+    &.muted {
+      background: #4a2a2a;
+      color: #ff6666;
+    }
+
+    &.disconnect-btn {
+      background: #d9534f;
+      &:hover { background: #c9302c; }
+    }
+  }
+}

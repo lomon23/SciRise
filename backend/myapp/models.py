@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.db.models import JSONField
 
 # ==========================================
 # AUTH
@@ -92,16 +93,52 @@ class GroupMember(models.Model):
 class Channel(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='channels')
     name = models.CharField(max_length=100)
-    channel_type = models.CharField(max_length=10, choices=[('TEXT', 'Text'), ('VOICE', 'Voice')], default='TEXT')
+    # ЗМІНЕНО: значення тепер з маленької літери ('text', 'voice'), щоб ідеально метчитися з React
+    channel_type = models.CharField(max_length=10, choices=[('text', 'Text'), ('voice', 'Voice')], default='text')
 
+    def __str__(self):
+        return f"{self.name} ({self.channel_type}) in {self.group.name}"
+# ==========================================
+# СИГНАЛИ
+# ==========================================
+@receiver(post_save, sender=Group)
+def create_default_channels(sender, instance, created, **kwargs):
+    """
+    Автоматично створює дефолтні канали (текстовий і голосовий) 
+    при створенні нової Групи.
+    """
+    if created:
+        Channel.objects.create(group=instance, name="Загальний чат", channel_type="text")
+        Channel.objects.create(group=instance, name="Голосовий", channel_type="voice")
 class Message(models.Model):
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE, related_name='messages')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-@receiver(post_save, sender=Group)
-def create_default_channels(sender, instance, created, **kwargs):
-    if created:
-        Channel.objects.create(group=instance, name="Загальний чат", channel_type='TEXT')
-        Channel.objects.create(group=instance, name="Голосовий", channel_type='VOICE')
+WIDGET_TYPES = (
+    ('course', 'Course'),
+    ('text', 'Text Note'),
+    ('video', 'YouTube Video'),
+)
+
+# ОСЬ ЦЕЙ РЯДОК ТИ ЗАГУБИВ:
+class BoardWidget(models.Model):
+    group = models.ForeignKey('Group', on_delete=models.CASCADE, related_name='widgets')
+    widget_type = models.CharField(max_length=20, choices=WIDGET_TYPES)
+    
+    # Геометрія 
+    x = models.FloatField(default=0)
+    y = models.FloatField(default=0)
+    width = models.FloatField(default=300)
+    height = models.FloatField(default=200)
+    z_index = models.IntegerField(default=1)
+    
+    # Вміст (JSON)
+    content = JSONField(default=dict)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.widget_type} in Group {self.group.id}"

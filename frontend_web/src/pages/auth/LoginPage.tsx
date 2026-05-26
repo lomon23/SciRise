@@ -16,17 +16,18 @@ export const LoginPage = () => {
     setError('');
 
     try {
-      // Запит до стандартного ендпоінту SimpleJWT (зміни URL, якщо він у тебе інший)
       const response = await axiosInstance.post('/auth/login/', { email, password });
       
-      // Зберігаємо токени. Формат SimpleJWT: { access: '...', refresh: '...' }
+      // Зберігаємо токени
       localStorage.setItem('tokens', JSON.stringify({
         access: response.data.access,
         refresh: response.data.refresh
       }));
       
-      // Якщо твій /token/ віддає ще й юзера, збережи його теж:
-      // if(response.data.user) localStorage.setItem('user', JSON.stringify(response.data.user));
+      // ЗБЕРІГАЄМО ЮЗЕРА (розкоментовано)
+      if (response.data.user) {
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      }
 
       navigate('/');
     } catch (err: any) {

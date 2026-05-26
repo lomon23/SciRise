@@ -7,6 +7,11 @@ import { GroupsLayout } from './pages/groups/GroupsLayout';
 import { CoursesLayout } from './pages/courses/CoursesLayout'; // Імпорт
 import { ChatArea } from './pages/chats/ChatArea';
 import { CoursePlayer } from './components/sidebar/courses/CoursePlayer'; // Імпорт
+import { CreateLesson } from './components/sidebar/courses/CreateLesson';
+import { Whiteboard } from './components/board/Whiteboard';
+import { VoiceChannelPage } from './pages/voice/VoiceChannelPage';
+import { ProfilePage } from './pages/profile/ProfilePage';
+import { SettingsPage } from './pages/settings/SettingsPage';
 export const App = () => {
   return (
     <BrowserRouter>
@@ -17,17 +22,23 @@ export const App = () => {
         
         <Route path="/workspace" element={<WorkspaceLayout />}>
           <Route index element={<Navigate to="groups" replace />} />
-          
-          {/* МОДУЛЬ ГРУП */}
+          <Route path="settings/*" element={<SettingsPage />} />
+          <Route path="profile" element={<ProfilePage />} />
           <Route path="groups/*" element={<GroupsLayout />}>
             <Route index element={<div>Оберіть канал або групу зліва</div>} />
             <Route path=":groupId/channels/:channelId" element={<ChatArea />} />
+            <Route path=":groupId/courses/:courseId" element={<CoursePlayer />} />
+            <Route path=":groupId/board" element={<Whiteboard />} />
+            
+            {/* ТУТ БУЛА ПОМИЛКА: ДОДАНО :groupId/ */}
+            <Route path=":groupId/voice/:channelId" element={<VoiceChannelPage />} />
           </Route>
 
           {/* МОДУЛЬ КУРСІВ */}
           <Route path="courses/*" element={<CoursesLayout />}>
             <Route index element={<div>Оберіть курс зі списку ліворуч</div>} />
             <Route path=":courseId" element={<CoursePlayer />} />
+            <Route path=":courseId/modules/:moduleId/create-lesson" element={<CreateLesson />} />
           </Route>
 
           {/* НАЛАШТУВАННЯ */}

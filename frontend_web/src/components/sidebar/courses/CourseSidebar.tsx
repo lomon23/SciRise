@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom'; // Додай цей імпорт
 import { axiosInstance } from '../../../api/axios';
 import { SecondSidebar } from '../core/SecondSidebar';
 import { CourseItem } from './CourseItem';
@@ -9,46 +10,36 @@ export const CourseSidebar = () => {
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Дістаємо юзера з локал стореджа і перевіряємо роль
-  const userStr = localStorage.getItem('user');
-  const user = userStr ? JSON.parse(userStr) : null;
-  const isTutor = user?.role === 'tutor';
+  const location = useLocation(); // Стежимо за зміною шляху
 
   const fetchCourses = useCallback(async () => {
-    setLoading(true);
     try {
       const response = await axiosInstance.get('/courses/');
-      // Якщо є пагінація — response.data.results, інакше response.data
-      setCourses(response.data.results || response.data);
+      setCourses(response.data);
     } catch (error) {
-      console.error('Помилка завантаження курсів:', error);
+      console.error('Помилка курсів:', error);
     } finally {
       setLoading(false);
     }
   }, []);
 
+  // Оновлюємо список щоразу, коли заходимо в розділ курсів або змінюємо URL
   useEffect(() => {
     fetchCourses();
-  }, [fetchCourses]);
+  }, [fetchCourses, location.pathname]); 
 
-  // Кнопка додається ТІЛЬКИ якщо користувач — tutor
-  const actionButtons = isTutor ? (
-    <div className="course-sidebar__actions">
-      <button className="btn-action" onClick={() => setIsModalOpen(true)}>+</button>
-    </div>
-  ) : null;
+  const actionButtons = (
+    <button className="btn-action" onClick={() => setIsModalOpen(true)}>+</button>
+  );
 
   return (
     <>
       <SecondSidebar title="Всі курси" actions={actionButtons}>
         <div className="course-sidebar__list">
           {loading ? (
-            <div className="course-sidebar__status">...</div>
-          ) : courses.length === 0 ? (
-            <div className="course-sidebar__status">Курсів немає</div>
+            <div className="status">...</div>
           ) : (
-            courses.map((course) => (
+            courses.map(course => (
               <CourseItem key={course.id} course={course} />
             ))
           )}
