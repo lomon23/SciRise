@@ -1,0 +1,66 @@
+.main-course {
+  padding: 40px;
+  max-width: 1400px; // Трохи розширимо для великої кількості курсів
+  margin: 0 auto;
+
+  &__header {
+    margin-bottom: 40px;
+    h1 { color: #fff; font-size: 32px; margin-bottom: 8px; }
+    p { color: #666; font-size: 15px; }
+  }
+
+  &__grid {
+    display: grid;
+    // Фіксуємо ширину плитки, щоб вони не розтягувалися на весь екран
+    grid-template-columns: repeat(auto-fill, 360px); 
+    // Центруємо весь блок сітки, якщо курсів мало, 
+    // але при великій кількості вони будуть ідеально вирівняні по лівому краю
+    justify-content: start; 
+    gap: 20px;
+  }
+}
+
+.course-tile {
+  background: #111;
+  border: 1px solid #1a1a1a;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  gap: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%; // Плитка займає всю ширину комірки (360px)
+
+  &:hover {
+    border-color: #333;
+    background: #161616;
+    transform: translateY(-2px);
+    .course-tile__icon { background: #222; color: #c4a7e7; } // Фіолетовий при наведенні
+  }
+
+  &__icon {
+    background: #0a0a0a;
+    color: #666;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: 0.2s;
+  }
+
+  &__info {
+    h3 { color: #eee; margin: 0 0 6px 0; font-size: 16px; }
+    p { color: #666; font-size: 13px; line-height: 1.5; margin: 0; }
+  }
+}
+
+// Додаємо скрол до сторінки, якщо курсів реально багато
+.main-course {
+  height: 100%;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar { width: 8px; }
+  &::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+}

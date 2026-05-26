@@ -1,10 +1,86 @@
+// HeroSection.scss
 .hero-section {
-  width: 100%;
-  min-height: 50vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0c0c0e; // Базовий фон
-  border-bottom: 1px solid #27282f;
-  color: #94a3b8;
+  text-align: center;
+  position: relative;
+  background-color: #0a0a0a;
+  // Патерн сітки для "технічного" вайбу
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  overflow: hidden;
+
+  .hero-glow {
+    position: absolute;
+    width: 800px;
+    height: 400px;
+    background: #2f124c;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(150px);
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .badge {
+    background: rgba(47, 18, 76, 0.3);
+    border: 1px solid #2f124c;
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+
+  h1 {
+    font-size: 86px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    color: #fff;
+    letter-spacing: -2px;
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+  }
+
+  p {
+    color: #999;
+    font-size: 20px;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+  }
+
+  .hero-btn {
+    background: #2f124c;
+    color: #fff;
+    border: 1px solid #3f1866;
+    padding: 16px 36px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(47, 18, 76, 0.4);
+
+    &:hover {
+      background: #3f1866;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(47, 18, 76, 0.6);
+    }
+  }
 }

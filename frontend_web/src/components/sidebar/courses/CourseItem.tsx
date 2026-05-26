@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ChevronDown, ChevronRight, FileText, Plus } from 'lucide-react';
 import './CourseItem.scss';
 
 interface CourseData {
   id: number;
   title: string;
-  owner_email: string; // Обов'язково онови interfaces тут
+  owner_email: string;
   modules: any[]; 
 }
 
@@ -17,11 +18,8 @@ export const CourseItem = ({ course }: Props) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Дістаємо поточного юзера для перевірки прав
   const userStr = localStorage.getItem('user');
   const currentUser = userStr ? JSON.parse(userStr) : null;
-
-  // Логіка доступу: чи викладач І чи його email збігається з email власника курсу
   const isOwner = currentUser?.role === 'tutor' && currentUser?.email === course.owner_email;
 
   return (
@@ -37,7 +35,7 @@ export const CourseItem = ({ course }: Props) => {
           className="course-item__toggle" 
           onClick={() => setIsOpen(!isOpen)}
         >
-          {isOpen ? '▲' : '▼'}
+          {isOpen ? <ChevronDown size={16} strokeWidth={1.5} /> : <ChevronRight size={16} strokeWidth={1.5} />}
         </button>
       </div>
 
@@ -47,28 +45,29 @@ export const CourseItem = ({ course }: Props) => {
             <div key={mod.id} className="accordion-module">
               <div className="accordion-module__title">{mod.title}</div>
               
-              {(mod.lessons || []).map((lesson: any) => (
-                <button 
-                  key={lesson.id} 
-                  className="accordion-lesson"
-                  onClick={() => navigate(`/workspace/courses/${course.id}?lesson=${lesson.id}`)}
-                >
-                  📄 {lesson.title}
-                </button>
-              ))}
+              <div className="accordion-module__list">
+                {(mod.lessons || []).map((lesson: any) => (
+                  <button 
+                    key={lesson.id} 
+                    className="accordion-lesson"
+                    onClick={() => navigate(`/workspace/courses/${course.id}?lesson=${lesson.id}`)}
+                  >
+                    <FileText size={14} strokeWidth={1.5} className="icon" />
+                    <span className="text">{lesson.title}</span>
+                  </button>
+                ))}
+              </div>
               
-              {/* Кнопка додавання лекції доступна тільки ВЛАСНИКУ і чітко прив'язана до модуля */}
               {isOwner && (
                 <button 
                   className="accordion-add-btn"
                   onClick={() => navigate(`/workspace/courses/${course.id}/modules/${mod.id}/create-lesson`)}
                 >
-                  + Додати лекцію
+                  <Plus size={14} strokeWidth={2} /> Додати лекцію
                 </button>
               )}
             </div>
           ))}
-          {/* Кнопку-дублікат, яка була тут, я прибрав.  */}
         </div>
       )}
     </div>

@@ -1,18 +1,27 @@
+// CourseSidebar.scss
 .course-sidebar {
   &__actions {
     display: flex;
     align-items: center;
 
     .btn-action {
-      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      padding: 0;
       cursor: pointer;
       background: transparent;
-      border: none;
-      color: #777777;
-      font-size: 18px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: #888;
+      transition: all 0.2s;
 
       &:hover {
-        color: #aaaaaa;
+        background: #1a1a1a;
+        color: #fff;
+        border-color: #333;
       }
     }
   }
@@ -23,9 +32,9 @@
   }
 
   &__status {
-    padding: 16px;
+    padding: 24px;
     font-size: 13px;
-    color: #555555;
+    color: #555;
     text-align: center;
   }
 }

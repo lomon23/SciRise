@@ -3,7 +3,11 @@ import './AboutSection.scss';
 export const AboutSection = () => {
   return (
     <section className="about-section">
-      <h2>Це компонент About Us</h2>
+      <div className="glass-card">
+        <div className="card-accent"></div>
+        <h2>Про проєкт</h2>
+        <p>SciRise — </p>
+      </div>
     </section>
   );
 };

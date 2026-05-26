@@ -1,18 +1,27 @@
 import { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Mic, MicOff, Video, VideoOff, PhoneOff, Maximize2 } from 'lucide-react';
 import { useVoice } from './VoiceContext';
- // Стилі зробиш під себе (великий чорний екран)
 import './VoiceChannelPage.scss';
-// Допоміжний компонент для відео
+
 const VideoPlayer = ({ stream, isLocal, isMuted }: any) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  
   useEffect(() => {
     if (videoRef.current && stream) videoRef.current.srcObject = stream;
   }, [stream]);
+
   return (
     <div className="voice-page-video-wrapper">
       <video ref={videoRef} autoPlay playsInline muted={isLocal} className={isMuted ? 'muted' : ''} />
-      {isMuted && <div className="overlay">Камера вимкнена</div>}
+      
+      {/* Якщо isMuted == true АБО стріму взагалі немає — малюємо заглушку */}
+      {(isMuted || !stream) && (
+        <div className="overlay">
+          <div className="overlay-glow"></div>
+          <span className="overlay-text">Камера вимкнена</span>
+        </div>
+      )}
     </div>
   );
 };
@@ -20,19 +29,19 @@ const VideoPlayer = ({ stream, isLocal, isMuted }: any) => {
 export const VoiceChannelPage = () => {
   const { groupId, channelId } = useParams();
   const navigate = useNavigate();
-  const { joinVoice, leaveVoice, currentRoom, localStream, remoteStreams, toggleMic, toggleCam, isMicMuted, isCamMuted } = useVoice();
+  const { 
+    joinVoice, leaveVoice, currentRoom, localStream, 
+    remoteStreams, connectedUsers, toggleMic, toggleCam, 
+    isMicMuted, isCamMuted 
+  } = useVoice();
 
-  // При відкритті сторінки - підключаємось, якщо ще не там
   useEffect(() => {
     if (channelId && currentRoom !== channelId) {
       joinVoice(channelId);
     }
   }, [channelId]);
 
-  const remoteUsers = Object.keys(remoteStreams);
-
   const handleMinimize = () => {
-    // Просто переходимо на дошку (або куди завгодно), віджет з'явиться сам
     navigate(`/workspace/groups/${groupId}/board`);
   };
 
@@ -45,24 +54,37 @@ export const VoiceChannelPage = () => {
     <div className="voice-channel-page">
       <div className="voice-page-header">
         <h2>Голосовий канал #{channelId}</h2>
-        <button className="minimize-btn" onClick={handleMinimize}>↘ Згорнути у віджет</button>
+        <button className="icon-btn" onClick={handleMinimize} title="Згорнути у віджет">
+          <Maximize2 size={20} />
+        </button>
       </div>
 
       <div className="voice-page-grid">
+        {/* 1. Локальний користувач */}
         {localStream && <VideoPlayer stream={localStream} isLocal={true} isMuted={isCamMuted} />}
-        {remoteUsers.map(userId => (
-          <VideoPlayer key={userId} stream={remoteStreams[userId]} />
+        
+        {/* 2. Інші користувачі (базується на інфі з сокетів) */}
+        {connectedUsers.map(userId => (
+          <VideoPlayer 
+            key={userId} 
+            stream={remoteStreams[userId]} // Може бути undefined, якщо WebRTC не зміг
+            isMuted={!remoteStreams[userId]} // Примусово показуємо заглушку, якщо стріму нема
+          />
         ))}
       </div>
 
       <div className="voice-page-controls">
-        <button className={isMicMuted ? 'muted' : ''} onClick={toggleMic}>
-          {isMicMuted ? '🔇 Мікрофон вимкнено' : '🎙️ Мікрофон увімкнено'}
+        <button className={`control-btn ${isMicMuted ? 'muted' : ''}`} onClick={toggleMic} title="Мікрофон">
+          {isMicMuted ? <MicOff size={24} /> : <Mic size={24} />}
         </button>
-        <button className={isCamMuted ? 'muted' : ''} onClick={toggleCam}>
-          {isCamMuted ? '📷❌ Камера вимкнена' : '📷 Камера увімкнена'}
+        
+        <button className={`control-btn ${isCamMuted ? 'muted' : ''}`} onClick={toggleCam} title="Камера">
+          {isCamMuted ? <VideoOff size={24} /> : <Video size={24} />}
         </button>
-        <button className="disconnect" onClick={handleDisconnect}>📞 Відключитись</button>
+        
+        <button className="control-btn disconnect" onClick={handleDisconnect} title="Відключитись">
+          <PhoneOff size={24} />
+        </button>
       </div>
     </div>
   );

@@ -12,6 +12,8 @@ import { Whiteboard } from './components/board/Whiteboard';
 import { VoiceChannelPage } from './pages/voice/VoiceChannelPage';
 import { ProfilePage } from './pages/profile/ProfilePage';
 import { SettingsPage } from './pages/settings/SettingsPage';
+import { MainCourse } from './pages/courses/MainCourse';
+import { MainGroup } from './pages/groups/MainGroup';
 export const App = () => {
   return (
     <BrowserRouter>
@@ -25,7 +27,7 @@ export const App = () => {
           <Route path="settings/*" element={<SettingsPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="groups/*" element={<GroupsLayout />}>
-            <Route index element={<div>Оберіть канал або групу зліва</div>} />
+            <Route index element={<MainGroup />} />
             <Route path=":groupId/channels/:channelId" element={<ChatArea />} />
             <Route path=":groupId/courses/:courseId" element={<CoursePlayer />} />
             <Route path=":groupId/board" element={<Whiteboard />} />
@@ -36,10 +38,12 @@ export const App = () => {
 
           {/* МОДУЛЬ КУРСІВ */}
           <Route path="courses/*" element={<CoursesLayout />}>
-            <Route index element={<div>Оберіть курс зі списку ліворуч</div>} />
+            <Route index element={<MainCourse />} />
             <Route path=":courseId" element={<CoursePlayer />} />
             <Route path=":courseId/modules/:moduleId/create-lesson" element={<CreateLesson />} />
+
           </Route>
+
 
           {/* НАЛАШТУВАННЯ */}
           <Route path="settings/*" element={<div>Налаштування</div>} />

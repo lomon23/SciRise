@@ -1,0 +1,61 @@
+.main-group {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #050505;
+  
+  // Патерн в крапочку для консистентності з дошкою
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.welcome-card {
+  text-align: center;
+  max-width: 400px;
+  padding: 40px;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+
+  &__icon {
+    width: 64px;
+    height: 64px;
+    background: #111;
+    color: #c4a7e7; // Твій фіолетовий акцент
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    margin: 0 auto 24px;
+  }
+
+  h1 { color: #fff; font-size: 24px; margin-bottom: 12px; }
+  p { color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 32px; }
+}
+
+.welcome-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .action-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #111;
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    color: #888;
+    font-size: 13px;
+    transition: 0.2s;
+
+    &:hover {
+      background: #1a1a1a;
+      color: #ccc;
+    }
+  }
+}

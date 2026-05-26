@@ -1,4 +1,6 @@
+// CreateGroupModal.tsx
 import { useState, type FormEvent } from 'react';
+import { X } from 'lucide-react';
 import { axiosInstance } from '../../../api/axios';
 import './CreateGroupModal.scss';
 
@@ -30,9 +32,14 @@ export const CreateGroupModal = ({ onClose, onSuccess }: Props) => {
   };
 
   return (
-    <div className="create-group-modal__overlay">
-      <div className="create-group-modal__content">
-        <h3>Створити нову групу</h3>
+    <div className="create-group-modal__overlay" onClick={onClose}>
+      <div className="create-group-modal__content" onClick={e => e.stopPropagation()}>
+        <div className="create-group-modal__header">
+          <h3>Створити групу</h3>
+          <button className="btn-close" onClick={onClose}>
+            <X size={20} strokeWidth={1.5} />
+          </button>
+        </div>
         
         {error && <div className="create-group-modal__error">{error}</div>}
         
@@ -48,8 +55,8 @@ export const CreateGroupModal = ({ onClose, onSuccess }: Props) => {
           </div>
           
           <div className="create-group-modal__actions">
-            <button type="button" onClick={onClose} disabled={loading}>Скасувати</button>
-            <button type="submit" disabled={loading || !name.trim()}>
+            <button type="button" className="btn-cancel" onClick={onClose} disabled={loading}>Скасувати</button>
+            <button type="submit" className="btn-submit" disabled={loading || !name.trim()}>
               {loading ? 'Створення...' : 'Створити'}
             </button>
           </div>

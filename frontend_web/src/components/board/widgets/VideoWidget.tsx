@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { MonitorPlay, Minus, X } from 'lucide-react'; // Змінили імпорт
 import './Widgets.scss';
 
 export const VideoWidget = ({ widget, onUpdate, onHide, onDelete }: any) => {
@@ -20,24 +21,25 @@ export const VideoWidget = ({ widget, onUpdate, onHide, onDelete }: any) => {
     <div className="widget-inner">
       <div className="widget-header">
         <div className="header-left">
-          <span>🎥 YouTube</span>
+          <MonitorPlay size={16} className="widget-icon" /> {/* Замінили іконку */}
+          <span>Відео</span>
         </div>
         <div className="header-actions">
-          <button className="widget-btn hide-btn" onClick={onHide} title="Згорнути">—</button>
-          <button className="widget-btn close-btn" onClick={onDelete} title="Закрити повністю">✕</button>
+          <button className="widget-btn hide-btn" onClick={onHide} title="Згорнути"><Minus size={14} /></button>
+          <button className="widget-btn close-btn" onClick={onDelete} title="Закрити повністю"><X size={14} /></button>
         </div>
       </div>
 
       <div className="widget-body" onPointerDown={(e) => e.stopPropagation()}>
         {!savedUrl ? (
-          <div className="video-widget-setup">
+          <div className="widget-setup video-widget-setup">
             <input 
               type="text" 
-              placeholder="Вставте посилання..." 
+              placeholder="Вставте посилання на відео..." 
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
             />
-            <button onClick={handleSaveUrl}>Ок</button>
+            <button onClick={handleSaveUrl}>Прив'язати відео</button>
           </div>
         ) : (
           <iframe

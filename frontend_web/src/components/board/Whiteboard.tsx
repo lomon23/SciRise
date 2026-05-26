@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
+import { Type, Video, BookOpen, Eye, EyeOff } from 'lucide-react'; // Додали іконки
 import { axiosInstance } from '../../api/axios';
 import { TextWidget } from './widgets/TextWidget';
 import { VideoWidget } from './widgets/VideoWidget';
@@ -29,8 +30,6 @@ export const Whiteboard = () => {
   const [resizingId, setResizingId] = useState<number | null>(null);
   const resizeStart = useRef({ width: 0, height: 0, startX: 0, startY: 0 });
 
-  // 1. РОБИМО РЕФ МИТТЄВИМ (без useEffect). 
-  // Він завжди має актуальні дані прямо в момент рендеру.
   const widgetsRef = useRef<WidgetData[]>([]);
   widgetsRef.current = widgets;
 
@@ -62,8 +61,6 @@ export const Whiteboard = () => {
       });
     });
     newSocket.on('widget_deleted', (data: any) => {
-      // Залежно від того, як твій Node-сервер пересилає дані, 
-      // витягуємо ID (може прийти об'єкт {widgetId: ...} або просто число)
       const idToRemove = typeof data === 'object' ? data.widgetId : data;
       setWidgets(prev => prev.filter(w => w.id !== idToRemove));
     });
@@ -106,6 +103,7 @@ export const Whiteboard = () => {
       handleUpdateContent(widgetId, { ...widget.content, hidden: isHidden });
     }
   };
+
   const handleDeleteWidget = async (widgetId: number) => {
     try {
       await axiosInstance.delete(`/widgets/${widgetId}/`);
@@ -115,6 +113,7 @@ export const Whiteboard = () => {
       console.error('Помилка видалення віджета', error);
     }
   };
+
   const handlePointerDownDrag = (e: React.PointerEvent, widget: WidgetData) => {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     dragOffset.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
@@ -165,7 +164,6 @@ export const Whiteboard = () => {
     const activeId = draggingId || resizingId;
     
     if (activeId !== null) {
-      // 2. ФІКС: Беремо актуальний віджет з РЕФА, а не зі старого стейту!
       const widgetToSave = widgetsRef.current.find(w => w.id === activeId);
       setDraggingId(null);
       setResizingId(null);
@@ -184,11 +182,19 @@ export const Whiteboard = () => {
 
   return (
     <div className="whiteboard-container" onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerLeave={handlePointerUp}>
-      <div className="whiteboard-toolbar">
+      
+      {/* ПРЕМІАЛЬНИЙ ХЕДЕР */}
+      <header className="whiteboard-header">
         <div className="toolbar-actions">
-          <button onClick={() => handleAddWidget('text')}>+ Текст</button>
-          <button onClick={() => handleAddWidget('video')}>+ Відео</button>
-          <button onClick={() => handleAddWidget('course')}>+ Курс</button>
+          <button className="action-btn" onClick={() => handleAddWidget('text')} title="Додати текст">
+            <Type size={18} />
+          </button>
+          <button className="action-btn" onClick={() => handleAddWidget('video')} title="Додати відео">
+            <Video size={18} />
+          </button>
+          <button className="action-btn" onClick={() => handleAddWidget('course')} title="Додати курс">
+            <BookOpen size={18} />
+          </button>
         </div>
         
         <div className="taskbar">
@@ -197,14 +203,17 @@ export const Whiteboard = () => {
               key={w.id} 
               className={`taskbar-tab ${w.content?.hidden ? 'tab-hidden' : 'tab-active'}`}
               onClick={() => handleToggleHide(w.id, !w.content?.hidden)}
+              title={w.content?.hidden ? 'Показати' : 'Сховати'}
             >
-              {w.widget_type === 'text' ? '📝' : w.widget_type === 'video' ? '🎥' : '📚'} #{w.id}
+              {w.widget_type === 'text' ? <Type size={14} /> : w.widget_type === 'video' ? <Video size={14} /> : <BookOpen size={14} />}
+              <span>Віджет #{w.id}</span>
+              {w.content?.hidden ? <EyeOff size={14} className="eye-icon" /> : <Eye size={14} className="eye-icon" />}
             </button>
           ))}
         </div>
-      </div>
+      </header>
 
-      <div className="whiteboard-canvas">
+      <main className="whiteboard-canvas">
         {widgets.filter(w => !w.content?.hidden).map(widget => (
           <div 
             key={widget.id}
@@ -218,41 +227,25 @@ export const Whiteboard = () => {
               position: 'absolute',
               border: 'none',
               background: 'transparent',
-              // Блокуємо івенти всередині віджета під час перетягування (щоб iframe ютуба не крав мишку)
               pointerEvents: (draggingId !== null || resizingId !== null) ? 'none' : 'auto'
             }}
           >
             <div style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
               {widget.widget_type === 'text' && (
-                <TextWidget 
-                  widget={widget} 
-                  onUpdate={handleUpdateContent} 
-                  onHide={() => handleToggleHide(widget.id, true)} 
-                  onDelete={() => handleDeleteWidget(widget.id)} 
-                />
+                <TextWidget widget={widget} onUpdate={handleUpdateContent} onHide={() => handleToggleHide(widget.id, true)} onDelete={() => handleDeleteWidget(widget.id)} />
               )}
               {widget.widget_type === 'video' && (
-                <VideoWidget 
-                  widget={widget} 
-                  onUpdate={handleUpdateContent} 
-                  onHide={() => handleToggleHide(widget.id, true)} 
-                  onDelete={() => handleDeleteWidget(widget.id)} 
-                />
+                <VideoWidget widget={widget} onUpdate={handleUpdateContent} onHide={() => handleToggleHide(widget.id, true)} onDelete={() => handleDeleteWidget(widget.id)} />
               )}
               {widget.widget_type === 'course' && (
-                <CourseWidget 
-                  widget={widget} 
-                  onUpdate={handleUpdateContent} 
-                  onHide={() => handleToggleHide(widget.id, true)} 
-                  onDelete={() => handleDeleteWidget(widget.id)} 
-                />
+                <CourseWidget widget={widget} onUpdate={handleUpdateContent} onHide={() => handleToggleHide(widget.id, true)} onDelete={() => handleDeleteWidget(widget.id)} />
               )}
             </div>
             
             <div className="resize-handle" onPointerDown={(e) => handlePointerDownResize(e, widget)} style={{ pointerEvents: 'auto' }}></div>
           </div>
         ))}
-      </div>
+      </main>
     </div>
   );
 };

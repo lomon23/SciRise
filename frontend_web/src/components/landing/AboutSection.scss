@@ -1,10 +1,44 @@
+// AboutSection.scss
 .about-section {
-  width: 100%;
-  min-height: 50vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #111114; // Трохи інший відтінок для візуального розділення
-  border-bottom: 1px solid #27282f;
-  color: #94a3b8;
+  padding: 120px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  
+  .glass-card {
+    position: relative;
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    padding: 80px 60px;
+    text-align: center;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    
+    .card-accent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #2f124c, transparent);
+    }
+
+    h2 { 
+      font-size: 42px; 
+      margin: 0 0 24px 0; 
+      color: #fff; 
+      font-weight: 600;
+      letter-spacing: -1px;
+    }
+    
+    p { 
+      color: #aaa; 
+      line-height: 1.8; 
+      font-size: 18px;
+      margin: 0;
+    }
+  }
 }

@@ -1,10 +1,84 @@
+// TeamSection.scss
 .team-section {
-  width: 100%;
-  min-height: 50vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #0c0c0e;
-  border-bottom: 1px solid #27282f;
-  color: #94a3b8;
+  padding: 80px 40px 140px;
+  background: #0a0a0a;
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+
+    h2 {
+      color: #fff;
+      font-size: 36px;
+      margin: 0 0 10px 0;
+      letter-spacing: -1px;
+    }
+
+    p {
+      color: #777;
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+
+  .team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    
+    .member-card {
+      background: #111; 
+      border: 1px solid rgba(255, 255, 255, 0.05); 
+      padding: 32px 24px; 
+      border-radius: 16px;
+      text-align: center;
+      transition: all 0.3s ease;
+      width: 200px;
+      flex-grow: 1;
+      max-width: 260px;
+      
+      &:hover { 
+        border-color: #2f124c; 
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(47, 18, 76, 0.2);
+        background: #141414;
+      }
+      
+      .avatar { 
+        width: 88px; 
+        height: 88px; 
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid #222;
+        transition: border-color 0.3s;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      &:hover .avatar {
+        border-color: #2f124c;
+      }
+
+      h4 { 
+        color: #fff; 
+        margin: 0 0 8px 0; 
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      span { 
+        color: #888; 
+        font-size: 13px; 
+        font-weight: 400;
+      }
+    }
+  }
 }

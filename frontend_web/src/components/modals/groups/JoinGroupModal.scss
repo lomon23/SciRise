@@ -1,3 +1,4 @@
+// JoinGroupModal.scss
 .join-group-modal {
   &__overlay {
     position: fixed;
@@ -6,28 +7,72 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.75); // Затемнюємо задній фон
+    backdrop-filter: blur(8px); // Ефект скла
+    animation: fadeIn 0.2s ease-out;
   }
 
   &__content {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 360px;
-    padding: 24px;
-    gap: 16px;
-    background-color: #1e293b;
+    width: 90%;
+    max-width: 440px; // Ширша модалка
+    background-color: #0a0a0a; // Глибокий чорний
+    border: 1px solid #1a1a1a;
+    border-radius: 16px; // Скруглені кути
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 32px 16px;
+
+    h3 {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+
+    .btn-close {
+      background: transparent;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.2s;
+
+      &:hover {
+        color: #fff;
+        background: #1a1a1a;
+      }
+    }
   }
 
   &__error {
-    padding: 8px;
-    font-size: 14px;
+    margin: 0 32px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #ff5555;
+    background: rgba(255, 60, 60, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 60, 60, 0.2);
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
+    padding: 16px 32px 32px;
   }
 
   &__input-group {
@@ -35,10 +80,66 @@
     flex-direction: column;
     gap: 8px;
 
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #888;
+    }
+  }
+
+  // Контейнер для інпуту та іконок
+  &__input-wrapper {
+    position: relative;
+    width: 100%;
+    
+    .icon-left {
+      position: absolute;
+      top: 50%;
+      left: 16px;
+      transform: translateY(-50%);
+      color: #444; // Приглушений колір іконок
+      display: flex;
+      align-items: center;
+      pointer-events: none; // Щоб клік проходив крізь іконки
+
+      &.icon-card {
+        left: 40px; // Зміщуємо картку ID вправо, щоб `#` було видно
+      }
+    }
+
     input {
-      padding: 10px;
+      padding: 14px 16px 14px 72px; // Великий паддінг зліва, щоб звільнити місце для іконок
       font-family: inherit;
       width: 100%;
+      background-color: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, background-color 0.2s;
+
+      &::placeholder {
+        color: #444;
+      }
+
+      &:focus {
+        background-color: #141414;
+        border-color: #2f124c; // Твоя фіолетова обводка
+        box-shadow: 0 0 0 1px #2f124c;
+      }
+      
+      // Скриваємо дефолтні стрілочки для number input
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        appearance: none;
+        margin: 0;
+      }
+      &[type=number] {
+        -moz-appearance: textfield;
+        appearance: textfield; // Стандартна властивість
+      }
     }
   }
 
@@ -49,8 +150,52 @@
     margin-top: 8px;
 
     button {
-      padding: 8px 16px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
+      border-radius: 8px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid #333;
+      color: #888;
+
+      &:hover:not(:disabled) {
+        background: #1a1a1a;
+        color: #ccc;
+      }
+    }
+
+    .btn-submit {
+      background: #2f124c;
+      border: 1px solid #3f1866;
+      color: #fff;
+
+      &:hover:not(:disabled) {
+        background: #3f1866;
+      }
+
+      &:disabled {
+        background: #1a1a1a;
+        border-color: #222;
+        color: #555;
+        cursor: not-allowed;
+      }
     }
   }
+}
+
+// Анімації
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }

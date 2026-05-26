@@ -1,85 +1,61 @@
-.floating-voice-widget {
-  position: fixed;
-  width: 260px; // Компактний розмір
-  background-color: #161616;
-  border: 1px solid #333;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  z-index: 9999;
-  
-  // Додаємо легку анімацію появи
-  animation: popIn 0.2s ease-out forwards;
+.voice-widget {
+  position: fixed !important;
+  width: 220px !important;
+  background: rgba(13, 13, 13, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid #1a1a1a !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+  z-index: 9999 !important;
+  overflow: hidden !important;
 }
 
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+.voice-widget__header {
+  padding: 8px 12px !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  cursor: grab !important;
 }
 
-.voice-header {
-  background-color: #222;
-  padding: 8px 12px;
-  font-size: 11px;
-  color: #aaa;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: grab;
-  user-select: none;
-  border-bottom: 1px solid #333;
-
-  &:active { cursor: grabbing; }
-
-  button {
-    background: transparent;
-    border: 1px solid #444;
-    color: #ccc;
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    cursor: pointer;
-    
-    &:hover {
-      background: #333;
-      color: #fff;
-    }
-  }
+.voice-widget__title {
+  font-size: 9px !important;
+  letter-spacing: 1px !important;
+  color: #555 !important;
+  font-weight: 700 !important;
 }
 
-.voice-controls {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  padding: 12px;
-  background-color: #1a1a1a;
-
-  button {
-    background: #333;
-    border: none;
-    color: #fff;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    transition: 0.2s ease;
-
-    &:hover { background: #444; }
-    
-    &.muted {
-      background: #4a2a2a;
-      color: #ff6666;
-    }
-
-    &.disconnect-btn {
-      background: #d9534f;
-      &:hover { background: #c9302c; }
-    }
-  }
+.voice-widget__expand {
+  background: transparent !important;
+  border: none !important;
+  color: #555 !important;
+  cursor: pointer !important;
+  padding: 4px !important;
 }
+
+.voice-widget__controls {
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: 12px !important;
+  gap: 8px !important;
+}
+
+.btn-ctrl {
+  flex: 1 !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  border: 1px solid #222 !important;
+  background: #111 !important;
+  color: #eee !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: 0.2s !important;
+}
+
+.btn-ctrl:hover { background: #222 !important; }
+.btn-ctrl.muted { color: #ff5555 !important; border-color: #331111 !important; background: #1a0a0a !important; }
+.btn-ctrl.disconnect { color: #ff5555 !important; }
+.btn-ctrl.disconnect:hover { background: #551111 !important; }

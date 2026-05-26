@@ -3,27 +3,48 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background-color: #111111; 
-  color: #888888;
+  background-color: #0a0a0a; // Темний базовий фон
+  // Патерн "Телеграм-стайл", легка текстура
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(47, 18, 76, 0.05) 0%, transparent 60%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 20px 20px, 20px 20px;
+  position: relative;
+  color: #ccc;
 
   &__empty {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #333333;
+    color: #555;
     font-size: 14px;
+    background-color: #0a0a0a;
   }
 
   &__header {
     padding: 16px 24px;
-    border-bottom: 1px solid #222222;
-    background-color: #161616;
+    background: rgba(10, 10, 10, 0.85); // Блюр ефект як у Телеграмі
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 
-    h3 {
-      font-size: 15px;
-      font-weight: 500;
-      color: #aaaaaa;
+    .channel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .icon { color: #666; }
+      h3 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        margin: 0;
+        letter-spacing: -0.3px;
+      }
     }
   }
 
@@ -33,102 +54,139 @@
     padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px; // Мінімальний відступ між повідомленнями
 
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: #222222;
-    }
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
   }
 
   &__status {
-    text-align: center;
-    color: #444444;
-    font-size: 13px;
+    align-self: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 6px 12px;
+    border-radius: 12px;
+    color: #777;
+    font-size: 12px;
     margin: auto 0;
   }
 
+  &__input-wrapper {
+    padding: 0 24px 24px; // Відступи, щоб інпут плавав
+    background: transparent;
+  }
+
   &__input-container {
-    padding: 16px 24px;
-    border-top: 1px solid #222222;
-    background-color: #161616;
     display: flex;
+    align-items: flex-end;
     gap: 12px;
+    background-color: #161616;
+    padding: 8px 12px;
+    border-radius: 16px; // Закруглений інпут
+    border: 1px solid #222;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: border-color 0.2s;
+
+    &:focus-within {
+      border-color: #2f124c; // Фіолетовий акцент при фокусі
+    }
   }
 
   &__input {
     flex: 1;
-    background-color: #0d0d0d;
-    border: 1px solid #222222;
-    color: #aaaaaa;
-    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 10px 4px;
     font-family: inherit;
-    font-size: 14px;
+    font-size: 15px;
     outline: none;
 
-    &:focus {
-      border-color: #333333;
-    }
-
-    &::placeholder {
-      color: #444444;
-    }
+    &::placeholder { color: #555; }
   }
 
   &__send-btn {
-    background-color: #222222;
-    border: 1px solid #2a2a2a;
-    color: #666666;
-    padding: 0 20px;
+    background-color: #2f124c; // Фіолетова кнопка
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; // Кругла кнопка
     cursor: pointer;
-    font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
 
     &:hover:not(:disabled) {
-      background-color: #282828;
-      color: #888888;
+      background-color: #3f1866;
+      transform: scale(1.05);
     }
 
     &:disabled {
-      opacity: 0.5;
+      background-color: #1a1a1a;
+      color: #444;
       cursor: not-allowed;
     }
   }
 }
 
+// БУЛЬБАШКИ ПОВІДОМЛЕНЬ
 .chat-message {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-
-  &__header {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-  }
+  max-width: 65%;
+  border-radius: 16px;
+  padding: 8px 14px;
+  position: relative;
+  word-break: break-word;
 
   &__author {
     font-weight: 600;
-    font-size: 13px;
-    color: #aaaaaa;
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #4b4b4b; // Колір імені автора (чужого)
+    filter: brightness(1.5); // Трохи висвітлюємо для читабельності
+  }
+
+  &__content {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  &__text {
+    font-size: 15px;
+    color: #eee;
+    line-height: 1.4;
   }
 
   &__time {
     font-size: 10px;
-    color: #444444;
+    color: rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
+    margin-bottom: -2px;
   }
 
-  &__text {
-    font-size: 14px;
-    color: #888888;
-    line-height: 1.4;
-    word-break: break-word;
+  // МОЇ ПОВІДОМЛЕННЯ (Справа)
+  &--mine {
+    align-self: flex-end;
+    background-color: #2f124c; // Твій фіолетовий
+    border-bottom-right-radius: 4px; // Гострий куточок
+    box-shadow: 0 4px 12px rgba(47, 18, 76, 0.2);
+
+    .chat-message__text { color: #fff; }
+    .chat-message__time { color: rgba(255, 255, 255, 0.6); }
+  }
+
+  // ЧУЖІ ПОВІДОМЛЕННЯ (Зліва)
+  &--other {
+    align-self: flex-start;
+    background-color: #1a1a1a;
+    border: 1px solid #222;
+    border-bottom-left-radius: 4px; // Гострий куточок
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 }

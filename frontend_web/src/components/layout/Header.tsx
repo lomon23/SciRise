@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-
+import './Header.scss';
 const Header = () => {
   const navigate = useNavigate();
   const [isAuth, setIsAuth] = useState(false);
@@ -24,10 +24,6 @@ const Header = () => {
         <Link to="/" className="header__logo">SciRise</Link>
       </div>
       
-      <nav className="header__nav">
-        <a href="#about" className="header__nav-link">Про нас</a>
-        <a href="#team" className="header__nav-link">Команда</a>
-      </nav>
 
       <div className="header__auth">
         {isAuth ? (

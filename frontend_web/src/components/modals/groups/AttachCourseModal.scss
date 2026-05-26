@@ -1,3 +1,4 @@
+// AttachCourseModal.scss
 .attach-course-modal {
   &__overlay {
     position: fixed;
@@ -6,56 +7,92 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    background-color: rgba(10, 10, 10, 0.85);
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.2s ease-out;
   }
 
   &__content {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 380px;
-    padding: 24px;
-    gap: 16px;
-    background-color: #1a1a1a;
-    border: 1px solid #2e2e2e;
-    color: #888888;
+    width: 90%;
+    max-width: 480px;
+    background-color: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 16px;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  h3 {
-    font-size: 15px;
-    color: #aaaaaa;
-    font-weight: 600;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 32px 16px;
+
+    h3 {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+
+    .btn-close {
+      background: transparent;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.2s;
+
+      &:hover { color: #fff; background: #1a1a1a; }
+    }
   }
 
   &__error {
-    padding: 10px;
+    margin: 0 32px;
+    padding: 12px 16px;
     font-size: 13px;
-    border: 1px solid #3a1a1a;
-    background-color: #151010;
-    color: #aa7777;
+    color: #ff5555;
+    background: rgba(255, 60, 60, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 60, 60, 0.2);
   }
 
   &__status {
+    padding: 32px;
     text-align: center;
-    padding: 16px 0;
-    font-size: 13px;
+    color: #888;
+    font-size: 14px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
     align-items: center;
+    gap: 16px;
 
-    .btn-close {
-      padding: 6px 12px;
-      background-color: #252525;
+    .btn-cancel {
+      padding: 10px 20px;
+      background: transparent;
       border: 1px solid #333;
+      color: #888;
+      border-radius: 8px;
       cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover { background: #111; color: #ccc; }
     }
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
+    padding: 16px 32px 32px;
   }
 
   &__input-group {
@@ -63,23 +100,25 @@
     flex-direction: column;
     gap: 8px;
 
-    label {
-      font-size: 12px;
-      color: #666666;
-    }
+    label { font-size: 13px; font-weight: 500; color: #888; }
 
     select {
-      padding: 10px;
+      padding: 14px 16px;
       font-family: inherit;
-      background-color: #111111;
-      border: 1px solid #252525;
-      color: #888888;
-      outline: none;
       width: 100%;
+      background-color: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
       cursor: pointer;
+      transition: border-color 0.2s, background-color 0.2s;
 
       &:focus {
-        border-color: #444444;
+        background-color: #141414;
+        border-color: #2f124c;
+        box-shadow: 0 0 0 1px #2f124c;
       }
     }
   }
@@ -88,25 +127,30 @@
     display: flex;
     justify-content: flex-end;
     gap: 12px;
+    margin-top: 8px;
 
     button {
-      padding: 8px 16px;
-      font-family: inherit;
-      font-size: 13px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
-      background-color: #222222;
-      border: 1px solid #2e2e2e;
-      color: #777777;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
 
-      &:hover:not(:disabled) {
-        background-color: #2a2a2a;
-        color: #999999;
-      }
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid #333;
+      color: #888;
+      &:hover:not(:disabled) { background: #1a1a1a; color: #ccc; }
+    }
 
-      &:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-      }
+    .btn-submit {
+      background: #2f124c;
+      border: 1px solid #3f1866;
+      color: #fff;
+      &:hover:not(:disabled) { background: #3f1866; }
+      &:disabled { background: #1a1a1a; border-color: #222; color: #555; cursor: not-allowed; }
     }
   }
 }

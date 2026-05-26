@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import { ArrowLeft, Edit3, ListChecks, FileText } from 'lucide-react';
 import { axiosInstance } from '../../../api/axios';
 import './CoursePlayer.scss';
 
@@ -42,7 +43,7 @@ export const CoursePlayer = () => {
     return null;
   }, [course, lessonIdParam]);
 
-  if (loading) return <div className="course-player__status">...</div>;
+  if (loading) return <div className="course-player__status">Завантаження курсу...</div>;
   if (!course) return <div className="course-player__status">Курс не знайдено</div>;
 
   const isOwner = currentUser?.role === 'tutor' && currentUser?.email === course.owner_email;
@@ -57,8 +58,8 @@ export const CoursePlayer = () => {
         
         {isOwner && (
           <div className="course-player__actions">
-            <button className="btn-action">✎ Редагувати</button>
-            <button className="btn-action">+ Опитування</button>
+            <button className="btn-action"><Edit3 size={16} strokeWidth={1.5} /> Редагувати</button>
+            <button className="btn-action"><ListChecks size={16} strokeWidth={1.5} /> Опитування</button>
           </div>
         )}
       </div>
@@ -66,12 +67,11 @@ export const CoursePlayer = () => {
       <div className="course-player__body">
         <div className="course-player__content">
           {activeLesson ? (
-            <div className="markdown-container">
-              {/* Кнопка повернення до плиток */}
+            <div className="markdown-body">
               <button className="btn-back-to-tiles" onClick={() => setSearchParams({})}>
-                ← До списку лекцій
+                <ArrowLeft size={16} strokeWidth={1.5} /> До списку лекцій
               </button>
-              <h1>{activeLesson.title}</h1>
+
               <ReactMarkdown>{activeLesson.content}</ReactMarkdown>
             </div>
           ) : (
@@ -83,7 +83,6 @@ export const CoursePlayer = () => {
 
               <h4 className="grid-title">Лекційні блоки</h4>
               
-              {/* СІТКА З ПЛИТКАМИ */}
               <div className="lessons-grid">
                 {course.modules?.flatMap((mod: any) => 
                   (mod.lessons || []).map((lesson: any) => (
@@ -92,7 +91,7 @@ export const CoursePlayer = () => {
                       className="lesson-tile"
                       onClick={() => setSearchParams({ lesson: lesson.id.toString() })}
                     >
-                      <div className="lesson-tile__icon">📄</div>
+                      <div className="lesson-tile__icon"><FileText size={20} strokeWidth={1.5} /></div>
                       <div className="lesson-tile__meta">
                         <span className="lesson-tile__mod-title">{mod.title}</span>
                         <span className="lesson-tile__les-title">{lesson.title}</span>

@@ -93,11 +93,12 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'channels', 'courses', 'created_at'] 
 
 class MessageSerializer(serializers.ModelSerializer):
-    author_name = serializers.SerializerMethodField()
+    author_name = serializers.CharField(source='author.username', read_only=True) # або first_name
+    author_email = serializers.EmailField(source='author.email', read_only=True) # ДОДАЙ ЦЕ!
 
     class Meta:
         model = Message
-        fields = ['id', 'author_name', 'text', 'created_at']
+        fields = ['id', 'text', 'author_name', 'author_email', 'created_at'] # і сюди не забудь
 
     def get_author_name(self, obj):
         return f"{obj.author.profile.first_name}".strip() or obj.author.email

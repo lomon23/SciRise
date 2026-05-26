@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import './GroupItem.scss';
+import { Volume2, MessageSquare, Presentation, Book, Plus } from 'lucide-react';
 import { useVoice } from '../../../pages/voice/VoiceContext'; 
+import './GroupItem.scss';
 
 interface AttachedCourse {
   id: number;
@@ -51,43 +52,44 @@ export const GroupItem = ({ group, onAddCourseClick }: Props) => {
                 className={`group-item__channel-btn ${isActiveVoice ? 'active-voice' : ''}`}
                 onClick={() => {
                   if (isVoice) {
-                    // 1. ПІДКЛЮЧАЄМОСЯ ДО ВЕБРАТЦ
                     joinVoice(channel.id.toString());
-                    // 2. ПЕРЕХОДИМО НА СТОРІНКУ
                     navigate(`/workspace/groups/${group.id}/voice/${channel.id}`);
                   } else {
                     navigate(`/workspace/groups/${group.id}/channels/${channel.id}`);
                   }
                 }}
               >
-                {isVoice ? '🔊' : '💬'} {channel.name}
+                <span className="icon-wrapper">
+                  {isVoice ? <Volume2 size={16} strokeWidth={1.5} /> : <MessageSquare size={16} strokeWidth={1.5} />}
+                </span>
+                {channel.name}
               </button>
             );
           })
         ) : (
-          <div style={{ fontSize: '12px', color: '#555', padding: '4px 8px' }}>
-            Каналів немає
-          </div>
+          <div className="group-item__empty">Каналів немає</div>
         )}
 
         <button
           className="group-item__channel-btn"
           onClick={() => navigate(`/workspace/groups/${group.id}/board`)}
         >
-          🖍 Інтерактивна дошка
+          <span className="icon-wrapper"><Presentation size={16} strokeWidth={1.5} /></span>
+          Інтерактивна дошка
         </button>
       </div>
 
       {group.courses && group.courses.length > 0 && (
         <div className="group-item__courses">
-          <div className="group-item__courses-title">Курси:</div>
+          <div className="group-item__courses-title">Курси</div>
           {group.courses.map((course) => (
             <button
               key={course.id}
               className="group-item__course-btn"
               onClick={() => navigate(`/workspace/groups/${group.id}/courses/${course.id}`)}
             >
-              📚 {course.title}
+              <span className="icon-wrapper"><Book size={16} strokeWidth={1.5} /></span>
+              {course.title}
             </button>
           ))}
         </div>
@@ -98,7 +100,7 @@ export const GroupItem = ({ group, onAddCourseClick }: Props) => {
           className="group-item__add-course-btn"
           onClick={() => onAddCourseClick(group.id)}
         >
-          + Додати курс
+          <Plus size={14} strokeWidth={2} /> Додати курс
         </button>
       )}
     </div>

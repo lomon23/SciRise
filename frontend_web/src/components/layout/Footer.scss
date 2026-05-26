@@ -1,25 +1,64 @@
 .footer {
-  display: flex;
-  justify-content: center;
-  padding: 32px;
   width: 100%;
-  margin-top: auto; // Прибиває футер до низу
+  background-color: #0a0a0a;
+  padding: 60px 40px 30px;
+  border-top: 1px solid #1a1a1a;
+  color: #888;
+  box-sizing: border-box;
 
   &__container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 40px;
+
+    @media (max-width: 768px) { grid-template-columns: 1fr; }
   }
 
-  &__links {
-    display: flex;
-    gap: 24px;
+  &__brand {
+    h2 { color: #fff; margin-bottom: 12px; font-weight: 500; }
+    p { font-size: 13px; line-height: 1.6; }
+  }
 
-    a {
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    h4 { color: #fff; margin: 0 0 8px 0; font-size: 14px; font-weight: 500; }
+    
+    a, span {
       text-decoration: none;
-      font-size: 14px;
+      color: #888;
+      font-size: 13px;
+      cursor: pointer;
+      transition: color 0.2s;
+
+      &:hover { color: #2f124c; } // Твій фіолетовий при наведенні
+    }
+  }
+
+  &__socials {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 30px;
+    border-top: 1px solid #1a1a1a;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+
+    .footer__legal {
+      display: flex;
+      gap: 20px;
+      a { color: #555; text-decoration: none; &:hover { color: #888; } }
     }
   }
 }

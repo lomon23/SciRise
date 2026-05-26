@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { BookOpen, Menu, Minus, X, FileText } from 'lucide-react';
 import { axiosInstance } from '../../../api/axios';
 import './Widgets.scss';
 
@@ -78,20 +79,21 @@ export const CourseWidget = ({ widget, onUpdate, onHide, onDelete }: any) => {
               className="course-burger-btn" 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              ☰
+              <Menu size={16} />
             </button>
           )}
-          <span>📚 {courseData ? courseData.title : 'Курс'}</span>
+          <BookOpen size={16} className="widget-icon" />
+          <span>{courseData ? courseData.title : 'Курс'}</span>
         </div>
         <div className="header-actions">
-          <button className="widget-btn hide-btn" onClick={onHide} title="Згорнути">—</button>
-          <button className="widget-btn close-btn" onClick={onDelete} title="Закрити повністю">✕</button>
+          <button className="widget-btn hide-btn" onClick={onHide} title="Згорнути"><Minus size={14} /></button>
+          <button className="widget-btn close-btn" onClick={onDelete} title="Закрити повністю"><X size={14} /></button>
         </div>
       </div>
 
       <div className="widget-body" onPointerDown={(e) => e.stopPropagation()}>
         {!savedCourseId ? (
-          <div className="course-widget-setup">
+          <div className="widget-setup course-widget-setup">
             <select 
               value={selectedCourseId} 
               onChange={(e) => setSelectedCourseId(e.target.value)}
@@ -100,7 +102,7 @@ export const CourseWidget = ({ widget, onUpdate, onHide, onDelete }: any) => {
                 <option key={c.id} value={c.id}>{c.title}</option>
               ))}
             </select>
-            <button onClick={handleSave}>Прив'язати</button>
+            <button onClick={handleSave}>Прив'язати курс</button>
           </div>
         ) : loading ? (
           <div className="course-loading">Завантаження...</div>
@@ -117,7 +119,8 @@ export const CourseWidget = ({ widget, onUpdate, onHide, onDelete }: any) => {
                       className={`sidebar-lesson ${activeLesson?.id === lesson.id ? 'active' : ''}`}
                       onClick={() => handleSelectLesson(lesson)}
                     >
-                      📄 {lesson.title}
+                      <FileText size={12} className="lesson-icon" />
+                      <span className="lesson-text">{lesson.title}</span>
                     </button>
                   ))}
                 </div>

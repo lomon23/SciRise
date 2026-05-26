@@ -1,72 +1,157 @@
 .auth-page {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  width: 100%;
-  padding: 24px;
+  height: 100vh;
+  width: 100vw;
+  background-color: #0a0a0a;
+  color: #fff;
+  overflow: hidden;
 
-  &__container {
+  &__left {
+    flex: 1;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background-color: #0a0a0a;
+  }
+
+  .auth-form-container {
     width: 100%;
-    max-width: 440px;
-    gap: 24px;
+    max-width: 420px;
   }
 
-  &__title {
-    text-align: center;
-  }
-
+  &__title { margin: 0 0 8px 0; font-size: 32px; font-weight: 600; }
+  &__subtitle { margin: 0 0 32px 0; color: #777; font-size: 14px; }
+  
   &__error {
+    background: rgba(217, 83, 79, 0.1);
+    border: 1px solid #d9534f;
+    color: #ff6b6b;
     padding: 12px;
-    margin-bottom: 8px;
-    border: 1px solid;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    font-size: 14px;
   }
 
-  &__form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  &__row {
-    display: flex;
-    gap: 16px;
-
-    .auth-page__input-group {
-      flex: 1;
-    }
+  &__form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
   }
 
   &__input-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 
     label {
-      font-size: 14px;
+      font-size: 13px;
+      color: #aaa;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    input, select {
-      padding: 12px;
-      font-family: inherit;
-      width: 100%;
+    input {
+      background: #161616;
+      border: 1px solid #222;
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 4px;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.2s ease;
+
+      &:focus {
+        border-color: #2f124c; 
+        background: #111;
+        box-shadow: 0 0 0 2px rgba(47, 18, 76, 0.4);
+      }
     }
   }
 
   &__submit {
     margin-top: 12px;
+    background: transparent;
+    color: #481c74; 
+    border: 1px solid #3f0e71;
     padding: 14px;
-    font-family: inherit;
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 4px;
     cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: #2f124c;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(47, 18, 76, 0.4);
+    }
+  }
+
+  // КНОПКА GOOGLE ВИДІЛЕНА ОКРЕМО
+  &__google-btn {
+    width: 100%;
+    padding: 14px;
+    background: #0a0a0a; 
+    border: 1px solid #222;
+    color: #666;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 14px;
+    font-weight: 500;
+
+    &:hover {
+      background: #111;
+      border-color: #333;
+      color: #ccc;
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
   }
 
   &__footer {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
+    margin-top: 32px;
+    text-align: center;
     font-size: 14px;
+    color: #777;
+
+    a {
+      text-decoration: none;
+      margin-left: 8px;
+      font-weight: 500;
+      color: #888;
+      &:hover { text-decoration: underline; color: #4f1588; }
+    }
+  }
+
+  &__right {
+    flex: 1;
+    position: relative;
+    background: url('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+    display: none; 
+    @media (min-width: 900px) { display: block; }
+    &::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, #0a0a0a 0%, rgba(10, 10, 10, 0.2) 40%, transparent 100%); }
+    &::after { content: ''; position: absolute; inset: 0; background: rgba(0, 0, 0, 0.2); }
+  }
+
+  .overlay-text {
+    position: absolute;
+    bottom: 60px;
+    right: 60px;
+    z-index: 2;
+    text-align: right;
+    max-width: 400px;
+    h2 { font-size: 36px; font-weight: 700; margin: 0 0 12px 0; color: #fff; }
+    p { margin: 0; font-size: 16px; color: #eee; }
   }
 }

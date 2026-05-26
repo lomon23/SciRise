@@ -9,7 +9,8 @@ interface VoiceContextProps {
   isMicMuted: boolean;
   isCamMuted: boolean;
   localStream: MediaStream | null;
-  remoteStreams: Record<string, MediaStream>; // Зберігаємо стріми інших юзерів по їх ID
+  remoteStreams: Record<string, MediaStream>; 
+  connectedUsers: string[]; // Масив для відмальовки сітки екранів
   currentRoom: string | null;
 }
 
@@ -26,28 +27,36 @@ export const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [remoteStreams, setRemoteStreams] = useState<Record<string, MediaStream>>({});
+  const [connectedUsers, setConnectedUsers] = useState<string[]>([]);
   const [currentRoom, setCurrentRoom] = useState<string | null>(null);
   
   const [isMicMuted, setIsMicMuted] = useState(false);
-  const [isCamMuted, setIsCamMuted] = useState(true); // Камера по дефолту вимкнена
+  const [isCamMuted, setIsCamMuted] = useState(true);
 
   const peersRef = useRef<Record<string, RTCPeerConnection>>({});
   const localStreamRef = useRef<MediaStream | null>(null);
 
-  // 1. Ініціалізація сокету для войсу
   useEffect(() => {
     const newSocket = io('http://localhost:3001');
     setSocket(newSocket);
 
-    newSocket.on('all_voice_users', (users) => {
+    // 1. Отримуємо список тих, хто ВЖЕ в кімнаті (спрацьовує для того, хто щойно зайшов)
+    newSocket.on('all_voice_users', (users: string[]) => {
+      setConnectedUsers(users);
       users.forEach((userId: string) => {
-        const peer = createPeer(userId, newSocket.id!, localStreamRef.current!);
+        const peer = createPeer(userId, newSocket.id!, localStreamRef.current);
         peersRef.current[userId] = peer;
       });
     });
 
+    // 2. Хтось новий зайшов (спрацьовує для тих, хто вже сидить у кімнаті)
     newSocket.on('user_joined', async (payload) => {
-      const peer = addPeer(payload.signal, payload.callerID, localStreamRef.current!, newSocket);
+      setConnectedUsers(prev => {
+        if (prev.includes(payload.callerID)) return prev;
+        return [...prev, payload.callerID];
+      });
+
+      const peer = addPeer(payload.signal, payload.callerID, localStreamRef.current, newSocket);
       peersRef.current[payload.callerID] = peer;
     });
 
@@ -64,6 +73,7 @@ export const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     newSocket.on('user_left', (userId) => {
+      setConnectedUsers(prev => prev.filter(id => id !== userId));
       if (peersRef.current[userId]) {
         peersRef.current[userId].close();
         delete peersRef.current[userId];
@@ -78,10 +88,14 @@ export const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
     return () => { newSocket.disconnect(); };
   }, []);
 
-  // 2. Створення з'єднання (Ініціатор дзвінка)
-  const createPeer = (userToSignal: string, callerID: string, stream: MediaStream) => {
+  // Створення з'єднання (Ініціатор дзвінка)
+  const createPeer = (userToSignal: string, callerID: string, stream: MediaStream | null) => {
     const peer = new RTCPeerConnection(ICE_SERVERS);
-    stream.getTracks().forEach(track => peer.addTrack(track, stream));
+    
+    // Додаємо треки ТІЛЬКИ якщо вони є
+    if (stream) {
+      stream.getTracks().forEach(track => peer.addTrack(track, stream));
+    }
 
     peer.onicecandidate = (e) => {
       if (e.candidate) socket?.emit('ice_candidate', { target: userToSignal, candidate: e.candidate });
@@ -91,19 +105,23 @@ export const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
       setRemoteStreams(prev => ({ ...prev, [userToSignal]: e.streams[0] }));
     };
 
-    peer.onnegotiationneeded = async () => {
-      const offer = await peer.createOffer();
-      await peer.setLocalDescription(offer);
-      socket?.emit('sending_signal', { userToSignal, callerID, signal: peer.localDescription });
-    };
+    // ГОЛОВНИЙ ФІКС: Примусово створюємо Offer. Не чекаємо на onnegotiationneeded!
+    // Тепер сигнал піде в будь-якому випадку, навіть якщо камера відвалилася або зайнята.
+    peer.createOffer().then(offer => {
+      peer.setLocalDescription(offer);
+      socket?.emit('sending_signal', { userToSignal, callerID, signal: offer });
+    });
 
     return peer;
   };
 
-  // 3. Прийняття з'єднання (Відповідач)
-  const addPeer = (incomingSignal: RTCSessionDescriptionInit, callerID: string, stream: MediaStream, currentSocket: Socket) => {
+  // Прийняття з'єднання (Відповідач)
+  const addPeer = (incomingSignal: RTCSessionDescriptionInit, callerID: string, stream: MediaStream | null, currentSocket: Socket) => {
     const peer = new RTCPeerConnection(ICE_SERVERS);
-    stream.getTracks().forEach(track => peer.addTrack(track, stream));
+    
+    if (stream) {
+      stream.getTracks().forEach(track => peer.addTrack(track, stream));
+    }
 
     peer.onicecandidate = (e) => {
       if (e.candidate) currentSocket.emit('ice_candidate', { target: callerID, candidate: e.candidate });
@@ -122,46 +140,35 @@ export const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
     return peer;
   };
 
-  // 4. ЕКШНИ КОРИСТУВАЧА
   const joinVoice = async (roomId: string) => {
-    console.log(`[VOICE] 1. Клік пройшов. Спроба входу в кімнату: ${roomId}`);
-    
-    // Перевіряємо, чи браузер взагалі підтримує WebRTC в поточному середовищі
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      console.error('[VOICE] FATAL: Браузер не підтримує mediaDevices. Можливо, ти відкрив не через localhost або заблокував доступ.');
-      alert('Помилка: Ваш браузер блокує доступ до камери/мікрофона.');
-      return;
-    }
-
     try {
-      console.log('[VOICE] 2. Запитуємо доступ до камери та мікрофона...');
+      // Пробуємо захопити камеру. Якщо ми в другій вкладці і вона зайнята - це викине помилку
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-      
-      console.log('[VOICE] 3. Доступ отримано! Налаштовуємо стрім.');
       stream.getVideoTracks().forEach(track => track.enabled = false);
       
       setLocalStream(stream);
       localStreamRef.current = stream;
-      setCurrentRoom(roomId);
-      
-      console.log(`[VOICE] 4. Стейт оновлено. Відправляємо сокет join_voice: ${roomId}`);
-      socket?.emit('join_voice', roomId);
     } catch (err: any) {
-      console.error('[VOICE] ERROR: Не вдалося отримати доступ до мікрофона/камери.', err.name, err.message);
-      alert(`Помилка доступу до пристроїв: ${err.message}`);
+      console.warn('Камера/мікрофон зайняті або заблоковані. Підключаємось як слухач.');
+      // Ми навмисно не перериваємо виконання (return), щоб юзер все одно зайшов у кімнату
+      setLocalStream(null);
+      localStreamRef.current = null;
     }
+
+    // Незалежно від того, чи є в нас камера, ми кажемо серверу, що зайшли
+    setCurrentRoom(roomId);
+    socket?.emit('join_voice', roomId);
   };
 
   const leaveVoice = () => {
     socket?.emit('leave_voice', currentRoom);
     setCurrentRoom(null);
+    setConnectedUsers([]);
     
-    // Вимикаємо свої треки (щоб лампочка камери погасла)
     localStreamRef.current?.getTracks().forEach(track => track.stop());
     setLocalStream(null);
     localStreamRef.current = null;
     
-    // Закриваємо всі з'єднання
     Object.values(peersRef.current).forEach(peer => peer.close());
     peersRef.current = {};
     setRemoteStreams({});
@@ -190,7 +197,7 @@ export const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <VoiceContext.Provider value={{
       joinVoice, leaveVoice, toggleMic, toggleCam, 
-      isMicMuted, isCamMuted, localStream, remoteStreams, currentRoom
+      isMicMuted, isCamMuted, localStream, remoteStreams, connectedUsers, currentRoom
     }}>
       {children}
     </VoiceContext.Provider>

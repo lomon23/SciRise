@@ -1,36 +1,35 @@
+// CreateLesson.scss
 .create-lesson {
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background-color: #111111;
+  background-color: #0a0a0a;
 
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 24px;
-    background-color: #161616;
-    border-bottom: 1px solid #222222;
+    padding: 20px 32px;
+    background-color: #0a0a0a;
+    border-bottom: 1px solid #1a1a1a;
   }
 
   &__title-input {
     flex: 1;
-    margin-right: 24px;
+    margin-right: 32px;
 
     input {
       width: 100%;
       background: transparent;
       border: none;
-      color: #cccccc;
-      font-size: 18px;
+      color: #fff;
+      font-size: 20px;
       font-weight: 600;
       outline: none;
       font-family: inherit;
 
-      &::placeholder {
-        color: #444444;
-      }
+      &::placeholder { color: #444; }
     }
   }
 
@@ -39,47 +38,47 @@
     gap: 12px;
 
     button {
-      padding: 8px 16px;
+      padding: 10px 20px;
       font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
-      border-radius: 4px;
+      border-radius: 6px;
       font-family: inherit;
+      transition: all 0.2s;
     }
 
     .btn-cancel {
       background: transparent;
-      border: 1px solid #333333;
-      color: #888888;
+      border: 1px solid #333;
+      color: #888;
 
-      &:hover {
-        background: #1a1a1a;
-        color: #aaaaaa;
-      }
+      &:hover { background: #111; color: #ccc; }
     }
 
     .btn-save {
-      background: #222222;
-      border: 1px solid #333333;
-      color: #cccccc;
+      background: #2f124c; // Фіолетовий акцент
+      border: 1px solid #3f1866;
+      color: #fff;
 
       &:hover:not(:disabled) {
-        background: #2a2a2a;
-        border-color: #444444;
+        background: #3f1866;
       }
 
       &:disabled {
-        opacity: 0.5;
+        background: #1a1a1a;
+        border-color: #222;
+        color: #555;
         cursor: not-allowed;
       }
     }
   }
 
   &__error {
-    background-color: #1a1010;
-    color: #aa5555;
-    padding: 8px 24px;
+    background-color: rgba(255, 60, 60, 0.1);
+    color: #ff5555;
+    padding: 12px 32px;
     font-size: 13px;
-    border-bottom: 1px solid #2a1111;
+    border-bottom: 1px solid rgba(255, 60, 60, 0.2);
   }
 
   &__workspace {
@@ -90,42 +89,34 @@
 
   &__editor {
     flex: 1;
-    border-right: 1px solid #222222;
+    border-right: 1px solid #1a1a1a;
     display: flex;
     flex-direction: column;
 
     textarea {
       flex: 1;
-      background-color: #0a0a0a;
-      color: #aaaaaa;
+      background-color: #0a0a0a; // Темний фон редактора
+      color: #bbb;
       border: none;
-      padding: 24px;
-      font-family: 'Fira Code', 'Courier New', Courier, monospace; // Моноширинний шрифт для маркдауну
+      padding: 32px;
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.6;
       resize: none;
       outline: none;
 
-      &::-webkit-scrollbar {
-        width: 8px;
-      }
-      &::-webkit-scrollbar-thumb {
-        background: #222222;
-      }
+      &::-webkit-scrollbar { width: 8px; }
+      &::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
     }
   }
 
   &__preview {
     flex: 1;
-    background-color: #0d0d0d;
-    padding: 24px;
+    background-color: #0f0f0f; // Трохи світліший фон для прев'ю
+    padding: 32px;
     overflow-y: auto;
 
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: #222222;
-    }
+    &::-webkit-scrollbar { width: 8px; }
+    &::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
   }
 }

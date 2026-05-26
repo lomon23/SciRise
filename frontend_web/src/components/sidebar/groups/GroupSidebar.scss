@@ -2,24 +2,42 @@
   &__actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
 
     .btn-action {
-      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      padding: 0;
       cursor: pointer;
       background: transparent;
-      border: none;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: #888;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #1a1a1a;
+        color: #fff;
+        border-color: #333;
+      }
     }
   }
 
   &__list {
     display: flex;
     flex-direction: column;
+    // Якщо SecondSidebar не має свого фону, задай його тут:
+    // background: #121212;
+    // height: 100%;
   }
 
   &__status {
-    padding: 16px;
-    font-size: 14px;
+    padding: 24px;
+    font-size: 13px;
     text-align: center;
+    color: #555;
   }
 }

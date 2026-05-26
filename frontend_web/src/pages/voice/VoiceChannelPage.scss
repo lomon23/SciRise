@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #0d0d0d;
+  background-color: #050505;
   color: #fff;
   overflow: hidden;
 }
@@ -12,28 +12,32 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  background-color: #161616;
-  border-bottom: 1px solid #222;
+  background-color: #0a0a0a;
+  border-bottom: 1px solid #1a1a1a;
 
   h2 {
     margin: 0;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
-    color: #ddd;
+    color: #ccc;
+    letter-spacing: 0.5px;
   }
 
-  .minimize-btn {
-    background: #2a2a2a;
-    border: 1px solid #444;
-    color: #ccc;
-    padding: 6px 12px;
-    border-radius: 4px;
+  .icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #666;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 13px;
-    transition: 0.2s ease;
+    transition: all 0.2s ease;
 
     &:hover {
-      background: #333;
+      background: #1a1a1a;
       color: #fff;
     }
   }
@@ -42,11 +46,10 @@
 .voice-page-grid {
   flex: 1;
   display: grid;
-  // Магія сітки: автоматично розширює відео залежно від кількості юзерів
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 16px;
   padding: 24px;
-  background-color: #0a0a0a;
+  background-color: #050505;
   overflow-y: auto;
   place-content: center;
 }
@@ -55,21 +58,20 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background-color: #111;
-  border-radius: 8px;
-  border: 1px solid #222;
+  background-color: #0a0a0a;
+  border-radius: 12px;
+  border: 1px solid #1a1a1a;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 
   video {
     width: 100%;
     height: 100%;
-    object-fit: cover; // Щоб відео заповнювало квадрат без чорних смуг
+    object-fit: cover;
     display: block;
+    transition: opacity 0.3s;
     
-    &.muted {
-      opacity: 0; // Ховаємо картинку, якщо камера вимкнена
-    }
+    &.muted { opacity: 0; }
   }
 
   .overlay {
@@ -81,46 +83,89 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #111;
-    color: #555;
-    font-size: 14px;
+    background: #0a0a0a;
+    overflow: hidden;
+
+    .overlay-glow {
+      position: absolute;
+      width: 150%;
+      height: 150%;
+      background: radial-gradient(circle at 50% 50%, rgba(47, 18, 76, 0.4) 0%, rgba(255, 255, 255, 0.05) 30%, transparent 70%);
+      filter: blur(40px);
+      animation: pulseGlow 4s infinite alternate;
+    }
+
+    .overlay-text {
+      position: relative;
+      z-index: 1;
+      color: #888;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      background: rgba(10, 10, 10, 0.5);
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+    }
   }
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.1); opacity: 1; }
 }
 
 .voice-page-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;
-  padding: 20px;
-  background-color: #161616;
-  border-top: 1px solid #222;
+  gap: 24px; // Трохи збільшив відступ між круглими кнопками
+  padding: 24px;
+  background-color: #0a0a0a;
+  border-top: 1px solid #1a1a1a;
 
-  button {
-    background: #2a2a2a;
-    border: none;
+  .control-btn {
+    background: #1a1a1a;
+    border: 1px solid #222;
     color: #fff;
-    padding: 12px 24px;
-    border-radius: 24px;
-    font-size: 14px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%; // Ідеальний круг
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: 0.2s ease;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
-    &:hover { background: #333; }
+    &:hover { 
+      background: #222; 
+      border-color: #333;
+      transform: translateY(-2px);
+    }
     
+    // Стан вимкнення (сірувато-червоний)
     &.muted {
-      background: #4a2a2a;
-      color: #ff6666;
-      &:hover { background: #5a3333; }
+      background: rgba(255, 60, 60, 0.1);
+      color: #ff5555;
+      border-color: rgba(255, 60, 60, 0.2);
+      
+      &:hover { 
+        background: rgba(255, 60, 60, 0.15); 
+      }
     }
 
+    // Кнопка відключення (чіткий червоний)
     &.disconnect {
-      background: #d9534f;
-      font-weight: 500;
-      &:hover { background: #c9302c; }
+      background: #c9302c;
+      color: #fff;
+      border-color: #d9534f;
+      
+      &:hover { 
+        background: #d9534f; 
+        box-shadow: 0 4px 16px rgba(217, 83, 79, 0.4);
+      }
     }
   }
 }

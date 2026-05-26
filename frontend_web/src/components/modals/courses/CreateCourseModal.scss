@@ -6,36 +6,72 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    background-color: rgba(15, 15, 15, 0.85); // Дуже темний оверлей
+    background-color: rgba(0, 0, 0, 0.75); // Темніший фон
+    backdrop-filter: blur(8px); // Ефект скла на задньому фоні
+    animation: fadeIn 0.2s ease-out;
   }
 
   &__content {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    padding: 24px;
-    gap: 16px;
-    background-color: #1e1e1e; // Темно-сірий фон
-    border: 1px solid #333333;
-    color: #999999; // Приглушений текст
+    width: 90%;
+    max-width: 520px; // Зробили ширшою
+    background-color: #0a0a0a; // Глибокий чорний як у сайдбарах
+    border: 1px solid #1a1a1a;
+    border-radius: 16px;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  h3 {
-    color: #aaaaaa;
-    font-size: 16px;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 32px 16px;
+
+    h3 {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+
+    .btn-close {
+      background: transparent;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.2s;
+
+      &:hover {
+        color: #fff;
+        background: #1a1a1a;
+      }
+    }
   }
 
   &__error {
-    padding: 8px;
+    margin: 0 32px;
+    padding: 12px 16px;
     font-size: 13px;
-    border: 1px solid #442222; // Ледь червонуватий для помилки, але темний
+    color: #ff5555;
+    background: rgba(255, 60, 60, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 60, 60, 0.2);
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
+    padding: 16px 32px 32px;
   }
 
   &__input-group {
@@ -44,39 +80,78 @@
     gap: 8px;
 
     label {
-      font-size: 12px;
-      color: #777777;
+      font-size: 13px;
+      font-weight: 500;
+      color: #888;
     }
 
     input, textarea {
-      padding: 10px;
+      padding: 14px 16px;
       font-family: inherit;
       width: 100%;
-      background-color: #111111;
-      border: 1px solid #2a2a2a;
-      color: #999999;
+      background-color: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
       outline: none;
+      transition: border-color 0.2s, background-color 0.2s;
+
+      &::placeholder {
+        color: #444;
+      }
 
       &:focus {
-        border-color: #555555;
+        background-color: #141414;
+        border-color: #2f124c; // Фіолетовий фокус
+        box-shadow: 0 0 0 1px #2f124c;
       }
     }
 
     textarea {
       resize: vertical;
+      min-height: 100px;
     }
   }
 
   &__checkbox {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: #777777;
+    align-items: flex-start;
+    gap: 12px;
     cursor: pointer;
+    padding: 12px;
+    background: #111;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #141414;
+    }
 
     input {
-      accent-color: #444444; // Перебиваємо дефолтний синій чекбокс
+      margin-top: 2px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #2f124c;
+    }
+
+    .checkbox-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      strong {
+        color: #ddd;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      span {
+        color: #666;
+        font-size: 12px;
+      }
     }
   }
 
@@ -87,21 +162,52 @@
     margin-top: 8px;
 
     button {
-      padding: 8px 16px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
-      background-color: #222222;
-      border: 1px solid #333333;
-      color: #888888;
+      border-radius: 8px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid #333;
+      color: #888;
 
       &:hover:not(:disabled) {
-        background-color: #333333;
-        color: #aaaaaa;
+        background: #1a1a1a;
+        color: #ccc;
+      }
+    }
+
+    .btn-submit {
+      background: #2f124c;
+      border: 1px solid #3f1866;
+      color: #fff;
+
+      &:hover:not(:disabled) {
+        background: #3f1866;
       }
 
       &:disabled {
-        opacity: 0.5;
+        background: #1a1a1a;
+        border-color: #222;
+        color: #555;
         cursor: not-allowed;
       }
     }
   }
+}
+
+// Анімації
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }

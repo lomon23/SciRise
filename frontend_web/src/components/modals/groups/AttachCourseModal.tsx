@@ -1,4 +1,6 @@
+// AttachCourseModal.tsx
 import { useState, useEffect, type FormEvent } from 'react';
+import { X } from 'lucide-react';
 import { axiosInstance } from '../../../api/axios';
 import './AttachCourseModal.scss';
 
@@ -19,7 +21,6 @@ export const AttachCourseModal = ({ groupId, onClose, onSuccess }: Props) => {
     const fetchAllCourses = async () => {
       try {
         const response = await axiosInstance.get('/courses/');
-        // Враховуємо можливу пагінацію DRF (results) або звичайний масив
         const data = response.data.results || response.data;
         setCourses(data);
         if (data.length > 0) {
@@ -43,7 +44,6 @@ export const AttachCourseModal = ({ groupId, onClose, onSuccess }: Props) => {
     setError('');
 
     try {
-      // Твій точний шлях з urls.py: groups/<int:group_id>/attach-course/<int:course_id>/
       await axiosInstance.post(`/groups/${groupId}/attach-course/${selectedCourseId}/`);
       onSuccess();
     } catch (err: any) {
@@ -54,18 +54,23 @@ export const AttachCourseModal = ({ groupId, onClose, onSuccess }: Props) => {
   };
 
   return (
-    <div className="attach-course-modal__overlay">
-      <div className="attach-course-modal__content">
-        <h3>Прикріпити курс до групи</h3>
+    <div className="attach-course-modal__overlay" onClick={onClose}>
+      <div className="attach-course-modal__content" onClick={e => e.stopPropagation()}>
+        <div className="attach-course-modal__header">
+          <h3>Прикріпити курс</h3>
+          <button className="btn-close" onClick={onClose}>
+            <X size={20} strokeWidth={1.5} />
+          </button>
+        </div>
 
         {error && <div className="attach-course-modal__error">{error}</div>}
 
         {fetching ? (
-          <div className="attach-course-modal__status">...</div>
+          <div className="attach-course-modal__status">Завантаження курсів...</div>
         ) : courses.length === 0 ? (
           <div className="attach-course-modal__status">
-            <p>Немає створених курсів.</p>
-            <button type="button" onClick={onClose} className="btn-close">Закрити</button>
+            <p>Немає доступних курсів для прикріплення.</p>
+            <button type="button" className="btn-cancel" onClick={onClose}>Закрити</button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="attach-course-modal__form">
@@ -78,16 +83,16 @@ export const AttachCourseModal = ({ groupId, onClose, onSuccess }: Props) => {
               >
                 {courses.map((course) => (
                   <option key={course.id} value={course.id}>
-                    {course.title} (ID: {course.id})
+                    {course.title}
                   </option>
                 ))}
               </select>
             </div>
 
             <div className="attach-course-modal__actions">
-              <button type="button" onClick={onClose} disabled={loading}>Скасувати</button>
-              <button type="submit" disabled={loading || !selectedCourseId}>
-                {loading ? '...' : 'Прикріпити'}
+              <button type="button" className="btn-cancel" onClick={onClose} disabled={loading}>Скасувати</button>
+              <button type="submit" className="btn-submit" disabled={loading || !selectedCourseId}>
+                {loading ? 'Прикріплення...' : 'Прикріпити'}
               </button>
             </div>
           </form>

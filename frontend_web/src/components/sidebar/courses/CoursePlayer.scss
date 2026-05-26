@@ -1,109 +1,259 @@
-// Додай ці стилі в кінець свого файлу CoursePlayer.scss
+// CoursePlayer.scss (Заміни старий)
+.course-player {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 
-.btn-back-to-tiles {
-  background: transparent;
-  border: none;
-  color: #555555;
-  cursor: pointer;
-  font-size: 13px;
-  padding: 0;
-  margin-bottom: 20px;
-  display: block;
+  &__status {
+    padding: 40px;
+    color: #777;
+    text-align: center;
+  }
 
-  &:hover {
-    color: #888888;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 32px 40px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  &__info {
+    h2 { font-size: 28px; color: #fff; margin: 0 0 8px 0; font-weight: 600; letter-spacing: -0.5px; }
+    .course-player__author { font-size: 13px; color: #666; }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+
+    .btn-action {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #ccc;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover { background: #1a1a1a; color: #fff; border-color: #555; }
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
   }
 }
 
+.btn-back-to-tiles {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+  margin-bottom: 24px;
+  transition: color 0.2s;
+
+  &:hover { color: #fff; }
+}
+
 .course-overview {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
 
-  __intro {
-    margin-bottom: 32px;
-    h3 { color: #cccccc; font-size: 16px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
-    p { color: #777777; font-size: 14px; line-height: 1.5; }
+  &__intro {
+    margin-bottom: 40px;
+    h3 { color: #555; font-size: 12px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    p { color: #aaa; font-size: 15px; line-height: 1.6; }
   }
 
   .grid-title {
     font-size: 12px;
     text-transform: uppercase;
-    color: #555555;
-    margin-bottom: 16px;
+    color: #555;
+    margin-bottom: 20px;
     letter-spacing: 1px;
-    border-bottom: 1px solid #222;
-    padding-bottom: 8px;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 12px;
   }
 
-  .grid-empty {
-    color: #444444;
-    font-size: 13px;
-  }
+  .grid-empty { color: #444; font-size: 14px; }
 }
 
-// СІТКА
 .lessons-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
 }
 
-// ПЛИТКА
 .lesson-tile {
-  background-color: #141414;
-  border: 1px solid #222222;
-  padding: 16px;
+  background-color: #111;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px; // Строгий, але сучасний радіус
+  padding: 20px;
   display: flex;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
   cursor: pointer;
-  transition: border-color 0.2s, background-color 0.2s;
+  transition: all 0.2s ease;
 
   &:hover {
-    border-color: #333333;
-    background-color: #181818;
+    border-color: #333;
+    background-color: #161616;
+    transform: translateY(-2px);
     
-    .lesson-tile__les-title {
-      color: #cccccc;
-    }
+    .lesson-tile__icon { color: #fff; background: #222; }
+    .lesson-tile__les-title { color: #fff; }
   }
 
   &__icon {
-    font-size: 20px;
-    color: #555555;
-    background: #0d0d0d;
-    width: 40px;
-    height: 40px;
+    color: #666;
+    background: #0a0a0a;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: 6px;
+    transition: all 0.2s;
   }
 
   &__meta {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
     overflow: hidden;
   }
 
   &__mod-title {
     font-size: 10px;
     text-transform: uppercase;
-    color: #444444;
+    color: #555;
     font-weight: 600;
+    letter-spacing: 0.5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   &__les-title {
-    font-size: 14px;
-    color: #888888;
+    font-size: 15px;
+    color: #ccc;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: color 0.2s;
+  }
+}
+.markdown-body {
+  color: #c9d1d9;
+  font-size: 16px;
+  line-height: 1.7; // Збільшив міжрядковий інтервал для читабельності
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+  // 1. АБЗАЦИ (даємо повітря)
+  p {
+    margin-top: 0;
+    margin-bottom: 1.2em; // Відступ після кожного абзацу
+  }
+
+  // 2. ЗАГОЛОВКИ (відбиваємо від попереднього тексту)
+  h1, h2, h3, h4 {
+    color: #ffffff;
+    font-weight: 600;
+    margin-top: 1.8em; // Великий відступ ЗВЕРХУ
+    margin-bottom: 0.8em; // Менший відступ ЗНИЗУ
+    line-height: 1.3;
+  }
+
+  h1 { font-size: 2em; border-bottom: 1px solid #222; padding-bottom: 0.3em; margin-top: 0; }
+  h2 { font-size: 1.5em; border-bottom: 1px solid #222; padding-bottom: 0.3em; }
+  h3 { font-size: 1.25em; }
+
+  // 3. СПИСКИ (Жорстко задаємо відступи, щоб перебити глобальні стилі)
+  ul, ol {
+    margin-top: 0;
+    margin-bottom: 1.2em;
+    padding-left: 2.5em !important; // Ось твій "таб" (відступ) для списку
+  }
+
+  ol { list-style-type: decimal; }
+  ul { list-style-type: disc; }
+
+  li {
+    margin-bottom: 0.5em; // Відстань між пунктами списку
+    padding-left: 0.2em; // Трохи відсуваємо текст від самої цифри/крапки
+    
+    // Якщо всередині списку є абзац, прибираємо йому нижній відступ
+    > p {
+      margin-bottom: 0;
+    }
+  }
+
+  // СИЛЬНІ АКЦЕНТИ
+  strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  // === ДОДАНО: ЦИТАТИ ТА ПРИМІТКИ ===
+  blockquote {
+    margin: 0 0 1.2em 0;
+    padding: 12px 16px;
+    color: #8b949e;
+    background: rgba(47, 18, 76, 0.08); // Легкий фіолетовий фон
+    border-left: 4px solid #2f124c; // Товста фіолетова лінія
+    border-radius: 0 8px 8px 0;
+
+    // Скидаємо відступ для останнього абзацу всередині примітки
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // ІНЛАЙН КОД (std::unique_ptr, new, delete)
+  code {
+    font-family: "Fira Code", "Consolas", monospace;
+    font-size: 85%;
+    background-color: #1a1a1a;
+    color: #c4a7e7; // Змінено на пастельно-фіолетовий (як у віджетах)
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+    border: 1px solid #333;
+  }
+
+  // БЛОКИ КОДУ
+  pre {
+    background-color: #0d0d0d;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    margin-top: 1em;
+    margin-bottom: 1.5em;
+
+    &::-webkit-scrollbar { height: 8px; }
+    &::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+    code {
+      background-color: transparent;
+      color: #c9d1d9; // Залишаємо світло-сірий для великого коду
+      padding: 0;
+      border: none;
+      font-size: 14px;
+      white-space: pre;
+    }
   }
 }

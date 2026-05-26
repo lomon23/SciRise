@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { globalModules } from '../../..//config/navigation';
-import './GlobalSidebar.scss'; // Стилі для глобальної сайдбар
+import { globalModules } from '../../../config/navigation';
+import './GlobalSidebar.scss';
 
 export const GlobalSidebar = () => {
   const location = useLocation();
@@ -10,8 +10,8 @@ export const GlobalSidebar = () => {
     <aside className="global-sidebar">
       <nav className="global-sidebar__nav">
         {globalModules.map((module) => {
-          // Перевіряємо, чи ми зараз у цьому розділі, щоб потім можна було підсвітити кнопку
           const isActive = location.pathname.startsWith(module.path);
+          const IconComponent = module.icon; // Беремо компонент іконки
           
           return (
             <button
@@ -20,7 +20,10 @@ export const GlobalSidebar = () => {
               onClick={() => navigate(module.path)}
               title={module.label}
             >
-              <span className="global-sidebar__icon">{module.icon}</span>
+              <span className="global-sidebar__icon">
+                {/* Рендеримо і задаємо товщину тут */}
+                <IconComponent size={22} strokeWidth={1.5} />
+              </span>
             </button>
           );
         })}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { FileText, Eye, Edit3, Minus, X } from 'lucide-react';
 import './Widgets.scss';
 
 export const TextWidget = ({ widget, onUpdate, onHide, onDelete }: any) => {
@@ -32,14 +33,15 @@ export const TextWidget = ({ widget, onUpdate, onHide, onDelete }: any) => {
     <div className="widget-inner">
       <div className="widget-header">
         <div className="header-left">
-          <span>📝 Нотатка</span>
+          <FileText size={16} className="widget-icon" />
+          <span>Нотатка</span>
           <button className="widget-mode-btn" onClick={() => setIsPreview(!isPreview)}>
-            {isPreview ? '✎ Редагувати' : '👁 Перегляд'}
+            {isPreview ? <><Edit3 size={12} /> Редагувати</> : <><Eye size={12} /> Перегляд</>}
           </button>
         </div>
         <div className="header-actions">
-          <button className="widget-btn hide-btn" onClick={onHide} title="Згорнути">—</button>
-          <button className="widget-btn close-btn" onClick={handleClose} title="Закрити повністю">✕</button>
+          <button className="widget-btn hide-btn" onClick={onHide} title="Згорнути"><Minus size={14} /></button>
+          <button className="widget-btn close-btn" onClick={handleClose} title="Закрити повністю"><X size={14} /></button>
         </div>
       </div>
       
